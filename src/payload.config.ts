@@ -16,6 +16,7 @@ import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -67,12 +68,39 @@ export default buildConfig({
   globals: [Header, Footer],
   plugins: [
     ...plugins,
-    // storage-adapter-placeholder
+    vercelBlobStorage({
+      access: 'public',
+      enabled: true,
+      clientUploads: true,
+      collections: {
+        media: true,
+      },
+      token: process.env.BLOB_READ_WRITE_TOKEN,
+    }),
   ],
   secret: process.env.PAYLOAD_SECRET,
   sharp,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
+  },
+  localization: {
+    defaultLocale: 'en',
+    locales: [
+      {
+        code: 'en',
+        label: {
+          en: 'English',
+          fr: 'Anglais',
+        },
+      },
+      {
+        code: 'fr',
+        label: {
+          en: 'French',
+          fr: 'Français',
+        },
+      },
+    ],
   },
   jobs: {
     access: {
