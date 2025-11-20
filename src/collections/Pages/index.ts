@@ -20,6 +20,12 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
+import HeroCarousel from '@/blocks/HeroCarousel/config'
+import TwoColumnCTA from '@/blocks/TwoColumnCTA/config'
+import DividerLine from '@/blocks/DividerLine/config'
+import ProjectsGrid from '@/blocks/ProjectsGrid/config'
+import StudioIntro from '@/blocks/StudioIntro/config'
+import StoryBlock from '@/blocks/StoryBlock/config'
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
@@ -72,7 +78,19 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock],
+              blocks: [
+                CallToAction,
+                Content,
+                MediaBlock,
+                Archive,
+                FormBlock,
+                HeroCarousel,
+                TwoColumnCTA,
+                DividerLine,
+                ProjectsGrid,
+                StudioIntro,
+                StoryBlock,
+              ],
               required: true,
               admin: {
                 initCollapsed: true,

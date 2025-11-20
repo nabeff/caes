@@ -18,6 +18,7 @@ import { getMessages, setRequestLocale } from 'next-intl/server'
 import { NextIntlClientProvider } from 'next-intl'
 import localization from '@/i18n/localization'
 import { routing } from '@/i18n/routing'
+import ScrollToTopButton from '@/components/ScrollToTopButton'
 
 export default async function RootLayout({
   children,
@@ -56,6 +57,7 @@ export default async function RootLayout({
             <Header locale={locale} />
             {children}
             <Footer locale={locale} />
+            <ScrollToTopButton />
           </NextIntlClientProvider>
         </Providers>
       </body>
