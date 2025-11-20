@@ -72,6 +72,7 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
+    projects: Project;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -94,6 +95,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    projects: ProjectsSelect<false> | ProjectsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -199,7 +201,19 @@ export interface Page {
       | null;
     media?: (string | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | ArchiveBlock
+    | FormBlock
+    | HeroCarouselBlock
+    | TwoColumnCTABlock
+    | DividerLineBlock
+    | ProjectsGridBlock
+    | StudioIntroBlock
+    | StoryBlock
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -780,6 +794,172 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HeroCarouselBlock".
+ */
+export interface HeroCarouselBlock {
+  slides: {
+    image: string | Media;
+    id?: string | null;
+  }[];
+  /**
+   * Link shown next to the slider indicators at the bottom.
+   */
+  cta: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: string | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: string | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline') | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'heroCarousel';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TwoColumnCTABlock".
+ */
+export interface TwoColumnCTABlock {
+  title: string;
+  /**
+   * Main paragraph displayed on the right side.
+   */
+  paragraph: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  button: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: string | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: string | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'twoColumnCTA';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DividerLineBlock".
+ */
+export interface DividerLineBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'dividerLine';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProjectsGridBlock".
+ */
+export interface ProjectsGridBlock {
+  title: string;
+  description: string;
+  /**
+   * Button label at the bottom (e.g. “See more”, “Voir plus”).
+   */
+  seeMoreLabel: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'projectsGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StudioIntroBlock".
+ */
+export interface StudioIntroBlock {
+  title: string;
+  image: string | Media;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'studioIntro';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StoryBlock".
+ */
+export interface StoryBlock {
+  title: string;
+  text: string;
+  image: string | Media;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'storyBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects".
+ */
+export interface Project {
+  id: string;
+  title: string;
+  thumbnail: string | Media;
+  /**
+   * Short line of text shown on the homepage cards.
+   */
+  tinyText: string;
+  heroImage: string | Media;
+  section2: {
+    title: string;
+    subtitle: string;
+    text: string;
+    image: string | Media;
+  };
+  section3: {
+    imageLeftTop: string | Media;
+    imageLeftBottom: string | Media;
+    imageRight: string | Media;
+  };
+  section4: {
+    subtitle: string;
+    text: string;
+    image: string | Media;
+  };
+  section5: {
+    title: string;
+    relatedProjects: (string | Project)[];
+  };
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -989,6 +1169,10 @@ export interface PayloadLockedDocument {
         value: string | User;
       } | null)
     | ({
+        relationTo: 'projects';
+        value: string | Project;
+      } | null)
+    | ({
         relationTo: 'redirects';
         value: string | Redirect;
       } | null)
@@ -1086,6 +1270,12 @@ export interface PagesSelect<T extends boolean = true> {
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        heroCarousel?: T | HeroCarouselBlockSelect<T>;
+        twoColumnCTA?: T | TwoColumnCTABlockSelect<T>;
+        dividerLine?: T | DividerLineBlockSelect<T>;
+        projectsGrid?: T | ProjectsGridBlockSelect<T>;
+        studioIntro?: T | StudioIntroBlockSelect<T>;
+        storyBlock?: T | StoryBlockSelect<T>;
       };
   meta?:
     | T
@@ -1182,6 +1372,89 @@ export interface FormBlockSelect<T extends boolean = true> {
   form?: T;
   enableIntro?: T;
   introContent?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HeroCarouselBlock_select".
+ */
+export interface HeroCarouselBlockSelect<T extends boolean = true> {
+  slides?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  cta?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TwoColumnCTABlock_select".
+ */
+export interface TwoColumnCTABlockSelect<T extends boolean = true> {
+  title?: T;
+  paragraph?: T;
+  button?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DividerLineBlock_select".
+ */
+export interface DividerLineBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProjectsGridBlock_select".
+ */
+export interface ProjectsGridBlockSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  seeMoreLabel?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StudioIntroBlock_select".
+ */
+export interface StudioIntroBlockSelect<T extends boolean = true> {
+  title?: T;
+  image?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StoryBlock_select".
+ */
+export interface StoryBlockSelect<T extends boolean = true> {
+  title?: T;
+  text?: T;
+  image?: T;
   id?: T;
   blockName?: T;
 }
@@ -1352,6 +1625,48 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects_select".
+ */
+export interface ProjectsSelect<T extends boolean = true> {
+  title?: T;
+  thumbnail?: T;
+  tinyText?: T;
+  heroImage?: T;
+  section2?:
+    | T
+    | {
+        title?: T;
+        subtitle?: T;
+        text?: T;
+        image?: T;
+      };
+  section3?:
+    | T
+    | {
+        imageLeftTop?: T;
+        imageLeftBottom?: T;
+        imageRight?: T;
+      };
+  section4?:
+    | T
+    | {
+        subtitle?: T;
+        text?: T;
+        image?: T;
+      };
+  section5?:
+    | T
+    | {
+        title?: T;
+        relatedProjects?: T;
+      };
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1634,6 +1949,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Header {
   id: string;
+  logo?: (string | null) | Media;
   navItems?:
     | {
         link: {
@@ -1654,6 +1970,25 @@ export interface Header {
         id?: string | null;
       }[]
     | null;
+  cta: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: string | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: string | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline') | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1663,7 +1998,80 @@ export interface Header {
  */
 export interface Footer {
   id: string;
-  navItems?:
+  logo: string | Media;
+  columns?:
+    | {
+        title: string;
+        links?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: string | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: string | Post;
+                    } | null);
+                url?: string | null;
+                label: string;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  socialLinks?:
+    | {
+        icon: string | Media;
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: string | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: string | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  bottomText?: string | null;
+  /**
+   * Example: "Powered by" (you can localize this per language).
+   */
+  poweredByLabel?: string | null;
+  poweredBy?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: string | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: string | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  bottomLinks?:
     | {
         link: {
           type?: ('reference' | 'custom') | null;
@@ -1691,6 +2099,7 @@ export interface Footer {
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
+  logo?: T;
   navItems?:
     | T
     | {
@@ -1705,6 +2114,16 @@ export interface HeaderSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  cta?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1714,7 +2133,59 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
-  navItems?:
+  logo?: T;
+  columns?:
+    | T
+    | {
+        title?: T;
+        links?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              id?: T;
+            };
+        id?: T;
+      };
+  socialLinks?:
+    | T
+    | {
+        icon?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+            };
+        id?: T;
+      };
+  bottomText?: T;
+  poweredByLabel?: T;
+  poweredBy?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+            };
+        id?: T;
+      };
+  bottomLinks?:
     | T
     | {
         link?:

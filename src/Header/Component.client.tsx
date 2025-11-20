@@ -1,34 +1,32 @@
 'use client'
+
 import { useHeaderTheme } from '@/providers/HeaderTheme'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import React, { useEffect, useState, useTransition } from 'react'
+import React, { useEffect, useRef, useState, useTransition } from 'react'
 
-import type { Header } from '@/payload-types'
+import type { Header as HeaderType, Media as MediaType } from '@/payload-types'
 
 import { Logo } from '@/components/Logo/Logo'
 import { HeaderNav } from './Nav'
 import { TypedLocale } from 'payload'
 import { useLocale } from 'next-intl'
-import Image from 'next/image'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import localization from '@/i18n/localization'
+import { CMSLink } from '@/components/Link'
+import { cn } from '@/utilities/ui'
+import { Media } from '@/components/Media'
 
 interface HeaderClientProps {
-  data: Header
+  data: HeaderType
 }
 
 export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
-  /* Storing the value in a useState to avoid hydration errors */
   const [theme, setTheme] = useState<string | null>(null)
   const { headerTheme, setHeaderTheme } = useHeaderTheme()
   const pathname = usePathname()
+
+  const [isVisible, setIsVisible] = useState(true)
+  const [isAtTop, setIsAtTop] = useState(true)
+  const lastScrollY = useRef(0)
 
   useEffect(() => {
     setHeaderTheme(null)
@@ -40,65 +38,107 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [headerTheme])
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const handleScroll = () => {
+      const currentY = window.scrollY || 0
+      const delta = currentY - lastScrollY.current
+      const atTop = currentY <= 0
+
+      setIsAtTop(atTop)
+
+      if (atTop) {
+        setIsVisible(true)
+      } else {
+        if (delta > 5) {
+          setIsVisible(false)
+        } else if (delta < -5) {
+          setIsVisible(true)
+        }
+      }
+
+      lastScrollY.current = currentY
+    }
+
+    handleScroll()
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const headerClasses = cn(
+    'fixed top-0 left-0 right-0 z-30 border-b border-black transition-all duration-300',
+    isVisible ? 'translate-y-0' : '-translate-y-full',
+    isAtTop ? 'bg-white/70 backdrop-blur-sm' : 'bg-white',
+  )
+
+  const cta = data?.cta as any
+  const logo = data?.logo as MediaType | undefined
+
   return (
-    <header className="container relative z-20   " {...(theme ? { 'data-theme': theme } : {})}>
-      <div className="py-8 flex justify-between">
+    <header className={headerClasses} {...(theme ? { 'data-theme': theme } : {})}>
+      <div className="container flex items-center justify-between py-4 md:py-5">
         <Link href="/">
-          <Logo loading="eager" priority="high" className="invert dark:invert-0" />
+          {logo ? (
+            <div className="relative h-10 w-auto">
+              <Media resource={logo} imgClassName="h-10 w-auto object-contain" htmlElement="div" />
+            </div>
+          ) : (
+            <Logo loading="eager" priority="high" className="h-10 w-auto" />
+          )}
         </Link>
-        <LocaleSwitcher />
-        <HeaderNav data={data} />
+
+        <div className="flex items-center gap-8">
+          <HeaderNav data={data} />
+
+          <LocaleToggle />
+
+          {cta?.url && (
+            <CMSLink {...cta} appearance="black" size="sm" className="hidden md:inline-flex" />
+          )}
+        </div>
       </div>
     </header>
   )
 }
 
-export function LocaleSwitcher() {
-  const locale = useLocale()
+// FR / EN toggle stays as you wrote it
+function LocaleToggle() {
+  const locale = useLocale() as TypedLocale
   const router = useRouter()
   const pathname = usePathname()
   const [, startTransition] = useTransition()
 
-  const supportedLocales = localization.locales.map((l) => l.code)
+  function changeLocale(value: TypedLocale) {
+    if (value === locale) return
 
-  function onSelectChange(value: TypedLocale) {
     startTransition(() => {
-      // Get the current path without the locale prefix
       const currentPath = pathname.replace(new RegExp(`^/${locale}`), '')
-      // Use router.replace with the new locale
       router.replace(`/${value}${currentPath}`)
     })
   }
 
-  return (
-    <div className="md:absolute right-36 top-8">
-      <Select onValueChange={onSelectChange} value={locale}>
-        <SelectTrigger className="w-auto text-sm bg-transparent gap-2 pl-0 md:pl-3 border-none">
-          <SelectValue placeholder="Language" />
-        </SelectTrigger>
-        <SelectContent>
-          {localization.locales
-            .sort((a, b) => a.label.localeCompare(b.label))
-            .map((locale) => (
-              <SelectItem
-                value={locale.code}
-                key={locale.code}
-                className="flex flex-row gap-3 items-center text-xs"
-              >
-                <div className="flex flex-row gap-3 items-center text-xs">
-                  <Image
-                    src={`/images/icons/${locale.code}.png`}
-                    width={24}
-                    height={20}
-                    alt={locale.label}
-                  />
+  const langs: TypedLocale[] = ['en', 'fr'] as TypedLocale[]
 
-                  {locale.label}
-                </div>
-              </SelectItem>
-            ))}
-        </SelectContent>
-      </Select>
+  return (
+    <div className="flex items-center  py-1 text-[13px] uppercase tracking-wide">
+      {langs.map((code) => {
+        const isActive = code === locale
+
+        return (
+          <button
+            key={code}
+            type="button"
+            onClick={() => changeLocale(code)}
+            className={cn(
+              'px-1 py-0.5 transition-colors uppercase',
+              isActive ? 'text-black underline' : 'text-black/30 hover:underline ',
+            )}
+          >
+            {code}
+          </button>
+        )
+      })}
     </div>
   )
 }

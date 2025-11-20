@@ -8,6 +8,12 @@ import { ContentBlock } from '@/blocks/Content/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { TypedLocale } from 'payload'
+import { HeroCarouselBlock } from './HeroCarousel/Component'
+import TwoColumnCTABlock from './TwoColumnCTA/Component'
+import DividerLineBlock from './DividerLine/Component'
+import ProjectsGridBlock from './ProjectsGrid/Component'
+import StudioIntroBlock from './StudioIntro/Component'
+import StoryBlock from './StoryBlock/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -15,6 +21,13 @@ const blockComponents = {
   cta: CallToActionBlock,
   formBlock: FormBlock,
   mediaBlock: MediaBlock,
+   heroCarousel: HeroCarouselBlock,
+   twoColumnCTA: TwoColumnCTABlock,
+   dividerLine: DividerLineBlock,
+   projectsGrid: ProjectsGridBlock,
+     studioIntro: StudioIntroBlock,
+     storyBlock: StoryBlock,
+
 }
 
 export const RenderBlocks: React.FC<{
@@ -36,7 +49,7 @@ export const RenderBlocks: React.FC<{
 
             if (Block) {
               return (
-                <div className="my-16" key={index}>
+                <div  key={index}>
                   {/* @ts-expect-error there may be some mismatch between the expected types here */}
                   <Block {...block} disableInnerContainer locale={locale} />
                 </div>

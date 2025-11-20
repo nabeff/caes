@@ -10,6 +10,13 @@ export const Header: GlobalConfig = {
   },
   fields: [
     {
+      name: 'logo',
+      type: 'upload',
+      relationTo: 'media',
+      required: false,
+      label: 'Header Logo',
+    },
+    {
       name: 'navItems',
       type: 'array',
       fields: [
@@ -25,6 +32,12 @@ export const Header: GlobalConfig = {
         },
       },
     },
+    link({
+      overrides: {
+        name: 'cta',
+        label: 'Header Button',
+      },
+    }),
   ],
   hooks: {
     afterChange: [revalidateHeader],
