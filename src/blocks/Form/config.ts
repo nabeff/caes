@@ -1,5 +1,5 @@
+// src/components/Form/config.ts (or wherever your block config lives)
 import type { Block } from 'payload'
-
 import {
   FixedToolbarFeature,
   HeadingFeature,
@@ -29,16 +29,37 @@ export const FormBlock: Block = {
         condition: (_, { enableIntro }) => Boolean(enableIntro),
       },
       editor: lexicalEditor({
-        features: ({ rootFeatures }) => {
-          return [
-            ...rootFeatures,
-            HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-            FixedToolbarFeature(),
-            InlineToolbarFeature(),
-          ]
-        },
+        features: ({ rootFeatures }) => [
+          ...rootFeatures,
+          HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
+          FixedToolbarFeature(),
+          InlineToolbarFeature(),
+        ],
       }),
       label: 'Intro Content',
+    },
+
+    // NEW: right-side image + contact info
+    {
+      name: 'sideImage',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Image de contact (côté droit)',
+    },
+    {
+      name: 'sideTitle',
+      type: 'text',
+      label: 'Titre sur l’image',
+    },
+    {
+      name: 'phone',
+      type: 'text',
+      label: 'Téléphone',
+    },
+    {
+      name: 'email',
+      type: 'email',
+      label: 'Adresse e-mail',
     },
   ],
   graphQL: {

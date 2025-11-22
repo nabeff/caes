@@ -29,6 +29,8 @@ import StoryBlock from '@/blocks/StoryBlock/config'
 import ProjectsListing from '@/blocks/ProjectsListing/config'
 import Philosophy from '@/blocks/Philosophy/config'
 import ImageTextSplit from '@/blocks/ImageTextSplit/config'
+import { ShiftSupportBlock } from '@/blocks/ShiftSupportBlock/config'
+import { DualMapBlock } from '@/blocks/DualMapBlock/config'
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
@@ -96,6 +98,8 @@ export const Pages: CollectionConfig<'pages'> = {
                 ProjectsListing,
                 Philosophy,
                 ImageTextSplit,
+                ShiftSupportBlock,
+                DualMapBlock,
               ],
               required: true,
               admin: {
