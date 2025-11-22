@@ -1,15 +1,19 @@
+// src/components/Form/Component.tsx  (or equivalent path)
 'use client'
-import type { FormFieldBlock, Form as FormType } from '@payloadcms/plugin-form-builder/types'
 
+import type { FormFieldBlock, Form as FormType } from '@payloadcms/plugin-form-builder/types'
 import { useRouter } from 'next/navigation'
 import React, { useCallback, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
-import RichText from '@/components/RichText'
-import { Button } from '@/components/ui/button'
 import type { DefaultTypedEditorState } from '@payloadcms/richtext-lexical'
 
-import { fields } from './fields'
+import RichText from '@/components/RichText'
+import { Button } from '@/components/ui/button'
 import { getClientSideURL } from '@/utilities/getURL'
+import { Media } from '@/components/Media'
+import type { Media as MediaType } from '@/payload-types'
+
+import { fields } from './fields'
 
 export type FormBlockType = {
   blockName?: string
@@ -17,6 +21,12 @@ export type FormBlockType = {
   enableIntro: boolean
   form: FormType
   introContent?: DefaultTypedEditorState
+
+  // NEW: right-side panel props coming from block config
+  sideImage?: MediaType | null
+  sideTitle?: string | null
+  phone?: string | null
+  email?: string | null
 }
 
 export const FormBlock: React.FC<
@@ -29,6 +39,12 @@ export const FormBlock: React.FC<
     form: formFromProps,
     form: { id: formID, confirmationMessage, confirmationType, redirect, submitButtonLabel } = {},
     introContent,
+
+    // NEW
+    sideImage,
+    sideTitle,
+    phone,
+    email,
   } = props
 
   const formMethods = useForm({
@@ -49,6 +65,7 @@ export const FormBlock: React.FC<
   const onSubmit = useCallback(
     (data: FormFieldBlock[]) => {
       let loadingTimerID: ReturnType<typeof setTimeout>
+
       const submitForm = async () => {
         setError(undefined)
 
@@ -57,7 +74,6 @@ export const FormBlock: React.FC<
           value,
         }))
 
-        // delay loading indicator by 1s
         loadingTimerID = setTimeout(() => {
           setIsLoading(true)
         }, 1000)
@@ -80,12 +96,10 @@ export const FormBlock: React.FC<
 
           if (req.status >= 400) {
             setIsLoading(false)
-
             setError({
               message: res.errors?.[0]?.message || 'Internal Server Error',
               status: res.status,
             })
-
             return
           }
 
@@ -94,17 +108,12 @@ export const FormBlock: React.FC<
 
           if (confirmationType === 'redirect' && redirect) {
             const { url } = redirect
-
-            const redirectUrl = url
-
-            if (redirectUrl) router.push(redirectUrl)
+            if (url) router.push(url)
           }
         } catch (err) {
           console.warn(err)
           setIsLoading(false)
-          setError({
-            message: 'Something went wrong.',
-          })
+          setError({ message: 'Something went wrong.' })
         }
       }
 
@@ -114,49 +123,79 @@ export const FormBlock: React.FC<
   )
 
   return (
-    <div className="container lg:max-w-[48rem]">
+    <div className="container mx-auto py-16">
       {enableIntro && introContent && !hasSubmitted && (
         <RichText className="mb-8 lg:mb-12" data={introContent} enableGutter={false} />
       )}
-      <div className="p-4 lg:p-6 border border-border rounded-[0.8rem]">
+
+      <div className="flex flex-row-reverse w-full gap-8 items-center">
         <FormProvider {...formMethods}>
-          {!isLoading && hasSubmitted && confirmationType === 'message' && (
-            <RichText data={confirmationMessage} />
-          )}
-          {isLoading && !hasSubmitted && <p>Loading, please wait...</p>}
-          {error && <div>{`${error.status || '500'}: ${error.message || ''}`}</div>}
-          {!hasSubmitted && (
-            <form id={formID} onSubmit={handleSubmit(onSubmit)}>
-              <div className="mb-4 last:mb-0">
-                {formFromProps &&
-                  formFromProps.fields &&
-                  formFromProps.fields?.map((field, index) => {
+          <div className="w-full lg:w-[50%]">
+            {!isLoading && hasSubmitted && confirmationType === 'message' && (
+              <RichText data={confirmationMessage} />
+            )}
+            {isLoading && !hasSubmitted && <p>Loading, please wait...</p>}
+            {error && <div>{`${error.status || '500'}: ${error.message || ''}`}</div>}
+
+            {!hasSubmitted && (
+              <form id={formID} onSubmit={handleSubmit(onSubmit)}>
+                <div className="mb-4 last:mb-0">
+                  {formFromProps?.fields?.map((field, index) => {
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     const Field: React.FC<any> = fields?.[field.blockType as keyof typeof fields]
-                    if (Field) {
-                      return (
-                        <div className="mb-6 last:mb-0" key={index}>
-                          <Field
-                            form={formFromProps}
-                            {...field}
-                            {...formMethods}
-                            control={control}
-                            errors={errors}
-                            register={register}
-                          />
-                        </div>
-                      )
-                    }
-                    return null
-                  })}
-              </div>
+                    if (!Field) return null
 
-              <Button form={formID} type="submit" variant="default">
-                {submitButtonLabel}
-              </Button>
-            </form>
-          )}
+                    return (
+                      <div className="mb-6 last:mb-0" key={index}>
+                        <Field
+                          form={formFromProps}
+                          {...field}
+                          {...formMethods}
+                          control={control}
+                          errors={errors}
+                          register={register}
+                        />
+                      </div>
+                    )
+                  })}
+                </div>
+
+                <Button
+                  form={formID}
+                  type="submit"
+                  variant="default"
+                  className="!bg-black border border-black !text-white hover:!bg-white hover:!text-black transition-colors duration-200"
+                >
+                  {submitButtonLabel}
+                </Button>
+              </form>
+            )}
+          </div>
         </FormProvider>
+
+        {sideImage && (
+          <div className="relative w-[50%] min-h-[700px]">
+            <Media resource={sideImage} fill imgClassName="object-cover grayscale" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent" />
+            <div className="absolute bottom-3 z-10 w-full p-4">
+              <div className="bg-black text-white w-full p-8 flex flex-col gap-8">
+                {sideTitle && <h3 className="text-xl font-light md:text-2xl">{sideTitle}</h3>}
+                <div className="space-y-1 text-sm md:text-base">
+                  {phone && (
+                    <a href={`tel:${phone}`} className="block hover:underline">
+                      Téléphone : {phone}
+                    </a>
+                  )}
+                  {email && (
+                    <a href={`mailto:${email}`} className="block hover:underline">
+                      Email : {email}
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

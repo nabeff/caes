@@ -17,6 +17,8 @@ import StoryBlock from './StoryBlock/Component'
 import ProjectsListingBlock from './ProjectsListing/Component'
 import PhilosophyBlock from './Philosophy/Component'
 import ImageTextSplitBlock from './ImageTextSplit/Component'
+import { ShiftSupportBlock } from './ShiftSupportBlock/Component'
+import { DualMapBlock } from './DualMapBlock/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -33,6 +35,10 @@ const blockComponents = {
      projectsListing: ProjectsListingBlock,
      philosophy: PhilosophyBlock,
      imageTextSplit: ImageTextSplitBlock,
+     shiftSupportBlock: ShiftSupportBlock,
+     dualMapBlock: DualMapBlock,
+
+
 
 }
 

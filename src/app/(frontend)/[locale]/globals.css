@@ -147,3 +147,11 @@ html[data-theme='light'] {
   border-color: black;
   color: #000 !important; /* force black text on white */
 }
+
+input {
+  border-radius: 0 !important;
+}
+
+textarea {
+  border-radius: 0 !important;
+}

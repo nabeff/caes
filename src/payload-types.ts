@@ -218,6 +218,8 @@ export interface Page {
     | ProjectsListingBlock
     | PhilosophyBlock
     | ImageTextSplitBlock
+    | ShiftSupportBlock
+    | DualMapBlock
   )[];
   meta?: {
     title?: string | null;
@@ -619,6 +621,10 @@ export interface FormBlock {
     };
     [k: string]: unknown;
   } | null;
+  sideImage?: (string | null) | Media;
+  sideTitle?: string | null;
+  phone?: string | null;
+  email?: string | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'formBlock';
@@ -968,6 +974,46 @@ export interface ImageTextSplitBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'imageTextSplit';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ShiftSupportBlock".
+ */
+export interface ShiftSupportBlock {
+  title: string;
+  image: string | Media;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'shiftSupportBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DualMapBlock".
+ */
+export interface DualMapBlock {
+  title: string;
+  intro?: string | null;
+  mapLeft: {
+    mapTitle: string;
+    /**
+     * Collez ici l’URL d’intégration (iframe src) obtenue depuis Google Maps > Partager > Intégrer une carte.
+     */
+    embedUrl: string;
+    linkLabel: string;
+    /**
+     * Optionnel. Si vide, on utilisera l’URL d’intégration comme lien.
+     */
+    linkUrl?: string | null;
+  };
+  mapRight: {
+    mapTitle: string;
+    embedUrl: string;
+    linkLabel: string;
+    linkUrl?: string | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'dualMapBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1354,6 +1400,8 @@ export interface PagesSelect<T extends boolean = true> {
         projectsListing?: T | ProjectsListingBlockSelect<T>;
         philosophy?: T | PhilosophyBlockSelect<T>;
         imageTextSplit?: T | ImageTextSplitBlockSelect<T>;
+        shiftSupportBlock?: T | ShiftSupportBlockSelect<T>;
+        dualMapBlock?: T | DualMapBlockSelect<T>;
       };
   meta?:
     | T
@@ -1450,6 +1498,10 @@ export interface FormBlockSelect<T extends boolean = true> {
   form?: T;
   enableIntro?: T;
   introContent?: T;
+  sideImage?: T;
+  sideTitle?: T;
+  phone?: T;
+  email?: T;
   id?: T;
   blockName?: T;
 }
@@ -1574,6 +1626,42 @@ export interface ImageTextSplitBlockSelect<T extends boolean = true> {
   title?: T;
   text?: T;
   image?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ShiftSupportBlock_select".
+ */
+export interface ShiftSupportBlockSelect<T extends boolean = true> {
+  title?: T;
+  image?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DualMapBlock_select".
+ */
+export interface DualMapBlockSelect<T extends boolean = true> {
+  title?: T;
+  intro?: T;
+  mapLeft?:
+    | T
+    | {
+        mapTitle?: T;
+        embedUrl?: T;
+        linkLabel?: T;
+        linkUrl?: T;
+      };
+  mapRight?:
+    | T
+    | {
+        mapTitle?: T;
+        embedUrl?: T;
+        linkLabel?: T;
+        linkUrl?: T;
+      };
   id?: T;
   blockName?: T;
 }
