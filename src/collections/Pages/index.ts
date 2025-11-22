@@ -26,6 +26,9 @@ import DividerLine from '@/blocks/DividerLine/config'
 import ProjectsGrid from '@/blocks/ProjectsGrid/config'
 import StudioIntro from '@/blocks/StudioIntro/config'
 import StoryBlock from '@/blocks/StoryBlock/config'
+import ProjectsListing from '@/blocks/ProjectsListing/config'
+import Philosophy from '@/blocks/Philosophy/config'
+import ImageTextSplit from '@/blocks/ImageTextSplit/config'
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
@@ -90,6 +93,9 @@ export const Pages: CollectionConfig<'pages'> = {
                 ProjectsGrid,
                 StudioIntro,
                 StoryBlock,
+                ProjectsListing,
+                Philosophy,
+                ImageTextSplit,
               ],
               required: true,
               admin: {

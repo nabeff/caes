@@ -42,7 +42,7 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
   }
 
   return (
-    <footer className="mt-auto border-t border-white/10 bg-black text-white">
+    <footer className=" border-t border-white/10 bg-black text-white pt-10">
       <div className="container flex flex-col gap-10 py-12">
         {/* Top: logo + link columns */}
         <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">

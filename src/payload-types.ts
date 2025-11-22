@@ -73,6 +73,7 @@ export interface Config {
     categories: Category;
     users: User;
     projects: Project;
+    projectCategories: ProjectCategory;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -96,6 +97,7 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    projectCategories: ProjectCategoriesSelect<false> | ProjectCategoriesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -213,6 +215,9 @@ export interface Page {
     | ProjectsGridBlock
     | StudioIntroBlock
     | StoryBlock
+    | ProjectsListingBlock
+    | PhilosophyBlock
+    | ImageTextSplitBlock
   )[];
   meta?: {
     title?: string | null;
@@ -797,8 +802,10 @@ export interface Form {
  * via the `definition` "HeroCarouselBlock".
  */
 export interface HeroCarouselBlock {
+  featuredProjectLabel: string;
   slides: {
     image: string | Media;
+    title?: string | null;
     id?: string | null;
   }[];
   /**
@@ -919,11 +926,60 @@ export interface StoryBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProjectsListingBlock".
+ */
+export interface ProjectsListingBlock {
+  title: string;
+  description?: string | null;
+  /**
+   * These texts will be inserted after every 4 projects. Choose left or right alignment.
+   */
+  quotes?:
+    | {
+        text: string;
+        align: 'left' | 'right';
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'projectsListing';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PhilosophyBlock".
+ */
+export interface PhilosophyBlock {
+  title: string;
+  text: string;
+  backgroundImage: string | Media;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'philosophy';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageTextSplitBlock".
+ */
+export interface ImageTextSplitBlock {
+  title: string;
+  text: string;
+  image: string | Media;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'imageTextSplit';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "projects".
  */
 export interface Project {
   id: string;
   title: string;
+  /**
+   * Used for filters in the projects listing.
+   */
+  categories?: (string | ProjectCategory)[] | null;
   thumbnail: string | Media;
   /**
    * Short line of text shown on the homepage cards.
@@ -950,6 +1006,21 @@ export interface Project {
     title: string;
     relatedProjects: (string | Project)[];
   };
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projectCategories".
+ */
+export interface ProjectCategory {
+  id: string;
+  title: string;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
@@ -1173,6 +1244,10 @@ export interface PayloadLockedDocument {
         value: string | Project;
       } | null)
     | ({
+        relationTo: 'projectCategories';
+        value: string | ProjectCategory;
+      } | null)
+    | ({
         relationTo: 'redirects';
         value: string | Redirect;
       } | null)
@@ -1276,6 +1351,9 @@ export interface PagesSelect<T extends boolean = true> {
         projectsGrid?: T | ProjectsGridBlockSelect<T>;
         studioIntro?: T | StudioIntroBlockSelect<T>;
         storyBlock?: T | StoryBlockSelect<T>;
+        projectsListing?: T | ProjectsListingBlockSelect<T>;
+        philosophy?: T | PhilosophyBlockSelect<T>;
+        imageTextSplit?: T | ImageTextSplitBlockSelect<T>;
       };
   meta?:
     | T
@@ -1380,10 +1458,12 @@ export interface FormBlockSelect<T extends boolean = true> {
  * via the `definition` "HeroCarouselBlock_select".
  */
 export interface HeroCarouselBlockSelect<T extends boolean = true> {
+  featuredProjectLabel?: T;
   slides?:
     | T
     | {
         image?: T;
+        title?: T;
         id?: T;
       };
   cta?:
@@ -1452,6 +1532,45 @@ export interface StudioIntroBlockSelect<T extends boolean = true> {
  * via the `definition` "StoryBlock_select".
  */
 export interface StoryBlockSelect<T extends boolean = true> {
+  title?: T;
+  text?: T;
+  image?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProjectsListingBlock_select".
+ */
+export interface ProjectsListingBlockSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  quotes?:
+    | T
+    | {
+        text?: T;
+        align?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PhilosophyBlock_select".
+ */
+export interface PhilosophyBlockSelect<T extends boolean = true> {
+  title?: T;
+  text?: T;
+  backgroundImage?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageTextSplitBlock_select".
+ */
+export interface ImageTextSplitBlockSelect<T extends boolean = true> {
   title?: T;
   text?: T;
   image?: T;
@@ -1632,6 +1751,7 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface ProjectsSelect<T extends boolean = true> {
   title?: T;
+  categories?: T;
   thumbnail?: T;
   tinyText?: T;
   heroImage?: T;
@@ -1663,6 +1783,17 @@ export interface ProjectsSelect<T extends boolean = true> {
         title?: T;
         relatedProjects?: T;
       };
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projectCategories_select".
+ */
+export interface ProjectCategoriesSelect<T extends boolean = true> {
+  title?: T;
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;

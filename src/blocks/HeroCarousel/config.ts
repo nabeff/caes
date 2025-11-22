@@ -10,6 +10,13 @@ export const HeroCarousel: Block = {
   },
   fields: [
     {
+      name: 'featuredProjectLabel',
+      type: 'text',
+      label: 'Featured project label',
+      localized: true,
+      required: true,
+    },
+    {
       name: 'slides',
       type: 'array',
       label: 'Slides',
@@ -22,6 +29,13 @@ export const HeroCarousel: Block = {
           relationTo: 'media',
           label: 'Image',
           required: true,
+        },
+        {
+          name: 'title',
+          type: 'text',
+          label: 'Slide title',
+          localized: true,
+          required: false,
         },
       ],
     },

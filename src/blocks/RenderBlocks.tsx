@@ -14,6 +14,9 @@ import DividerLineBlock from './DividerLine/Component'
 import ProjectsGridBlock from './ProjectsGrid/Component'
 import StudioIntroBlock from './StudioIntro/Component'
 import StoryBlock from './StoryBlock/Component'
+import ProjectsListingBlock from './ProjectsListing/Component'
+import PhilosophyBlock from './Philosophy/Component'
+import ImageTextSplitBlock from './ImageTextSplit/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -27,6 +30,9 @@ const blockComponents = {
    projectsGrid: ProjectsGridBlock,
      studioIntro: StudioIntroBlock,
      storyBlock: StoryBlock,
+     projectsListing: ProjectsListingBlock,
+     philosophy: PhilosophyBlock,
+     imageTextSplit: ImageTextSplitBlock,
 
 }
 
