@@ -4,14 +4,19 @@ import Link from 'next/link'
 import type { TypedLocale } from 'payload'
 
 import type { Footer as FooterGlobal, Media as MediaType } from '@/payload-types'
-import { getCachedGlobal } from '@/utilities/getGlobals'
 import { CMSLink } from '@/components/Link'
 import { Logo } from '@/components/Logo/Logo'
 import { Media } from '@/components/Media'
+import { getPayload } from 'payload'
+import config from '@/payload.config'
 
 export async function Footer({ locale }: { locale: TypedLocale }) {
-  const footerData = (await getCachedGlobal('footer', 1, locale)()) as FooterGlobal
-
+const payload = await getPayload({ config })
+const footerData = (await payload.findGlobal({
+  slug: 'footer',
+  depth: 1,
+  locale,
+})) as FooterGlobal
   const logo = footerData?.logo as MediaType | null
   const columns = footerData?.columns ?? []
   const socialLinks = footerData?.socialLinks ?? []
