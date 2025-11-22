@@ -50,7 +50,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-white min-h-[100vh] flex flex-col;
+    @apply bg-[#f4f4f4] min-h-[100vh] flex flex-col;
   }
 }
 
@@ -90,7 +90,6 @@ html[data-theme='light'] {
   animation: hero-fade-in 700ms ease-in-out;
 }
 
-
 @keyframes divider-line-grow {
   from {
     transform: scaleX(0);
@@ -107,4 +106,44 @@ html[data-theme='light'] {
 
 .divider-line-inner--animate {
   animation: divider-line-grow 900ms ease-out forwards;
+}
+
+.split .line-mask {
+  overflow: hidden;
+  display: block;
+}
+
+/* Animated black → white mask button */
+.btn-black-mask {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #000;
+  background-color: #000;
+  color: #fff;
+  z-index: 0; /* base layer */
+}
+
+/* White panel that slides up */
+.btn-black-mask::before {
+  content: '';
+  position: absolute;
+  inset: 0; /* top:0; right:0; bottom:0; left:0 */
+  background-color: #fff;
+  transform: translateY(100%); /* start hidden below */
+  transition: transform 0.2s ease-in;
+  z-index: -1; /* always behind the link text */
+}
+
+/* Slide mask from bottom → top on hover/focus */
+.btn-black-mask:hover::before,
+.btn-black-mask:focus-visible::before {
+  transform: translateY(0);
+}
+
+/* Colors when mask is visible */
+.btn-black-mask:hover,
+.btn-black-mask:focus-visible {
+  background-color: transparent; /* let the white mask show */
+  border-color: black;
+  color: #000 !important; /* force black text on white */
 }

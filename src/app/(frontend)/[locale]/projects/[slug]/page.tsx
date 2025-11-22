@@ -1,151 +1,285 @@
-// // src/app/(frontend)/[locale]/projects/[slug]/page.tsx
-// import { notFound } from 'next/navigation'
-// import Link from 'next/link'
-// import { getPayload, type TypedLocale } from 'payload'
-// import config from '@/payload.config'
-// import type { Project, Media as MediaType } from '@/payload-types'
-// import { Media } from '@/components/Media'
+// src/app/(frontend)/[locale]/projects/[slug]/page.tsx
 
-// type Params = {
-//   locale: string
-//   slug: string
-// }
+import { notFound } from 'next/navigation'
+import Link from 'next/link'
+import { getPayload, type TypedLocale } from 'payload'
+import config from '@/payload.config'
+import type { Project, Media as MediaType } from '@/payload-types'
 
-// export default async function ProjectPage({ params }: { params: Params }) {
-//   const { slug, locale } = params
+import { ProjectGalleryProvider, GalleryImage } from '@/components/gallery/ProjectGallery'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel'
+import { SplitRevealText } from '@/components/animations/SplitRevealText'
+import { Media } from '@/components/Media'
 
-//   const payload = await getPayload({ config })
+// ---------- PARAM TYPES (Use Promise<Params> because your project forces this) ----------
+type Params = {
+  locale: string
+  slug: string
+}
 
-//   const { docs } = await payload.find({
-//     collection: 'projects',
-//     where: { slug: { equals: slug } },
-//     limit: 1,
-//     depth: 2,
-//     locale: locale as TypedLocale, // cast here, keep route typing simple
-//   })
+type ProjectPageProps = {
+  params: Promise<Params>
+}
 
-//   const project = docs[0] as Project | undefined
-//   if (!project) notFound()
+export default async function ProjectPage({ params }: ProjectPageProps) {
+  const { slug, locale } = await params
 
-//   const heroImage = project.heroImage as MediaType
-//   const section2 = project.section2 as NonNullable<Project['section2']>
-//   const section3 = project.section3 as NonNullable<Project['section3']>
-//   const section4 = project.section4 as NonNullable<Project['section4']>
-//   const section5 = project.section5 as NonNullable<Project['section5']>
-//   const related = (section5.relatedProjects || []) as Project[]
+  const payload = await getPayload({ config })
 
-//   return (
-//     <main className="pb-20">
-//       {/* 1) Main project image */}
-//       <section className="relative w-full aspect-[16/9] overflow-hidden">
-//         {heroImage && <Media resource={heroImage} fill imgClassName="object-cover" />}
-//       </section>
+  const { docs } = await payload.find({
+    collection: 'projects',
+    where: { slug: { equals: slug } },
+    limit: 1,
+    depth: 2,
+    locale: locale as TypedLocale,
+  })
 
-//       {/* 2) Title + left (subtitle + text) / right (image) */}
-//       <section className="container py-16">
-//         <div className="mb-8 max-w-3xl">
-//           <h1 className="text-3xl md:text-4xl lg:text-5xl">{section2.title}</h1>
-//         </div>
+  const project = docs[0] as Project | undefined
+  if (!project) notFound()
 
-//         <div className="flex flex-col gap-10 lg:flex-row lg:items-start">
-//           <div className="flex w-full flex-col gap-4 lg:w-1/2">
-//             <h2 className="text-lg md:text-xl uppercase tracking-wide">{section2.subtitle}</h2>
-//             <p className="whitespace-pre-line text-sm leading-relaxed md:text-base">
-//               {section2.text}
-//             </p>
-//           </div>
+  const heroImage = project.heroImage as MediaType
+  const section2 = project.section2 as NonNullable<Project['section2']>
+  const section3 = project.section3 as NonNullable<Project['section3']>
+  const section4 = project.section4 as NonNullable<Project['section4']>
+  const section5 = project.section5 as NonNullable<Project['section5']>
+  const related = (section5.relatedProjects || []) as Project[]
 
-//           <div className="w-full lg:w-1/2">
-//             <div className="relative w-full aspect-[4/3] overflow-hidden">
-//               <Media resource={section2.image as MediaType} fill imgClassName="object-cover" />
-//             </div>
-//           </div>
-//         </div>
-//       </section>
+  // --- Build gallery images + remember indices for each spot ---
+  const galleryImages: MediaType[] = []
+  const registerImage = (image?: MediaType | null) => {
+    if (!image) return null
+    const index = galleryImages.length
+    galleryImages.push(image)
+    return index
+  }
 
-//       {/* 3) 3-image gallery */}
-//       <section className="container py-12">
-//         <div className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
-//           <div className="flex flex-col gap-6">
-//             <div className="relative w-full aspect-[4/3] overflow-hidden">
-//               <Media
-//                 resource={section3.imageLeftTop as MediaType}
-//                 fill
-//                 imgClassName="object-cover"
-//               />
-//             </div>
-//             <div className="relative w-full aspect-[4/3] overflow-hidden">
-//               <Media
-//                 resource={section3.imageLeftBottom as MediaType}
-//                 fill
-//                 imgClassName="object-cover"
-//               />
-//             </div>
-//           </div>
+  const heroIndex = registerImage(heroImage)
+  const section2Image = section2.image as MediaType | undefined
+  const section2Index = registerImage(section2Image)
+  const imageLeftTop = section3.imageLeftTop as MediaType | undefined
+  const imageLeftTopIndex = registerImage(imageLeftTop)
+  const imageLeftBottom = section3.imageLeftBottom as MediaType | undefined
+  const imageLeftBottomIndex = registerImage(imageLeftBottom)
+  const imageRight = section3.imageRight as MediaType | undefined
+  const imageRightIndex = registerImage(imageRight)
+  const section4Image = section4.image as MediaType | undefined
+  const section4Index = registerImage(section4Image)
 
-//           <div className="relative w-full aspect-[3/4] overflow-hidden">
-//             <Media resource={section3.imageRight as MediaType} fill imgClassName="object-cover" />
-//           </div>
-//         </div>
-//       </section>
+  return (
+    <main className="pb-20">
+      <ProjectGalleryProvider images={galleryImages}>
+        {/* 1) Main project image */}
+        <section className="relative h-[700px] w-full overflow-hidden">
+          {heroImage && heroIndex !== null && (
+            <GalleryImage
+              index={heroIndex}
+              media={heroImage}
+              wrapperClassName="relative h-full w-full"
+            />
+          )}
+        </section>
 
-//       {/* 4) Subtitle + text left, image right */}
-//       <section className="container py-16">
-//         <div className="flex flex-col gap-10 lg:flex-row lg:items-center">
-//           <div className="flex w-full flex-col gap-4 lg:w-1/2">
-//             <h2 className="text-lg md:text-xl uppercase tracking-wide">{section4.subtitle}</h2>
-//             <p className="whitespace-pre-line text-sm leading-relaxed md:text-base">
-//               {section4.text}
-//             </p>
-//           </div>
+        {/* 2) Title + left (subtitle + text) / right (image) */}
+        <section className="container flex flex-col items-center gap-8 py-16">
+          <div className="mb-8">
+            <SplitRevealText
+              as="h1"
+              variant="title"
+              className="text-3xl md:text-4xl lg:text-4xl"
+              text={section2.title}
+            />
+          </div>
 
-//           <div className="w-full lg:w-1/2">
-//             <div className="relative w-full aspect-[4/3] overflow-hidden">
-//               <Media resource={section4.image as MediaType} fill imgClassName="object-cover" />
-//             </div>
-//           </div>
-//         </div>
-//       </section>
+          <div className="flex w-full flex-col gap-10 lg:flex-row lg:items-center">
+            <div className="flex w-full flex-col gap-4 lg:w-1/2">
+              <SplitRevealText
+                as="h2"
+                variant="text"
+                className="text-lg md:text-xl uppercase tracking-wide"
+                text={section2.subtitle}
+              />
 
-//       {/* 5) Related projects “carousel” */}
-//       {related.length > 0 && (
-//         <section className="container py-16">
-//           <h2 className="mb-8 text-2xl md:text-3xl lg:text-4xl">{section5.title}</h2>
+              <p className="whitespace-pre-line text-sm leading-relaxed md:text-base w-[80%]">
+                {section2.text}
+              </p>
+            </div>
 
-//           <div className="flex gap-6 overflow-x-auto pb-4">
-//             {related.map((relProj) => {
-//               const relThumb = relProj.thumbnail as MediaType | undefined
+            <div className="w-full lg:w-1/2">
+              <div className="relative w-full overflow-hidden aspect-[4/3]">
+                {section2Image && section2Index !== null && (
+                  <GalleryImage
+                    index={section2Index}
+                    media={section2Image}
+                    wrapperClassName="relative w-full h-full"
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
 
-//               return (
-//                 <Link
-//                   key={relProj.id}
-//                   href={`/${locale}/projects/${relProj.slug}`}
-//                   className="group flex min-w-[260px] max-w-xs flex-shrink-0 border border-border"
-//                 >
-//                   <div className="relative h-48 w-full overflow-hidden">
-//                     {relThumb && (
-//                       <Media
-//                         resource={relThumb}
-//                         fill
-//                         imgClassName="object-cover grayscale transition duration-500 group-hover:grayscale-0"
-//                       />
-//                     )}
+        {/* 3) 3-image gallery */}
+        <section className="container py-12">
+          <div className="flex items-center gap-6">
+            <div className="flex flex-col gap-6 md:w-1/2">
+              <div className="relative w-full overflow-hidden aspect-[4/3]">
+                {imageLeftTop && imageLeftTopIndex !== null && (
+                  <GalleryImage
+                    index={imageLeftTopIndex}
+                    media={imageLeftTop}
+                    wrapperClassName="relative w-full h-full"
+                  />
+                )}
+              </div>
 
-//                     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 transition duration-500 group-hover:opacity-100" />
+              <div className="relative w-full overflow-hidden aspect-[4/3]">
+                {imageLeftBottom && imageLeftBottomIndex !== null && (
+                  <GalleryImage
+                    index={imageLeftBottomIndex}
+                    media={imageLeftBottom}
+                    wrapperClassName="relative w-full h-full"
+                  />
+                )}
+              </div>
+            </div>
 
-//                     <div className="pointer-events-none absolute inset-x-3 bottom-3 translate-y-2 opacity-0 transition duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-//                       <h3 className="text-sm text-white md:text-base">{relProj.title as any}</h3>
-//                       <p className="mt-1 line-clamp-2 text-[11px] text-white/80">
-//                         {relProj.tinyText as any}
-//                       </p>
-//                     </div>
-//                   </div>
-//                 </Link>
-//               )
-//             })}
-//           </div>
-//         </section>
-//       )}
-//     </main>
-//   )
-// }
+            <div className="relative w-full overflow-hidden aspect-[3/4] md:w-1/2">
+              {imageRight && imageRightIndex !== null && (
+                <GalleryImage
+                  index={imageRightIndex}
+                  media={imageRight}
+                  wrapperClassName="relative w-full h-full"
+                />
+              )}
+            </div>
+          </div>
+        </section>
+
+        {/* 4) Subtitle + text left, image right */}
+        <section className="container py-16">
+          <div className="flex flex-col gap-10 lg:flex-row lg:items-center">
+            <div className="flex w-full flex-col gap-4 lg:w-1/2">
+              <SplitRevealText
+                as="h2"
+                variant="text"
+                className="text-lg md:text-xl uppercase tracking-wide"
+                text={section4.subtitle}
+              />
+              <p className="whitespace-pre-line text-sm leading-relaxed md:text-base w-[80%]">
+                {section4.text}
+              </p>
+            </div>
+
+            <div className="w-full lg:w-1/2">
+              <div className="relative w-full overflow-hidden aspect-[4/3]">
+                {section4Image && section4Index !== null && (
+                  <GalleryImage
+                    index={section4Index}
+                    media={section4Image}
+                    wrapperClassName="relative w-full h-full"
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 5) Related projects “carousel” (unchanged structurally) */}
+        {related.length > 0 && (
+          <section className="container mx-auto py-16">
+            {/* Heading in container */}
+            <div className="mb-8">
+              <SplitRevealText
+                as="h2"
+                variant="title"
+                className="text-2xl md:text-3xl lg:text-4xl"
+                text={section5.title}
+              />
+            </div>
+
+            {/* Full-width carousel */}
+            <Carousel
+              opts={{
+                align: 'start',
+                loop: related.length > 3,
+              }}
+              className="w-full"
+            >
+              <CarouselContent className="-ml-4">
+                {related.map((relProj) => {
+                  const relThumb = relProj.thumbnail as MediaType | undefined
+
+                  return (
+                    <CarouselItem
+                      key={relProj.id}
+                      className="pl-4 basis-full sm:basis-1/2 xl:basis-1/3"
+                    >
+                      <Link
+                        href={`/${locale}/projects/${relProj.slug}`}
+                        className="group flex h-full flex-col border border-border"
+                      >
+                        <div className="relative h-[300px] w-full overflow-hidden">
+                          {relThumb && (
+                            <Media
+                              resource={relThumb}
+                              fill
+                              imgClassName="object-cover grayscale transition duration-500 group-hover:grayscale-0"
+                            />
+                          )}
+
+                          {/* gradient overlay */}
+                          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 transition duration-500 group-hover:opacity-100" />
+
+                          {/* text on hover */}
+                          <div className="pointer-events-none absolute inset-x-3 bottom-3 translate-y-2 opacity-0 transition duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                            <SplitRevealText
+                              as="h3"
+                              variant="text"
+                              className="text-sm text-white md:text-base"
+                              text={relProj.title as any}
+                            />
+                            <p className="mt-1 line-clamp-2 text-[11px] text-white/80">
+                              {relProj.tinyText as any}
+                            </p>
+                          </div>
+                        </div>
+                      </Link>
+                    </CarouselItem>
+                  )
+                })}
+              </CarouselContent>
+
+              {/* Arrows: bottom-right, square, black (md+ only) */}
+              <CarouselPrevious
+                className="
+                  hidden md:inline-flex
+                  left-auto top-auto translate-y-0
+                  -bottom-[50px] right-14
+                  rounded-none
+                  bg-black text-white border-black
+                  hover:bg-white hover:text-black hover:border-black
+                "
+              />
+              <CarouselNext
+                className="
+                  hidden md:inline-flex
+                  left-auto top-auto translate-y-0
+                  -bottom-[50px] right-4
+                  rounded-none
+                  bg-black text-white border-black
+                  hover:bg-white hover:text-black hover:border-black
+                "
+              />
+            </Carousel>
+          </section>
+        )}
+      </ProjectGalleryProvider>
+    </main>
+  )
+}

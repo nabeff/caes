@@ -1,6 +1,4 @@
-// src/blocks/ProjectsGrid/Component.tsx
 import React from 'react'
-import Link from 'next/link'
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 import type {
@@ -10,7 +8,8 @@ import type {
 } from '@/payload-types'
 import { TypedLocale } from 'payload'
 import { CMSLink } from '@/components/Link'
-import { Media } from '@/components/Media'
+import { AnimatedProjectsGrid } from './AnimatedProjectsGrid' // ⬅️ new import
+import { SplitRevealText } from '@/components/animations/SplitRevealText'
 
 // Helper to safely read localized strings / slugs
 function getLocalizedText(value: unknown, locale: string): string {
@@ -52,53 +51,36 @@ export const ProjectsGridBlock = async (props: ProjectsGridProps & { locale: Typ
   const headerDescription = getLocalizedText(description, locale)
   const seeMoreText = getLocalizedText(seeMoreLabel, locale)
 
+  // prepare only what the client needs (serializable)
+  const liteProjects = projects.map((project) => ({
+    id: project.id,
+    slug: getLocalizedText(project.slug as unknown, locale) || String(project.id),
+    title: getLocalizedText(project.title, locale),
+    tinyText: getLocalizedText(project.tinyText, locale),
+    thumbnail: project.thumbnail as MediaType | null,
+  }))
+
   return (
-    <section className="container py-16">
+    <section className="container py-6 md:py-12 lg:py-16">
       {/* Section header */}
-      <div className="mb-8 flex max-w-3xl flex-col gap-3">
-        <h2 className="text-2xl md:text-3xl lg:text-4xl">{headerTitle}</h2>
-        <p className="whitespace-pre-line text-sm text-muted-foreground md:text-base">
-          {headerDescription}
-        </p>
+      <div className="mb-12 flex max-w-5xl flex-col gap-3">
+        <SplitRevealText
+          as="h2"
+          variant="title"
+          text={headerTitle}
+          className="text-2xl md:text-3xl lg:text-4xl"
+        />
+
+        <SplitRevealText
+          as="p"
+          variant="text"
+          text={headerDescription}
+          className="whitespace-pre-line text-sm text-muted-foreground md:text-base"
+        />
       </div>
 
-      {/* Grid → 2 columns */}
-      <div className="grid gap-8 md:grid-cols-2">
-        {projects.map((project) => {
-          const thumb = project.thumbnail as MediaType | null
-          const projectTitle = getLocalizedText(project.title, locale)
-          const projectTinyText = getLocalizedText(project.tinyText, locale)
-          const projectSlug =
-            getLocalizedText(project.slug as unknown, locale) || String(project.id)
-
-          return (
-            <Link
-              key={project.id}
-              href={`/${locale}/projects/${projectSlug}`}
-              className="group flex flex-col border border-border p-0"
-            >
-              <div className="relative h-80 w-full overflow-hidden">
-                {thumb && (
-                  <Media
-                    resource={thumb}
-                    fill
-                    imgClassName="object-cover grayscale transition duration-500 group-hover:grayscale-0"
-                  />
-                )}
-
-                <div className="pointer-events-none absolute inset-0 bg-black/30 transition duration-500 group-hover:bg-black/0" />
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 transition duration-500 group-hover:opacity-100" />
-                <div className="pointer-events-none absolute inset-x-4 bottom-4 translate-y-3 opacity-0 transition duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-                  <h3 className="text-base text-white md:text-lg">{projectTitle}</h3>
-                  <p className="mt-1 line-clamp-3 text-xs text-white/80 md:text-sm">
-                    {projectTinyText}
-                  </p>
-                </div>
-              </div>
-            </Link>
-          )
-        })}
-      </div>
+      {/* Animated grid */}
+      <AnimatedProjectsGrid locale={locale} projects={liteProjects} />
 
       {/* See more button (label comes from admin, localized) */}
       <div className="mt-10 flex justify-center">
@@ -106,8 +88,7 @@ export const ProjectsGridBlock = async (props: ProjectsGridProps & { locale: Typ
           type="custom"
           url={`/${locale}/projects`}
           label={seeMoreText}
-          appearance="black"
-          size="sm"
+          appearance="blackMask"
         />
       </div>
     </section>

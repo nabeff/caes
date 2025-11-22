@@ -22,6 +22,20 @@ export const Projects: CollectionConfig = {
       required: true,
       localized: true,
     },
+
+    // 🔥 Categories for filters
+    {
+      name: 'categories',
+      type: 'relationship',
+      relationTo: 'projectCategories',
+      hasMany: true,
+      required: false,
+      label: 'Categories',
+      admin: {
+        description: 'Used for filters in the projects listing.',
+      },
+    },
+
     {
       name: 'thumbnail',
       type: 'upload',

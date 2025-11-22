@@ -19,6 +19,7 @@ export const Header: GlobalConfig = {
     {
       name: 'navItems',
       type: 'array',
+      localized: true,
       fields: [
         link({
           appearances: false,
@@ -36,6 +37,7 @@ export const Header: GlobalConfig = {
       overrides: {
         name: 'cta',
         label: 'Header Button',
+        localized: true,
       },
     }),
   ],

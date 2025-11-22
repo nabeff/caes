@@ -4,6 +4,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import type { StoryBlock as StoryBlockProps } from '@/payload-types'
 import { Media } from '@/components/Media'
+import { SplitRevealText } from '@/components/animations/SplitRevealText'
 
 export const StoryBlock: React.FC<StoryBlockProps> = ({ title, text, image }) => {
   const imgWrapperRef = useRef<HTMLDivElement | null>(null)
@@ -32,7 +33,12 @@ export const StoryBlock: React.FC<StoryBlockProps> = ({ title, text, image }) =>
       <div className="container grid items-start gap-10 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.4fr)_minmax(0,1.1fr)]">
         {/* Left: title */}
         <div>
-          <h2 className="text-2xl md:text-3xl lg:text-4xl">{title}</h2>
+          <SplitRevealText
+            as="h2"
+            variant="title"
+            text={title}
+            className="text-2xl md:text-3xl lg:text-4xl"
+          />
         </div>
 
         {/* Middle: paragraph */}
