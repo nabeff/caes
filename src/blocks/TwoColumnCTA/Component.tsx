@@ -38,8 +38,10 @@ export const TwoColumnCTABlock: React.FC<TwoColumnCTAProps> = ({ title, button, 
     const heading = container.querySelector('h3')
     if (!heading) return
 
+    // normalize non-breaking spaces + collapse whitespace
     const text = heading.textContent ?? ''
-    const words = text.split(' ')
+    const normalized = text.replace(/\u00A0/g, ' ')
+    const words = normalized.trim().split(/\s+/)
 
     heading.innerHTML = words.map((w) => `<span style="opacity:0">${w}</span>`).join(' ')
 
@@ -51,12 +53,8 @@ export const TwoColumnCTABlock: React.FC<TwoColumnCTAProps> = ({ title, button, 
         const rect = el.getBoundingClientRect()
         if (rect.top < window.innerHeight) {
           const { left } = rect
-          let top = rect.top
-          top = top - window.innerHeight * 0.7
-
-          let opacityValue =
-            1 - (top * 0.01 + left * 0.001) < 0.1 ? 0.1 : 1 - (top * 0.01 + left * 0.001)
-
+          const top = rect.top - window.innerHeight * 0.7
+          let opacityValue = 1 - (top * 0.01 + left * 0.001)
           opacityValue = Math.min(1, Math.max(0.1, +opacityValue.toFixed(3)))
           el.style.opacity = String(opacityValue)
         }
@@ -77,7 +75,7 @@ export const TwoColumnCTABlock: React.FC<TwoColumnCTAProps> = ({ title, button, 
           <SplitRevealText as="h2" text={title} className="text-2xl md:text-xl lg:text-2xl" />
 
           {/* 👇 new variant */}
-          <CMSLink {...cta} appearance="blackMask" size="lg" className="mt-4" />
+          <CMSLink {...cta} appearance="blackMask" size="lg" />
         </div>
 
         <div

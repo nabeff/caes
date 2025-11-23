@@ -1,3 +1,4 @@
+// src/blocks/HeroCarousel/config.ts
 import { link } from '@/fields/link'
 import type { Block } from 'payload'
 
@@ -24,28 +25,21 @@ export const HeroCarousel: Block = {
       required: true,
       fields: [
         {
-          name: 'image',
-          type: 'upload',
-          relationTo: 'media',
-          label: 'Image',
+          name: 'project',
+          type: 'relationship',
+          relationTo: 'projects',
           required: true,
-        },
-        {
-          name: 'title',
-          type: 'text',
-          label: 'Slide title',
-          localized: true,
-          required: false,
+          label: 'Featured project',
         },
       ],
     },
-
     link({
       overrides: {
         name: 'cta',
-        label: 'Bottom link',
+        label: 'Bottom link label',
         admin: {
-          description: 'Link shown next to the slider indicators at the bottom.',
+          description:
+            'Label of the link on the right. URL is automatically taken from the active project.',
         },
       },
     }),

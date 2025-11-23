@@ -30,9 +30,9 @@ export const ScrollToTopButton: React.FC = () => {
       aria-label="Scroll to top"
       className={`
         fixed bottom-10 right-6 z-40 flex h-10 w-10 items-center justify-center
-        rounded-full border border-white/20 bg-black text-white
+         border border-white/20 bg-black text-white hover:bg-white hover:border-black hover:text-black hover:translate-y-[-8px] hover:scale-105
         shadow-lg backdrop-blur
-        transition-opacity duration-300
+        transition-all duration-300
         ${visible ? 'opacity-100' : 'opacity-0 pointer-events-none'}
       `}
     >
