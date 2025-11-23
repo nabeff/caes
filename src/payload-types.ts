@@ -810,12 +810,11 @@ export interface Form {
 export interface HeroCarouselBlock {
   featuredProjectLabel: string;
   slides: {
-    image: string | Media;
-    title?: string | null;
+    project: string | Project;
     id?: string | null;
   }[];
   /**
-   * Link shown next to the slider indicators at the bottom.
+   * Label of the link on the right. URL is automatically taken from the active project.
    */
   cta: {
     type?: ('reference' | 'custom') | null;
@@ -839,6 +838,66 @@ export interface HeroCarouselBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'heroCarousel';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects".
+ */
+export interface Project {
+  id: string;
+  title: string;
+  /**
+   * Used for filters in the projects listing.
+   */
+  categories?: (string | ProjectCategory)[] | null;
+  thumbnail: string | Media;
+  /**
+   * Short line of text shown on the homepage cards.
+   */
+  tinyText: string;
+  heroImage: string | Media;
+  section2: {
+    title: string;
+    subtitle: string;
+    text: string;
+    image: string | Media;
+  };
+  section3: {
+    imageLeftTop: string | Media;
+    imageLeftBottom: string | Media;
+    imageRight: string | Media;
+  };
+  section4: {
+    subtitle: string;
+    text: string;
+    image: string | Media;
+  };
+  section5: {
+    title: string;
+    relatedProjects: (string | Project)[];
+  };
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projectCategories".
+ */
+export interface ProjectCategory {
+  id: string;
+  title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1014,66 +1073,6 @@ export interface DualMapBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'dualMapBlock';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "projects".
- */
-export interface Project {
-  id: string;
-  title: string;
-  /**
-   * Used for filters in the projects listing.
-   */
-  categories?: (string | ProjectCategory)[] | null;
-  thumbnail: string | Media;
-  /**
-   * Short line of text shown on the homepage cards.
-   */
-  tinyText: string;
-  heroImage: string | Media;
-  section2: {
-    title: string;
-    subtitle: string;
-    text: string;
-    image: string | Media;
-  };
-  section3: {
-    imageLeftTop: string | Media;
-    imageLeftBottom: string | Media;
-    imageRight: string | Media;
-  };
-  section4: {
-    subtitle: string;
-    text: string;
-    image: string | Media;
-  };
-  section5: {
-    title: string;
-    relatedProjects: (string | Project)[];
-  };
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "projectCategories".
- */
-export interface ProjectCategory {
-  id: string;
-  title: string;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1514,8 +1513,7 @@ export interface HeroCarouselBlockSelect<T extends boolean = true> {
   slides?:
     | T
     | {
-        image?: T;
-        title?: T;
+        project?: T;
         id?: T;
       };
   cta?:

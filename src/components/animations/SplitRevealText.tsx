@@ -62,48 +62,36 @@ export const SplitRevealText: React.FC<SplitRevealTextProps> = ({
       const isLong = contentLength > 140
       const isTitle = variant === 'title'
 
-      const lineDuration = isTitle
-        ? isLong
-          ? 0.5
-          : 0.6
-        : isLong
-          ? 0.35
-          : 0.45
+      const lineDuration = isTitle ? (isLong ? 0.5 : 0.6) : isLong ? 0.35 : 0.45
 
-      const lineStagger = isTitle
-        ? isLong
-          ? 0.12
-          : 0.16
-        : isLong
-          ? 0.1
-          : 0.14
+      const lineStagger = isTitle ? (isLong ? 0.12 : 0.16) : isLong ? 0.1 : 0.14
 
-      const wordDuration = isTitle
-        ? isLong
-          ? 0.24
-          : 0.3
-        : isLong
-          ? 0.2
-          : 0.26
+      const wordDuration = isTitle ? (isLong ? 0.24 : 0.3) : isLong ? 0.2 : 0.26
 
-      const wordStagger = isTitle
-        ? isLong
-          ? 0.04
-          : 0.06
-        : isLong
-          ? 0.03
-          : 0.05
+      const wordStagger = isTitle ? (isLong ? 0.04 : 0.06) : isLong ? 0.03 : 0.05
 
       const overlap = isTitle ? '-=0.25' : isLong ? '-=0.32' : '-=0.3'
 
       const tl = gsap.timeline({
         delay: baseDelay + extraDelay,
-        scrollTrigger: {
-          trigger: textRef.current,
-          start: 'top 85%',
-          toggleActions: 'play none none none',
-        },
+        paused: true,
       })
+
+      ScrollTrigger.create({
+        trigger: textRef.current,
+        start: 'top 85%',
+        onEnter: () => tl.play(),
+        onEnterBack: () => tl.play(),
+        once: true,
+      })
+
+      // If element starts already visible → play instantly
+      if (textRef.current) {
+        const rect = textRef.current.getBoundingClientRect()
+        if (rect.top < window.innerHeight * 0.85) {
+          tl.play(0)
+        }
+      }
 
       tl.from(split.lines, {
         yPercent: 100,
@@ -142,11 +130,7 @@ export const SplitRevealText: React.FC<SplitRevealTextProps> = ({
   }, [baseDelay, extraDelay, variant])
 
   return (
-    <Tag
-      ref={textRef as any}
-      className={`split ${className}`}
-      style={{ opacity: 0 }}
-    >
+    <Tag ref={textRef as any} className={`split ${className}`} style={{ opacity: 0 }}>
       {text}
     </Tag>
   )

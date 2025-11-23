@@ -23,7 +23,6 @@ interface HeaderClientProps {
 function localizeLink(link: any, locale: TypedLocale): any {
   if (!link) return link
 
-  // 1) Reference links: build a localized custom URL from the referenced doc
   if (
     link.type === 'reference' &&
     link.reference &&
@@ -44,11 +43,9 @@ function localizeLink(link: any, locale: TypedLocale): any {
     }
   }
 
-  // 2) Custom links: just add /locale if missing
   if (link.type === 'custom' && typeof link.url === 'string') {
     const url = link.url.trim()
     if (!url) return link
-
     if (url.startsWith(`/${locale}`)) return link
 
     const normalized = url.startsWith('/') ? url : `/${url}`
@@ -71,13 +68,16 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
   const [isAtTop, setIsAtTop] = useState(true)
   const lastScrollY = useRef(0)
 
-  // Reset header theme on route change
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  // Reset header theme + close menu on route change
   useEffect(() => {
     setHeaderTheme(null)
+    setIsMenuOpen(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname])
 
-  // Sync local theme state
+  // Sync theme
   useEffect(() => {
     if (headerTheme && headerTheme !== theme) setTheme(headerTheme)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -97,11 +97,8 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
       if (atTop) {
         setIsVisible(true)
       } else {
-        if (delta > 5) {
-          setIsVisible(false)
-        } else if (delta < -5) {
-          setIsVisible(true)
-        }
+        if (delta > 5) setIsVisible(false)
+        else if (delta < -5) setIsVisible(true)
       }
 
       lastScrollY.current = currentY
@@ -121,14 +118,12 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
   const ctaRaw = data?.cta as any
   const logo = data?.logo as MediaType | undefined
 
-  // Localize nav items
   const localizedNavItems =
     data?.navItems?.map((item) => ({
       ...item,
       link: localizeLink(item.link, locale),
     })) ?? []
 
-  // Localize CTA
   const cta = localizeLink(ctaRaw, locale)
 
   const headerDataWithLocalizedNav: HeaderType = {
@@ -136,30 +131,99 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
     navItems: localizedNavItems as HeaderType['navItems'],
   }
 
+  const navItems = headerDataWithLocalizedNav.navItems ?? []
+
   return (
-    <header className={headerClasses} {...(theme ? { 'data-theme': theme } : {})}>
-      <div className="container flex items-center justify-between py-4 md:py-5">
-        {/* Logo → localized root */}
-        <Link href={`/${locale}`}>
-          {logo ? (
-            <div className="relative h-10 w-auto">
-              <Media resource={logo} imgClassName="h-10 w-auto object-contain" htmlElement="div" />
+    <>
+      <header className={headerClasses} {...(theme ? { 'data-theme': theme } : {})}>
+        <div className="container flex items-center justify-between py-4 md:py-5">
+          {/* Logo → localized root */}
+          <Link href={`/${locale}`}>
+            {logo ? (
+              <div className="relative h-10 w-auto">
+                <Media
+                  resource={logo}
+                  imgClassName="h-10 w-auto object-contain"
+                  htmlElement="div"
+                />
+              </div>
+            ) : (
+              <Logo loading="eager" priority="high" className="h-10 w-auto" />
+            )}
+          </Link>
+
+          <div className="flex items-center gap-4">
+            {/* Desktop */}
+            <div className="hidden items-center gap-8 md:flex">
+              <HeaderNav data={headerDataWithLocalizedNav} />
+              <LocaleToggle />
+              {cta?.url && <CMSLink {...cta} appearance="blackMask" />}
             </div>
-          ) : (
-            <Logo loading="eager" priority="high" className="h-10 w-auto" />
-          )}
-        </Link>
 
-        <div className="flex items-center gap-8">
-          {/* Nav with localized links */}
-          <HeaderNav data={headerDataWithLocalizedNav} />
+            {/* Mobile */}
+            <div className="flex items-center gap-3 md:hidden">
+              <LocaleToggle />
+              {cta?.url && (
+                <CMSLink {...cta} appearance="blackMask" size="sm" className="px-4 py-2 text-xs" />
+              )}
 
-          <LocaleToggle />
+              {/* Burger: two lines → merge into one when open */}
+              <button
+                type="button"
+                aria-label="Toggle menu"
+                onClick={() => setIsMenuOpen((prev) => !prev)}
+                className="flex h-8 w-10 items-center justify-center"
+              >
+                <span className="relative flex  w-5 flex-col justify-between">
+                  <span
+                    className={cn(
+                      'block h-[2px] w-full bg-black transition-transform duration-300',
+                      isMenuOpen ? 'translate-y-[3px]' : '-translate-y-[3px]',
+                    )}
+                  />
+                  <span
+                    className={cn(
+                      'block h-[2px] w-full bg-black transition-transform duration-300',
+                      isMenuOpen ? '-translate-y-[3px]' : 'translate-y-[3px]',
+                    )}
+                  />
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
 
-          {cta?.url && <CMSLink {...cta} appearance="blackMask" />}
+      {/* Mobile full-screen menu */}
+      <div
+        className={cn(
+          'fixed inset-0 z-20 bg-black text-white transition-transform duration-300 md:hidden',
+          isMenuOpen ? 'translate-y-0' : 'translate-y-full pointer-events-none',
+        )}
+      >
+        <div className="flex h-full flex-col justify-center px-6 pb-10 pt-24">
+          <nav className="flex flex-col gap-4">
+            {navItems.map((item, index) => {
+              if (!item.link) return null
+
+              return (
+                <div
+                  key={item.id ?? index}
+                  className={cn(
+                    'transform opacity-0 transition-all duration-300',
+                    isMenuOpen && 'translate-y-0 opacity-100',
+                  )}
+                  style={{ transitionDelay: `${index * 90 + 80}ms` }}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <CMSLink {...item.link} appearance="link" className="text-xl tracking-wide" />
+                </div>
+              )
+            })}
+          </nav>
         </div>
       </div>
-    </header>
+    </>
   )
 }
 
@@ -190,7 +254,7 @@ function LocaleToggle() {
           <button
             key={code}
             type="button"
-            onClick={() => changeLocale(code)}
+            onClick={() => changeLocale(code as TypedLocale)}
             className={cn(
               'px-1 py-0.5 transition-colors uppercase',
               isActive ? 'text-black underline' : 'text-black/30 hover:underline',

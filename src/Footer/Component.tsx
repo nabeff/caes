@@ -11,12 +11,12 @@ import { getPayload } from 'payload'
 import config from '@/payload.config'
 
 export async function Footer({ locale }: { locale: TypedLocale }) {
-const payload = await getPayload({ config })
-const footerData = (await payload.findGlobal({
-  slug: 'footer',
-  depth: 1,
-  locale,
-})) as FooterGlobal
+  const payload = await getPayload({ config })
+  const footerData = (await payload.findGlobal({
+    slug: 'footer',
+    depth: 1,
+    locale,
+  })) as FooterGlobal
   const logo = footerData?.logo as MediaType | null
   const columns = footerData?.columns ?? []
   const socialLinks = footerData?.socialLinks ?? []
@@ -50,7 +50,7 @@ const footerData = (await payload.findGlobal({
     <footer className=" border-t border-white/10 bg-black text-white pt-10">
       <div className="container flex flex-col gap-10 py-12">
         {/* Top: logo + link columns */}
-        <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
+        <div className="flex flex-col gap-10 lg:flex-row items-center justify-center lg:items-start lg:justify-between">
           {/* Logo from CMS (fallback to Logo component if missing) */}
           <div>
             <Link href={`/${locale}`} className="inline-flex items-center">
@@ -63,15 +63,18 @@ const footerData = (await payload.findGlobal({
           </div>
 
           {/* Columns (title + CMSLink links) */}
-          <div className="flex flex-wrap gap-32">
+          <div className="flex flex-col md:flex-row items-center md:items-start  text-center md:text-start gap-8 md:gap-16">
             {columns.map((col, idx) => {
               const links = col.links ?? []
 
               return (
-                <div key={col.id ?? idx}>
+                <div
+                  key={col.id ?? idx}
+                  className="flex flex-col  items-center md:items-start gap-3"
+                >
                   <h2 className="text-lg uppercase">{col.title}</h2>
 
-                  <div className="mt-4 flex flex-col gap-2 text-sm">
+                  <div className="flex flex-col gap-2 text-sm">
                     {links.map((row, i) => {
                       if (!row.link) return null
 
@@ -92,7 +95,7 @@ const footerData = (await payload.findGlobal({
 
         {/* Social icons: icon upload + link, NO label */}
         {socialLinks.length > 0 && (
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-row justify-center gap-4 md:justify-start">
             {socialLinks.map((item, idx) => {
               if (!item.icon || !item.link) return null
 
@@ -118,9 +121,9 @@ const footerData = (await payload.findGlobal({
         <div className="h-px w-full bg-white/10" />
 
         {/* Bottom bar */}
-        <div className="flex justify-between gap-6 text-xs text-white/60 md:flex-row md:items-center md:justify-between md:text-sm">
+        <div className="flex flex-col md:flex-row justify-between gap-6 text-xs text-white/60 items-center md:justify-between md:text-sm">
           {/* Left: bottom text + powered by */}
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col md:flex-row items-center gap-2">
             {renderBottomText()}
 
             {(poweredByLabel || poweredBy.length > 0) && (

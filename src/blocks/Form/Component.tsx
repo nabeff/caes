@@ -14,6 +14,7 @@ import { Media } from '@/components/Media'
 import type { Media as MediaType } from '@/payload-types'
 
 import { fields } from './fields'
+import { SplitRevealText } from '@/components/animations/SplitRevealText'
 
 export type FormBlockType = {
   blockName?: string
@@ -128,7 +129,7 @@ export const FormBlock: React.FC<
         <RichText className="mb-8 lg:mb-12" data={introContent} enableGutter={false} />
       )}
 
-      <div className="flex flex-row-reverse w-full gap-8 items-center">
+      <div className="flex flex-col lg:flex-row-reverse w-full gap-8 items-center">
         <FormProvider {...formMethods}>
           <div className="w-full lg:w-[50%]">
             {!isLoading && hasSubmitted && confirmationType === 'message' && (
@@ -174,12 +175,12 @@ export const FormBlock: React.FC<
         </FormProvider>
 
         {sideImage && (
-          <div className="relative w-[50%] min-h-[700px]">
+          <div className="relative w-full lg:w-[50%] min-h-[500px] md:min-h-[700px]">
             <Media resource={sideImage} fill imgClassName="object-cover grayscale" />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent" />
             <div className="absolute bottom-3 z-10 w-full p-4">
               <div className="bg-black text-white w-full p-8 flex flex-col gap-8">
-                {sideTitle && <h3 className="text-xl font-light md:text-2xl">{sideTitle}</h3>}
+                {sideTitle && <SplitRevealText as="h3" variant="title" text={sideTitle} className="text-xl font-light md:text-2xl" />}
                 <div className="space-y-1 text-sm md:text-base">
                   {phone && (
                     <a href={`tel:${phone}`} className="block hover:underline">
