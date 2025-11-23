@@ -13,7 +13,7 @@ export const PhilosophyBlock: React.FC<PhilosophyBlockProps> = ({
   return (
     <section className="bg-[#f4f4f4] py-10 md:py-12">
       <div className="container">
-        <div className="relative h-[600px] w-full overflow-hidden">
+        <div className="relative h-auto py-12 w-full overflow-hidden">
           {/* Background image with parallax */}
           {bg && (
             <ParallaxMedia
@@ -32,7 +32,7 @@ export const PhilosophyBlock: React.FC<PhilosophyBlockProps> = ({
           <div className="relative z-10 flex h-full items-center justify-center p-6 md:p-12 text-white">
             <div className="flex flex-col gap-6 md:flex-row md:items-start">
               <div className="md:w-1/3">
-              <SplitRevealText
+                <SplitRevealText
                   as="h2"
                   variant="title"
                   text={title}
@@ -40,8 +40,7 @@ export const PhilosophyBlock: React.FC<PhilosophyBlockProps> = ({
                 />
               </div>
 
-              <div className="whitespace-pre-line md:w-2/3 lg:text-base">
-              {text}</div>
+              <div className="whitespace-pre-line md:w-2/3 text-sm lg:text-base">{text}</div>
             </div>
           </div>
         </div>
