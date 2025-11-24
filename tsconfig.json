@@ -44,7 +44,7 @@
     "next-env.d.ts",
     "next.config.js",
     "next-sitemap.config.cjs"
-  ],
+, "src/components/PreloaderMask."  ],
   "exclude": [
     "node_modules"
   ],
