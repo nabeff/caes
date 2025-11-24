@@ -155,3 +155,101 @@ input {
 textarea {
   border-radius: 0 !important;
 }
+
+/* ===== PRELOADER MASK / CURTAIN ===== */
+
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  /* full black at the start, like a solid curtain */
+  background-color: #000;
+
+  opacity: 1;
+  visibility: visible;
+
+  /* background fades to transparent so we see the site under the mask */
+  transition:
+    background-color 0.8s ease 0.1s,
+    opacity 0.4s ease 1.2s,
+    visibility 0s linear 1.6s;
+}
+
+/* when animation is finished */
+.preloader.preloader--done {
+  background-color: transparent; /* reveal website behind */
+  opacity: 0; /* fade the overlay itself */
+  visibility: hidden; /* remove it from flow */
+  pointer-events: none;
+}
+
+/* BLACK CURTAIN PANELS */
+.preloader__panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background-color: #000;
+  will-change: transform;
+
+  /* 🔥 same speed, NO delay now */
+  transition: transform 1.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* start closed (touching in the middle, fully hiding the site) */
+.preloader__panel--left {
+  left: 0;
+  transform: translateX(0);
+}
+
+.preloader__panel--right {
+  right: 0;
+  transform: translateX(0);
+}
+
+/* when done → slide both panels away like curtains */
+.preloader.preloader--done .preloader__panel--left {
+  transform: translateX(-100%);
+}
+
+.preloader.preloader--done .preloader__panel--right {
+  transform: translateX(100%);
+}
+
+/* LOGO */
+.preloader__logo-wrap {
+  position: relative;
+  z-index: 2; /* above panels so we see it on black */
+}
+
+.preloader__logo {
+  display: block;
+  transform: scale(0.8);
+  opacity: 0;
+  animation: preloader-logo-in 0.7s ease-out forwards;
+}
+
+/* LOGO fades out earlier & faster than panels */
+
+.preloader.preloader--done .preloader__logo {
+  opacity: 0;
+  /* starts immediately, fades quickly */
+  transition: opacity 0.25s ease;
+}
+
+/* logo scale-in animation */
+@keyframes preloader-logo-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

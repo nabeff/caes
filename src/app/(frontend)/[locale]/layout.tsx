@@ -19,6 +19,7 @@ import { NextIntlClientProvider } from 'next-intl'
 import localization from '@/i18n/localization'
 import { routing } from '@/i18n/routing'
 import ScrollToTopButton from '@/components/ScrollToTopButton'
+import Preloader from '@/components/Preloader'
 
 export default async function RootLayout({
   children,
@@ -52,6 +53,8 @@ export default async function RootLayout({
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
       </head>
       <body className="overflow-x-hidden">
+        <Preloader />
+
         <Providers>
           <NextIntlClientProvider messages={messages}>
             <Header locale={locale} />
