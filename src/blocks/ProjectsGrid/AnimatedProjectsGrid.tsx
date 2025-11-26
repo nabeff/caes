@@ -78,8 +78,8 @@ export const AnimatedProjectsGrid: React.FC<Props> = ({ locale, projects }) => {
               <div className="pointer-events-none absolute inset-0 bg-black/30 transition duration-500 group-hover:bg-black/0" />
               <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 transition duration-500 group-hover:opacity-100" />
               <div className="pointer-events-none absolute inset-x-4 bottom-4 translate-y-3 opacity-0 transition duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-                <h3 className="text-base text-white md:text-lg">{project.title}</h3>
-                <p className="mt-1 line-clamp-3 text-xs text-white/80 md:text-sm">
+                <h3 className="text-base text-white md:text-2xl">{project.title}</h3>
+                <p className="mt-1 line-clamp-3 text-xs text-white/80 md:text-lg">
                   {project.tinyText}
                 </p>
               </div>
