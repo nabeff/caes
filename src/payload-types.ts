@@ -869,7 +869,11 @@ export interface Project {
   };
   section4: {
     subtitle: string;
-    text: string;
+    text?: string | null;
+    programme?: string | null;
+    maitreDouvrage?: string | null;
+    surfacePlancher?: string | null;
+    etat?: string | null;
     image: string | Media;
   };
   section5: {
@@ -957,6 +961,7 @@ export interface DividerLineBlock {
  */
 export interface ProjectsGridBlock {
   title: string;
+  title2: string;
   description: string;
   /**
    * Button label at the bottom (e.g. “See more”, “Voir plus”).
@@ -1562,6 +1567,7 @@ export interface DividerLineBlockSelect<T extends boolean = true> {
  */
 export interface ProjectsGridBlockSelect<T extends boolean = true> {
   title?: T;
+  title2?: T;
   description?: T;
   seeMoreLabel?: T;
   id?: T;
@@ -1861,6 +1867,10 @@ export interface ProjectsSelect<T extends boolean = true> {
     | {
         subtitle?: T;
         text?: T;
+        programme?: T;
+        maitreDouvrage?: T;
+        surfacePlancher?: T;
+        etat?: T;
         image?: T;
       };
   section5?:

@@ -105,9 +105,11 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 text={section2.subtitle}
               />
 
-              <p className="whitespace-pre-line text-sm leading-relaxed md:text-base w-[80%]">
-                {section2.text}
-              </p>
+              <div className="mt-2 border-t border-neutral-200 pt-6">
+                <p className="whitespace-pre-line text-sm leading-relaxed md:text-base w-[80%]">
+                  {section2.text}
+                </p>
+              </div>
             </div>
 
             <div className="w-full lg:w-1/2">
@@ -162,20 +164,61 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </section>
 
         {/* 4) Subtitle + text left, image right */}
+        {/* 4) Subtitle + details left, image right */}
         <section className="container py-16">
           <div className="flex flex-col gap-10 lg:flex-row lg:items-center">
-            <div className="flex w-full flex-col gap-4 lg:w-1/2">
+            <div className="flex w-full flex-col gap-6 lg:w-1/2">
+              {/* Subtitle */}
               <SplitRevealText
                 as="h2"
                 variant="text"
                 className="text-lg md:text-xl uppercase tracking-wide"
                 text={section4.subtitle}
               />
-              <p className="whitespace-pre-line text-sm leading-relaxed md:text-base w-[80%]">
-                {section4.text}
-              </p>
+
+              {/* 🔹 Project details: PROGRAMME, MAÎTRE D’OUVRAGE, SURFACE PLANCHER, État */}
+              <div className="mt-2 border-t border-neutral-200 pt-6">
+                <div className=" gap-6 text-xs uppercase flex flex-col  ">
+                  {section4.programme && (
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[11px] text-neutral-500">PROGRAMME</span>
+                      <span className="text-sm normal-case tracking-normal text-neutral-900">
+                        {section4.programme}
+                      </span>
+                    </div>
+                  )}
+
+                  {section4.maitreDouvrage && (
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[11px] text-neutral-500">MAÎTRE D’OUVRAGE</span>
+                      <span className="text-sm normal-case tracking-normal text-neutral-900">
+                        {section4.maitreDouvrage}
+                      </span>
+                    </div>
+                  )}
+
+                  {section4.surfacePlancher && (
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[11px] text-neutral-500">SURFACE PLANCHER</span>
+                      <span className="text-sm normal-case tracking-normal text-neutral-900">
+                        {section4.surfacePlancher}
+                      </span>
+                    </div>
+                  )}
+
+                  {section4.etat && (
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[11px] text-neutral-500">ÉTAT</span>
+                      <span className="text-sm normal-case tracking-normal text-neutral-900">
+                        {section4.etat}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
 
+            {/* Right image unchanged */}
             <div className="w-full lg:w-1/2">
               <div className="relative w-full overflow-hidden aspect-[4/3]">
                 {section4Image && section4Index !== null && (

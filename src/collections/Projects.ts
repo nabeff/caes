@@ -132,10 +132,11 @@ export const Projects: CollectionConfig = {
     },
 
     // 4) Subtitle + text left, image right
+    // 4) Subtitle + text + project details left, image right
     {
       name: 'section4',
       type: 'group',
-      label: 'Section 4 – Text + Image',
+      label: 'Section 4 – Détails du projet',
       fields: [
         {
           name: 'subtitle',
@@ -147,9 +148,36 @@ export const Projects: CollectionConfig = {
           name: 'text',
           type: 'textarea',
           label: 'Text',
-          required: true,
+          required: false, // you can set true if you want to force it
           admin: { rows: 4 },
         },
+
+        // 🔹 Project detail fields in Section 4
+        {
+          name: 'programme',
+          type: 'text',
+          label: 'PROGRAMME',
+          required: false,
+        },
+        {
+          name: 'maitreDouvrage',
+          type: 'text',
+          label: 'MAÎTRE D’OUVRAGE',
+          required: false,
+        },
+        {
+          name: 'surfacePlancher',
+          type: 'text',
+          label: 'SURFACE PLANCHER',
+          required: false,
+        },
+        {
+          name: 'etat',
+          type: 'text',
+          label: 'État',
+          required: false,
+        },
+
         {
           name: 'image',
           type: 'upload',

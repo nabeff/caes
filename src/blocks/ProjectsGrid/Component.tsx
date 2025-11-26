@@ -33,7 +33,7 @@ function getLocalizedText(value: unknown, locale: string): string {
 }
 
 export const ProjectsGridBlock = async (props: ProjectsGridProps & { locale: TypedLocale }) => {
-  const { title, description, seeMoreLabel, locale } = props
+  const { title, title2, description, seeMoreLabel, locale } = props
 
   const payload = await getPayload({ config })
 
@@ -48,6 +48,7 @@ export const ProjectsGridBlock = async (props: ProjectsGridProps & { locale: Typ
   if (!projects.length) return null
 
   const headerTitle = getLocalizedText(title, locale)
+  const headerTitle2 = getLocalizedText(title2, locale)
   const headerDescription = getLocalizedText(description, locale)
   const seeMoreText = getLocalizedText(seeMoreLabel, locale)
 
@@ -61,22 +62,11 @@ export const ProjectsGridBlock = async (props: ProjectsGridProps & { locale: Typ
   }))
 
   return (
-    <section className="container py-6 md:py-12 lg:py-16">
+    <section className="container py-6 md:py-12 lg:py-16 mt-[40px]">
       {/* Section header */}
-      <div className="mb-12 flex max-w-5xl flex-col gap-3">
-        <SplitRevealText
-          as="h2"
-          variant="title"
-          text={headerTitle}
-          className="text-2xl md:text-3xl lg:text-4xl"
-        />
-
-        <SplitRevealText
-          as="p"
-          variant="text"
-          text={headerDescription}
-          className="whitespace-pre-line text-sm text-muted-foreground md:text-base"
-        />
+      <div className="mb-12 flex flex-col gap-2">
+        <h2 className="text-2xl md:text-3xl lg:text-5xl font-bolder  !uppercase">{headerTitle}</h2>
+        <h2 className="text-2xl md:text-3xl lg:text-5xl font-bolder  !uppercase">{headerTitle2}</h2>
       </div>
 
       {/* Animated grid */}

@@ -11,9 +11,26 @@
   font-display: swap;
 }
 
+/* 1️⃣ Register the Bukra font */
+@font-face {
+  font-family: '29LT';
+  src: url('/fonts/29LT.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @font-face {
   font-family: 'Inter';
   src: url('/fonts/inter.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GothamLight';
+  src: url('/fonts/GothamLight.otf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -31,9 +48,13 @@
   }
 
   h1,
-  h2,
-  h3 {
+  h2 {
     font-family: 'Bukra', system-ui, sans-serif;
+  }
+
+  h4 {
+    font-family: '29LT', system-ui, sans-serif;
+    font-weight: 900;
   }
 
   p,
@@ -41,7 +62,7 @@
   span,
   li,
   button {
-    font-family: 'Inter';
+    font-family: 'GothamLight';
   }
 }
 
@@ -50,7 +71,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-[#f4f4f4] min-h-[100vh] flex flex-col;
+    @apply bg-white min-h-[100vh] flex flex-col;
   }
 }
 
@@ -156,100 +177,113 @@ textarea {
   border-radius: 0 !important;
 }
 
-/* ===== PRELOADER MASK / CURTAIN ===== */
+/* === PRELOADER OVERLAY === */
 
-.preloader {
+.preloader-overlay {
   position: fixed;
   inset: 0;
-  z-index: 9999;
+  z-index: 999999;
+  background-color: transparent;
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
 
-  /* full black at the start, like a solid curtain */
-  background-color: #000;
+  pointer-events: none; /* scroll captured by JS */
+  touch-action: none;
 
   opacity: 1;
   visibility: visible;
 
-  /* background fades to transparent so we see the site under the mask */
   transition:
-    background-color 0.8s ease 0.1s,
-    opacity 0.4s ease 1.2s,
-    visibility 0s linear 1.6s;
+    opacity 0.6s ease-out,
+    visibility 0.6s ease-out;
 }
 
-/* when animation is finished */
-.preloader.preloader--done {
-  background-color: transparent; /* reveal website behind */
-  opacity: 0; /* fade the overlay itself */
-  visibility: hidden; /* remove it from flow */
+/* BLACK BG WITH CIRCLE HOLE */
+.preloader-overlay::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+
+  background: radial-gradient(
+    circle at center,
+    transparent 0%,
+    transparent var(--hole-size, 0%),
+    #000 calc(var(--hole-size, 0%) + 0.5px),
+    #000 100%
+  );
+
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* PRELOADER CONTAINER ABOVE BACKGROUND */
+.preloader-inner {
+  position: relative;
+  z-index: 1;
+
+  width: 100%;
+  height: 100%;
+  max-width: 1200px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* === LOGO === */
+/* NO opacity + NO animation here (React controls everything) */
+.preloader-logo {
+  transform-origin: center center;
+  /* shrink and opacity handled in TS */
+}
+
+.preloader-logo img {
+  width: min(20vw, 140px);
+  height: auto;
+}
+
+/* === SCROLL HINT TEXT === */
+.preloader-scroll-hint {
+  position: fixed;
+  bottom: clamp(1.5rem, 4vh, 3rem);
+  left: clamp(1.5rem, 4vw, 3rem);
+
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+
+  opacity: 0.7;
   pointer-events: none;
 }
 
-/* BLACK CURTAIN PANELS */
-.preloader__panel {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 50%;
-  background-color: #000;
-  will-change: transform;
+/* No fade-in keyframe (removed) */
 
-  /* 🔥 same speed, NO delay now */
-  transition: transform 1.3s cubic-bezier(0.4, 0, 0.2, 1);
+/* === SCROLL ICON (bottom-right) === */
+.preloader-scroll-icon {
+  position: fixed;
+  bottom: clamp(1.5rem, 4vh, 3rem);
+  right: clamp(1.5rem, 4vw, 3rem);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  pointer-events: none;
+  animation: preloader-scroll-bounce 1.2s ease-in-out infinite alternate;
 }
 
-/* start closed (touching in the middle, fully hiding the site) */
-.preloader__panel--left {
-  left: 0;
-  transform: translateX(0);
-}
-
-.preloader__panel--right {
-  right: 0;
-  transform: translateX(0);
-}
-
-/* when done → slide both panels away like curtains */
-.preloader.preloader--done .preloader__panel--left {
-  transform: translateX(-100%);
-}
-
-.preloader.preloader--done .preloader__panel--right {
-  transform: translateX(100%);
-}
-
-/* LOGO */
-.preloader__logo-wrap {
-  position: relative;
-  z-index: 2; /* above panels so we see it on black */
-}
-
-.preloader__logo {
+.preloader-scroll-icon img {
   display: block;
-  transform: scale(0.8);
-  opacity: 0;
-  animation: preloader-logo-in 0.7s ease-out forwards;
 }
 
-/* LOGO fades out earlier & faster than panels */
-
-.preloader.preloader--done .preloader__logo {
-  opacity: 0;
-  /* starts immediately, fades quickly */
-  transition: opacity 0.25s ease;
-}
-
-/* logo scale-in animation */
-@keyframes preloader-logo-in {
+/* small up/down motion (~5px) */
+@keyframes preloader-scroll-bounce {
   0% {
-    opacity: 0;
-    transform: scale(0.7);
+    transform: translateY(0);
   }
   100% {
-    opacity: 1;
-    transform: scale(1);
+    transform: translateY(-5px);
   }
 }
