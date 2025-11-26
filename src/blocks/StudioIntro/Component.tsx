@@ -77,12 +77,11 @@ export const StudioIntroBlock: React.FC<StudioIntroProps> = ({ title, image }) =
       <section ref={sectionRef} className="py-14">
         <div className="container mx-auto px-4 flex flex-col gap-8 items-center">
           <SplitRevealText
-            as="h4"
+            as="h3"
             variant="title"
             text={title}
-            className="29LT text-left text-2xl md:text-6xl !uppercase font-bolder"
+            className="text-left text-2xl  !uppercase font-[900] "
           />
-
           <div
             className="relative w-full aspect-[16/9] overflow-hidden"
             style={{
@@ -111,7 +110,7 @@ export const StudioIntroBlock: React.FC<StudioIntroProps> = ({ title, image }) =
           }}
         >
           <div
-            className="relative aspect-[16/9] overflow-hidden"
+            className="relative aspect-[16/9] overflow-hidden z-[2]"
             style={{
               width: '100vw',
               transform: `scale(${imageScale})`,
@@ -126,7 +125,7 @@ export const StudioIntroBlock: React.FC<StudioIntroProps> = ({ title, image }) =
 
         {/* Title overlay, animated */}
         <div
-          className="absolute z-[1]"
+          className="absolute z-[-1] w-full"
           style={{
             left: '50%',
             top: '50%',
@@ -136,10 +135,10 @@ export const StudioIntroBlock: React.FC<StudioIntroProps> = ({ title, image }) =
           }}
         >
           <SplitRevealText
-            as="h2"
+            as="h3"
             variant="title"
             text={title}
-            className="text-center text-3xl lg:text-4xl !uppercase font-bold"
+            className="text-center text-3xl lg:text-5xl !uppercase font-[900]"
           />
         </div>
       </div>

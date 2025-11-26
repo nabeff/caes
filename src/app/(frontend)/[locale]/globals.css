@@ -11,15 +11,6 @@
   font-display: swap;
 }
 
-/* 1️⃣ Register the Bukra font */
-@font-face {
-  font-family: '29LT';
-  src: url('/fonts/29LT.ttf') format('truetype');
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
-}
-
 @font-face {
   font-family: 'Inter';
   src: url('/fonts/inter.ttf') format('truetype');
@@ -48,13 +39,10 @@
   }
 
   h1,
-  h2 {
-    font-family: 'Bukra', system-ui, sans-serif;
-  }
-
+  h2,
+  h3,
   h4 {
-    font-family: '29LT', system-ui, sans-serif;
-    font-weight: 900;
+    font-family: 'Bukra', system-ui, sans-serif;
   }
 
   p,

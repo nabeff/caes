@@ -19,26 +19,27 @@ export const DualMapBlock: React.FC<DualMapBlockProps> = ({ title, intro, mapLef
           />
         )}
         {intro && (
-          <SplitRevealText as="p" variant="text" text={intro} className="text-sm leading-relaxed md:text-base whitespace-pre-line" />
+          <SplitRevealText
+            as="p"
+            variant="text"
+            text={intro}
+            className="text-sm leading-relaxed md:text-base whitespace-pre-line"
+          />
         )}
       </header>
 
       {/* Two maps */}
-      <div className="grid gap-8 md:grid-cols-2">
+      <div className="grid gap-8 md:grid-cols-2 mt-2 border-t border-neutral-200 pt-6">
         {/* Left map */}
         {mapLeft && mapLeft.embedUrl && (
           <div className="flex flex-col gap-3">
-            <div className="group relative aspect-[4/3] overflow-hidden rounded-lg border border-border">
-              <iframe
-                src={mapLeft.embedUrl as string}
-                className="h-full w-full border-0 grayscale transition duration-500 group-hover:grayscale-0"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                allowFullScreen
-              />
-            </div>
             <div>
-              <SplitRevealText as="h3" variant="title" text={mapLeft.mapTitle} className="mt-4 mb-2 text-2xl" />
+              <SplitRevealText
+                as="h3"
+                variant="title"
+                text={mapLeft.mapTitle}
+                className="mt-4 mb-2 text-2xl"
+              />
               {leftLinkHref && (
                 <a
                   href={leftLinkHref}
@@ -56,17 +57,13 @@ export const DualMapBlock: React.FC<DualMapBlockProps> = ({ title, intro, mapLef
         {/* Right map */}
         {mapRight && mapRight.embedUrl && (
           <div className="flex flex-col gap-3">
-            <div className="group relative aspect-[4/3] overflow-hidden rounded-lg border border-border">
-              <iframe
-                src={mapRight.embedUrl as string}
-                className="h-full w-full border-0 grayscale transition duration-500 group-hover:grayscale-0"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                allowFullScreen
-              />
-            </div>
             <div>
-              <SplitRevealText as="h3" variant="title" text={mapRight.mapTitle} className="mt-4 mb-2 text-2xl" />
+              <SplitRevealText
+                as="h3"
+                variant="title"
+                text={mapRight.mapTitle}
+                className="mt-4 mb-2 text-2xl"
+              />
               {rightLinkHref && (
                 <a
                   href={rightLinkHref}
