@@ -77,10 +77,10 @@ export const StudioIntroBlock: React.FC<StudioIntroProps> = ({ title, image }) =
       <section ref={sectionRef} className="py-14">
         <div className="container mx-auto px-4 flex flex-col gap-8 items-center">
           <SplitRevealText
-            as="h2"
+            as="h4"
             variant="title"
             text={title}
-            className="text-left text-2xl md:text-3xl"
+            className="29LT text-left text-2xl md:text-6xl !uppercase font-bolder"
           />
 
           <div
@@ -139,7 +139,7 @@ export const StudioIntroBlock: React.FC<StudioIntroProps> = ({ title, image }) =
             as="h2"
             variant="title"
             text={title}
-            className="text-center text-3xl lg:text-4xl"
+            className="text-center text-3xl lg:text-4xl !uppercase font-bold"
           />
         </div>
       </div>

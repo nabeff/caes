@@ -12,13 +12,7 @@ export const ImageTextSplitBlock: React.FC<ImageTextSplitProps> = ({ title, text
       <div className="container grid items-center gap-10 md:grid-cols-2">
         {/* Left: image with parallax */}
         <div className="relative w-full aspect-[4/3] md:aspect-[4/4] overflow-hidden">
-          {img && (
-            <ParallaxMedia
-              resource={img}
-              fill
-              shift={40} // same as data-shift="40"
-            />
-          )}
+          {img && <ParallaxMedia resource={img} fill shift={40} />}
         </div>
 
         {/* Right: text */}

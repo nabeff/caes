@@ -63,7 +63,7 @@ export const HeroCarouselBlock: React.FC<HeroCarouselBlockProps> = (props) => {
                 isActive ? 'opacity-100' : 'opacity-0',
               )}
             >
-              <Media resource={heroImage} fill imgClassName="object-cover grayscale" />
+              <Media resource={heroImage} fill imgClassName="object-cover " />
               <div className="absolute inset-0 bg-black/40" />
             </div>
           )
@@ -73,7 +73,7 @@ export const HeroCarouselBlock: React.FC<HeroCarouselBlockProps> = (props) => {
       <div className="absolute bottom-12 z-10 w-full">
         <div className="container mx-auto flex flex-col items-start justify-start gap-8 md:flex-row md:items-end md:justify-between">
           {/* Left: indicators + featured text + slide title */}
-          <div className="flex flex-col items-start gap-6 md:gap-12">
+          <div className="flex flex-col items-start gap-6 md:gap-8">
             {/* Progress bars */}
             <div className="pointer-events-auto flex items-center gap-3">
               {safeSlides.map((slide, idx) => {
@@ -100,9 +100,6 @@ export const HeroCarouselBlock: React.FC<HeroCarouselBlockProps> = (props) => {
 
             {/* Featured label + project title */}
             <div className="text-white">
-              {featuredProjectLabel && (
-                <p className="text-xs uppercase text-white/80">{featuredProjectLabel}</p>
-              )}
               {activeTitle && <p className="mt-1 text-sm md:text-base">{activeTitle}</p>}
             </div>
           </div>
@@ -119,7 +116,6 @@ export const HeroCarouselBlock: React.FC<HeroCarouselBlockProps> = (props) => {
               </span>
             </Link>
           )}
-          <div />
         </div>
       </div>
     </section>

@@ -54,7 +54,6 @@ export default async function RootLayout({
       </head>
       <body className="overflow-x-hidden">
         <Preloader />
-
         <Providers>
           <NextIntlClientProvider messages={messages}>
             <Header locale={locale} />
