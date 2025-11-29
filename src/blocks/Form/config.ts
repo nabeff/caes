@@ -1,4 +1,4 @@
-// src/components/Form/config.ts (or wherever your block config lives)
+// src/components/Form/config.ts
 import type { Block } from 'payload'
 import {
   FixedToolbarFeature,
@@ -16,6 +16,12 @@ export const FormBlock: Block = {
       type: 'relationship',
       relationTo: 'forms',
       required: true,
+    },
+    {
+      name: 'formTitle',
+      type: 'text',
+      label: 'Form title (above fields)',
+      localized: true,
     },
     {
       name: 'enableIntro',
@@ -39,7 +45,7 @@ export const FormBlock: Block = {
       label: 'Intro Content',
     },
 
-    // NEW: right-side image + contact info
+    // right-side image + contact info
     {
       name: 'sideImage',
       type: 'upload',

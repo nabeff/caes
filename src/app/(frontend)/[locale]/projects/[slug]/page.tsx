@@ -101,7 +101,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               <SplitRevealText
                 as="h2"
                 variant="text"
-                className="text-lg md:text-xl uppercase tracking-wide"
+                className="text-lg md:text-2xl uppercase tracking-wide"
                 text={section2.subtitle}
               />
 
@@ -172,7 +172,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               <SplitRevealText
                 as="h2"
                 variant="text"
-                className="text-lg md:text-xl uppercase tracking-wide"
+                className="text-lg md:text-2xl uppercase tracking-wide"
                 text={section4.subtitle}
               />
 
@@ -241,7 +241,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               <SplitRevealText
                 as="h2"
                 variant="title"
-                className="text-2xl md:text-3xl lg:text-4xl"
+                className="text-2xl md:text-3xl lg:text-4xl uppercase "
                 text={section5.title}
               />
             </div>

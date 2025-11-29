@@ -15,7 +15,7 @@ export const DualMapBlock: React.FC<DualMapBlockProps> = ({ title, intro, mapLef
             as="h2"
             variant="title"
             text={title}
-            className="mb-4 text-2xl md:text-3xl lg:text-4xl"
+            className="mb-4 text-2xl md:text-3xl lg:text-4xl uppercase "
           />
         )}
         {intro && (

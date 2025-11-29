@@ -220,6 +220,11 @@ export interface Page {
     | ImageTextSplitBlock
     | ShiftSupportBlock
     | DualMapBlock
+    | SavoirFaireBlock
+    | ImageTextSplitReverseBlock
+    | HistoryBlock
+    | TeamStatsBlock
+    | OfficesBlock
   )[];
   meta?: {
     title?: string | null;
@@ -605,6 +610,7 @@ export interface ArchiveBlock {
  */
 export interface FormBlock {
   form: string | Form;
+  formTitle?: string | null;
   enableIntro?: boolean | null;
   introContent?: {
     root: {
@@ -1081,6 +1087,82 @@ export interface DualMapBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SavoirFaireBlock".
+ */
+export interface SavoirFaireBlock {
+  title: string;
+  text: string;
+  mainImage: string | Media;
+  teamImage?: (string | null) | Media;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'savoirFaire';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageTextSplitReverseBlock".
+ */
+export interface ImageTextSplitReverseBlock {
+  title: string;
+  text: string;
+  image: string | Media;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'imageTextSplitReverse';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HistoryBlock".
+ */
+export interface HistoryBlock {
+  title: string;
+  leftText: string;
+  rightText: string;
+  buildingImage: string | Media;
+  teamImage?: (string | null) | Media;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'history';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TeamStatsBlock".
+ */
+export interface TeamStatsBlock {
+  title: string;
+  items: {
+    value: string;
+    label: string;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'teamStats';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "OfficesBlock".
+ */
+export interface OfficesBlock {
+  title: string;
+  rightText?: string | null;
+  offices?:
+    | {
+        city: string;
+        address: string;
+        phone?: string | null;
+        email?: string | null;
+        mapLabel?: string | null;
+        mapUrl?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'offices';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1406,6 +1488,11 @@ export interface PagesSelect<T extends boolean = true> {
         imageTextSplit?: T | ImageTextSplitBlockSelect<T>;
         shiftSupportBlock?: T | ShiftSupportBlockSelect<T>;
         dualMapBlock?: T | DualMapBlockSelect<T>;
+        savoirFaire?: T | SavoirFaireBlockSelect<T>;
+        imageTextSplitReverse?: T | ImageTextSplitReverseBlockSelect<T>;
+        history?: T | HistoryBlockSelect<T>;
+        teamStats?: T | TeamStatsBlockSelect<T>;
+        offices?: T | OfficesBlockSelect<T>;
       };
   meta?:
     | T
@@ -1500,6 +1587,7 @@ export interface ArchiveBlockSelect<T extends boolean = true> {
  */
 export interface FormBlockSelect<T extends boolean = true> {
   form?: T;
+  formTitle?: T;
   enableIntro?: T;
   introContent?: T;
   sideImage?: T;
@@ -1665,6 +1753,79 @@ export interface DualMapBlockSelect<T extends boolean = true> {
         embedUrl?: T;
         linkLabel?: T;
         linkUrl?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SavoirFaireBlock_select".
+ */
+export interface SavoirFaireBlockSelect<T extends boolean = true> {
+  title?: T;
+  text?: T;
+  mainImage?: T;
+  teamImage?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageTextSplitReverseBlock_select".
+ */
+export interface ImageTextSplitReverseBlockSelect<T extends boolean = true> {
+  title?: T;
+  text?: T;
+  image?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HistoryBlock_select".
+ */
+export interface HistoryBlockSelect<T extends boolean = true> {
+  title?: T;
+  leftText?: T;
+  rightText?: T;
+  buildingImage?: T;
+  teamImage?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TeamStatsBlock_select".
+ */
+export interface TeamStatsBlockSelect<T extends boolean = true> {
+  title?: T;
+  items?:
+    | T
+    | {
+        value?: T;
+        label?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "OfficesBlock_select".
+ */
+export interface OfficesBlockSelect<T extends boolean = true> {
+  title?: T;
+  rightText?: T;
+  offices?:
+    | T
+    | {
+        city?: T;
+        address?: T;
+        phone?: T;
+        email?: T;
+        mapLabel?: T;
+        mapUrl?: T;
+        id?: T;
       };
   id?: T;
   blockName?: T;

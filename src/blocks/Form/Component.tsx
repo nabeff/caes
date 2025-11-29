@@ -1,4 +1,4 @@
-// src/components/Form/Component.tsx  (or equivalent path)
+// src/components/Form/Component.tsx
 'use client'
 
 import type { FormFieldBlock, Form as FormType } from '@payloadcms/plugin-form-builder/types'
@@ -23,6 +23,9 @@ export type FormBlockType = {
   form: FormType
   introContent?: DefaultTypedEditorState
 
+  // NEW: title above the form
+  formTitle?: string | null
+
   // NEW: right-side panel props coming from block config
   sideImage?: MediaType | null
   sideTitle?: string | null
@@ -41,7 +44,9 @@ export const FormBlock: React.FC<
     form: { id: formID, confirmationMessage, confirmationType, redirect, submitButtonLabel } = {},
     introContent,
 
-    // NEW
+    formTitle,
+
+    // right-side content
     sideImage,
     sideTitle,
     phone,
@@ -132,6 +137,16 @@ export const FormBlock: React.FC<
       <div className="flex flex-col lg:flex-row-reverse w-full gap-8 items-center">
         <FormProvider {...formMethods}>
           <div className="w-full lg:w-[50%]">
+            {/* Title above the form */}
+            {!hasSubmitted && formTitle && (
+              <SplitRevealText
+                as="h2"
+                variant="title"
+                text={formTitle}
+                className="mb-6 text-2xl md:text-3xl lg:text-6xl"
+              />
+            )}
+
             {!isLoading && hasSubmitted && confirmationType === 'message' && (
               <RichText data={confirmationMessage} />
             )}
@@ -146,11 +161,18 @@ export const FormBlock: React.FC<
                     const Field: React.FC<any> = fields?.[field.blockType as keyof typeof fields]
                     if (!Field) return null
 
+                    const originalLabel =
+                      'label' in field && typeof field.label === 'string' ? field.label : undefined
+
                     return (
                       <div className="mb-6 last:mb-0" key={index}>
                         <Field
                           form={formFromProps}
                           {...field}
+                          // 👇 remove label text above input…
+                          label=""
+                          // …and use it as placeholder instead
+                          placeholder={originalLabel}
                           {...formMethods}
                           control={control}
                           errors={errors}
@@ -178,23 +200,6 @@ export const FormBlock: React.FC<
           <div className="relative w-full lg:w-[50%] min-h-[500px] md:min-h-[700px]">
             <Media resource={sideImage} fill imgClassName="object-cover grayscale" />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent" />
-            <div className="absolute bottom-3 z-10 w-full p-4">
-              <div className="bg-black text-white w-full p-8 flex flex-col gap-8">
-                {sideTitle && <SplitRevealText as="h3" variant="title" text={sideTitle} className="text-xl font-light md:text-2xl" />}
-                <div className="space-y-1 text-sm md:text-base">
-                  {phone && (
-                    <a href={`tel:${phone}`} className="block hover:underline">
-                      Téléphone : {phone}
-                    </a>
-                  )}
-                  {email && (
-                    <a href={`mailto:${email}`} className="block hover:underline">
-                      Email : {email}
-                    </a>
-                  )}
-                </div>
-              </div>
-            </div>
           </div>
         )}
       </div>

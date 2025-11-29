@@ -19,6 +19,11 @@ import PhilosophyBlock from './Philosophy/Component'
 import ImageTextSplitBlock from './ImageTextSplit/Component'
 import { ShiftSupportBlock } from './ShiftSupportBlock/Component'
 import { DualMapBlock } from './DualMapBlock/Component'
+import SavoirFaireBlock from './SavoirFaire/Component'
+import ImageTextSplitReverseBlock from './ImageTextSplitreverse/Component'
+import HistoryBlock from './History/Component'
+import TeamStatsBlock from './TeamStats/Component'
+import OfficesBlock from './Offices/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -26,20 +31,22 @@ const blockComponents = {
   cta: CallToActionBlock,
   formBlock: FormBlock,
   mediaBlock: MediaBlock,
-   heroCarousel: HeroCarouselBlock,
-   twoColumnCTA: TwoColumnCTABlock,
-   dividerLine: DividerLineBlock,
-   projectsGrid: ProjectsGridBlock,
-     studioIntro: StudioIntroBlock,
-     storyBlock: StoryBlock,
-     projectsListing: ProjectsListingBlock,
-     philosophy: PhilosophyBlock,
-     imageTextSplit: ImageTextSplitBlock,
-     shiftSupportBlock: ShiftSupportBlock,
-     dualMapBlock: DualMapBlock,
-
-
-
+  heroCarousel: HeroCarouselBlock,
+  twoColumnCTA: TwoColumnCTABlock,
+  dividerLine: DividerLineBlock,
+  projectsGrid: ProjectsGridBlock,
+  studioIntro: StudioIntroBlock,
+  storyBlock: StoryBlock,
+  projectsListing: ProjectsListingBlock,
+  philosophy: PhilosophyBlock,
+  imageTextSplit: ImageTextSplitBlock,
+  shiftSupportBlock: ShiftSupportBlock,
+  dualMapBlock: DualMapBlock,
+  savoirFaire: SavoirFaireBlock,
+  imageTextSplitReverse: ImageTextSplitReverseBlock,
+  history: HistoryBlock,
+  teamStats: TeamStatsBlock,
+  offices: OfficesBlock,
 }
 
 export const RenderBlocks: React.FC<{
@@ -61,7 +68,7 @@ export const RenderBlocks: React.FC<{
 
             if (Block) {
               return (
-                <div  key={index}>
+                <div key={index}>
                   {/* @ts-expect-error there may be some mismatch between the expected types here */}
                   <Block {...block} disableInnerContainer locale={locale} />
                 </div>

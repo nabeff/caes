@@ -65,8 +65,18 @@ export const ProjectsGridBlock = async (props: ProjectsGridProps & { locale: Typ
     <section className="container py-6 md:py-12 lg:py-16 mt-[40px]">
       {/* Section header */}
       <div className="mb-12 flex flex-col gap-2">
-        <h2 className="text-2xl md:text-3xl lg:text-5xl font-[900]  !uppercase">{headerTitle}</h2>
-        <h2 className="text-2xl md:text-3xl lg:text-5xl font-[900]  !uppercase">{headerTitle2}</h2>
+        <SplitRevealText
+          as="h2"
+          variant="title"
+          text={headerTitle}
+          className="text-2xl md:text-3xl lg:text-6xl "
+        />
+        <SplitRevealText
+          as="h2"
+          variant="title"
+          text={headerTitle2}
+          className="text-2xl md:text-3xl lg:text-6xl "
+        />
       </div>
 
       {/* Animated grid */}

@@ -36,7 +36,7 @@ export const PhilosophyBlock: React.FC<PhilosophyBlockProps> = ({
                   as="h2"
                   variant="title"
                   text={title}
-                  className="text-2xl md:text-3xl lg:text-4xl"
+                  className="text-2xl md:text-3xl lg:text-4xl uppercase "
                 />
               </div>
 
