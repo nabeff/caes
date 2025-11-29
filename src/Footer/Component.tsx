@@ -25,7 +25,6 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
   const poweredByLabel = footerData?.poweredByLabel
   const poweredBy = footerData?.poweredBy ?? []
 
-  // Render bottom text with "CAES" forced bold + white
   const renderBottomText = () => {
     if (typeof bottomText !== 'string') return null
 
@@ -35,7 +34,7 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
       <p className="max-w-3xl">
         {parts.map((part, idx) =>
           part === 'CAES' ? (
-            <span key={idx} className="font-semibold text-white">
+            <span key={idx} className="font-semibold text-black">
               CAES
             </span>
           ) : (
@@ -47,7 +46,7 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
   }
 
   return (
-    <footer className=" border-t border-white/10 bg-black text-white pt-10">
+    <footer className=" border-t border-black/20 text-black pt-10">
       <div className="container flex flex-col gap-10 py-12">
         {/* Top: logo + link columns */}
         <div className="flex flex-col gap-10 lg:flex-row items-center justify-center lg:items-start lg:justify-between">
@@ -82,7 +81,7 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
                         <CMSLink
                           key={row.id ?? i}
                           {...row.link}
-                          className="block text-sm text-white/70 transition hover:text-white"
+                          className="block text-sm text-black/70 transition hover:text-black"
                         />
                       )
                     })}
@@ -118,10 +117,10 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
         )}
 
         {/* Divider line */}
-        <div className="h-px w-full bg-white/10" />
+        <div className="h-px w-full bg-black/20" />
 
         {/* Bottom bar */}
-        <div className="flex flex-col md:flex-row justify-between gap-6 text-xs text-white/60 items-center md:justify-between md:text-sm">
+        <div className="flex flex-col md:flex-row justify-between gap-6 text-xs text-black/60 items-center md:justify-between md:text-sm">
           {/* Left: bottom text + powered by */}
           <div className="flex flex-col md:flex-row items-center gap-2">
             {renderBottomText()}
@@ -136,7 +135,7 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
                   return (
                     <React.Fragment key={row.id ?? idx}>
                       {idx > 0 && <span>&amp;</span>}
-                      <CMSLink {...row.link} className="text-white transition hover:underline" />
+                      <CMSLink {...row.link} className="text-black transition hover:underline" />
                     </React.Fragment>
                   )
                 })}
@@ -153,7 +152,7 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
                 <CMSLink
                   key={row.id ?? idx}
                   {...row.link}
-                  className="text-white/60 underline transition hover:text-white"
+                  className="text-black/60 underline transition hover:text-black"
                 />
               )
             })}

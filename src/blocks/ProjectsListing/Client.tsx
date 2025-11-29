@@ -228,7 +228,7 @@ export const ProjectsListingClient: React.FC<Props> = ({
           as="h1"
           text={title}
           variant="title"
-          className="text-3xl md:text-4xl lg:text-5xl"
+          className="text-3xl md:text-4xl lg:text-5xl uppercase"
         />
 
         {description && (

@@ -31,6 +31,11 @@ import Philosophy from '@/blocks/Philosophy/config'
 import ImageTextSplit from '@/blocks/ImageTextSplit/config'
 import { ShiftSupportBlock } from '@/blocks/ShiftSupportBlock/config'
 import { DualMapBlock } from '@/blocks/DualMapBlock/config'
+import SavoirFaire from '@/blocks/SavoirFaire/config'
+import ImageTextSplitReverse from '@/blocks/ImageTextSplitreverse/config'
+import History from '@/blocks/History/config'
+import TeamStats from '@/blocks/TeamStats/config'
+import Offices from '@/blocks/Offices/config'
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
@@ -100,6 +105,11 @@ export const Pages: CollectionConfig<'pages'> = {
                 ImageTextSplit,
                 ShiftSupportBlock,
                 DualMapBlock,
+                SavoirFaire,
+                ImageTextSplitReverse,
+                History,
+                TeamStats,
+                Offices,
               ],
               required: true,
               admin: {

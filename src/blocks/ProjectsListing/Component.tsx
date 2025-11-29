@@ -118,7 +118,7 @@ export const ProjectsListingBlock = async (
   })
 
   return (
-    <section className="bg-[#f4f4f4] py-16 md:py-24 mt-[80px]">
+    <section className=" py-16 md:py-24 mt-[80px]">
       <div className="container">
         <ProjectsListingClient
           title={headerTitle}
