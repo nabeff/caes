@@ -12,7 +12,7 @@ export const OfficesBlock: React.FC<OfficesBlockProps> = ({ title, rightText, of
             as="h2"
             variant="title"
             text={title}
-            className="text-2xl md:text-3xl lg:text-6xl  uppercase"
+            className="text-2xl md:text-3xl lg:text-6xl uppercase  uppercase"
           />
 
           {rightText && (

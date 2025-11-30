@@ -69,13 +69,13 @@ export const ProjectsGridBlock = async (props: ProjectsGridProps & { locale: Typ
           as="h2"
           variant="title"
           text={headerTitle}
-          className="text-2xl md:text-3xl lg:text-6xl "
+          className="text-2xl md:text-3xl lg:text-6xl uppercase "
         />
         <SplitRevealText
           as="h2"
           variant="title"
           text={headerTitle2}
-          className="text-2xl md:text-3xl lg:text-6xl "
+          className="text-2xl md:text-3xl lg:text-6xl uppercase "
         />
       </div>
 

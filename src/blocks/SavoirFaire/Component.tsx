@@ -27,7 +27,7 @@ export const SavoirFaireBlock: React.FC<SavoirFaireBlockProps> = ({
               as="h2"
               variant="title"
               text={title}
-              className="text-2xl md:text-3xl lg:text-6xl "
+              className="text-2xl md:text-3xl lg:text-6xl uppercase "
             />
 
             <div className="flex flex-col gap-6 ">

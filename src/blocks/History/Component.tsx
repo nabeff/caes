@@ -35,7 +35,7 @@ export const HistoryBlock: React.FC<HistoryBlockProps> = ({
               as="h2"
               variant="title"
               text={title}
-              className="text-2xl md:text-3xl lg:text-6xl "
+              className="text-2xl md:text-3xl lg:text-6xl uppercase "
             />
 
             <p className="text-sm md:text-base leading-relaxed whitespace-pre-line w-[90%] mx-auto mb-6">
