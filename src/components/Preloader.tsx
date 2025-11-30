@@ -4,6 +4,42 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import Image from 'next/image'
 
+function LogoLetters() {
+  return (
+    <div className="preloader-logo-letters">
+      {/* main CAES word */}
+      <div className="preloader-logo-main">
+        <span className="preloader-letter preloader-letter--c">C</span>
+        <span className="preloader-letter preloader-letter--a">A</span>
+
+        {/* E with bar above it */}
+        <span className="preloader-letter-wrapper preloader-letter-wrapper--e">
+          <span className="preloader-letter preloader-letter--e">E</span>
+          <span className="preloader-letter-bar" />
+        </span>
+
+        <span className="preloader-letter preloader-letter--s">S</span>
+      </div>
+
+      {/* ARCHITECTURE – letter by letter */}
+      <div className="preloader-word-archi">
+        <span className="archi-letter archi-letter--1">A</span>
+        <span className="archi-letter archi-letter--2">R</span>
+        <span className="archi-letter archi-letter--3">C</span>
+        <span className="archi-letter archi-letter--4">H</span>
+        <span className="archi-letter archi-letter--5">I</span>
+        <span className="archi-letter archi-letter--6">T</span>
+        <span className="archi-letter archi-letter--7">E</span>
+        <span className="archi-letter archi-letter--8">C</span>
+        <span className="archi-letter archi-letter--9">T</span>
+        <span className="archi-letter archi-letter--10">U</span>
+        <span className="archi-letter archi-letter--11">R</span>
+        <span className="archi-letter archi-letter--12">E</span>
+      </div>
+    </div>
+  )
+}
+
 export default function Preloader() {
   const [progress, setProgress] = useState(0) // 0 → 1
   const [isDone, setIsDone] = useState(false)
@@ -63,8 +99,8 @@ export default function Preloader() {
 
   const clamped = Math.min(Math.max(progress, 0), 1)
 
-  // CIRCLE always uses full progress
-  const holeSize = 160 * clamped
+  // 🔁 for rectangle: use 0 → 50% as "half-size" from center
+  const holeSize = 50 * clamped // 0% (no hole) → 50% (hole fills viewport)
 
   // 🔥 LOGO SHRINK from 0–30%
   const shrinkEnd = 0.3
@@ -81,7 +117,6 @@ export default function Preloader() {
   const logoOpacity = 1 - fadeProgress // 1 → 0
 
   // ⭐ ICON FADE: starts AFTER logo is gone
-  // icon visible until 0.5, then fades out between 0.5–0.8
   const iconFadeStart = 0.5
   const iconFadeEnd = 0.8
   let iconFadeProgress = 0
@@ -92,7 +127,7 @@ export default function Preloader() {
 
   const style = {
     '--hole-size': `${holeSize}%`,
-  } as any
+  } as React.CSSProperties
 
   const logoStyle: CSSProperties = {
     transform: `scale(${logoScale})`,
@@ -109,15 +144,17 @@ export default function Preloader() {
     <div className="preloader-overlay" style={style}>
       <div className="preloader-inner">
         <div className="preloader-logo" style={logoStyle}>
-          <Image src="/preloaderlogo.svg" alt="Preloader logo" width={260} height={260} priority />
+          <LogoLetters />
         </div>
-
-        {/* bottom-left text – currently disabled */}
-        {/* <p className="preloader-scroll-hint">scroll to explore</p> */}
 
         {/* bottom-right bouncing scroll icon (fades after logo) */}
         <div className="preloader-scroll-icon" style={iconStyle} aria-hidden="true">
-          <Image src="/scroll-down.svg" alt="" width={32} height={32} priority />
+          <span className="preloader-scroll-label">
+            <span>FAITES</span>
+            <span>DÉFILER</span>
+            <span>POUR</span>
+            <span>DÉCOUVRIR</span>
+          </span>
         </div>
       </div>
     </div>

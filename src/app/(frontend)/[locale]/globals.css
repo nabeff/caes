@@ -20,11 +20,18 @@
 }
 
 @font-face {
-  font-family: 'Inter';
-  src: url('/fonts/inter.ttf') format('truetype');
-  font-weight: 400;
+  font-family: '29lt';
+  src: url('/fonts/29lt.ttf') format('truetype');
+  font-weight: 600;
   font-style: normal;
   font-display: swap;
+}
+
+@font-face {
+  font-family: 'BigPixel';
+  src: url('/fonts/BigPixel.otf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
 }
 
 @layer base {
@@ -62,6 +69,31 @@ html {
 html[data-theme='dark'],
 html[data-theme='light'] {
   opacity: initial;
+}
+
+/* LINK UNDERLINE SWIPE */
+.link-underline-swipe {
+  position: relative;
+  display: inline-block;
+}
+
+.link-underline-swipe::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.2em; /* adjust distance under text */
+  height: 1px;
+  background-color: currentColor;
+
+  transform: scaleX(0);
+  transform-origin: right; /* base = hide to the right */
+  transition: transform 0.35s ease;
+}
+
+.link-underline-swipe:hover::after {
+  transform: scaleX(1);
+  transform-origin: left; /* on hover = grow from left */
 }
 
 @keyframes hero-slide-progress {
@@ -158,7 +190,6 @@ textarea {
 }
 
 /* === PRELOADER OVERLAY === */
-
 .preloader-overlay {
   position: fixed;
   inset: 0;
@@ -180,20 +211,23 @@ textarea {
     visibility 0.6s ease-out;
 }
 
-/* BLACK BG WITH CIRCLE HOLE */
+/* 🔳 BLACK BG WITH RECTANGULAR HOLE (instead of circle)
+   --hole-size goes 0% → 50% (from TS)
+   We build 4 black bands: top, bottom, left, right.
+*/
 .preloader-overlay::before {
   content: '';
   position: fixed;
   inset: 0;
-
-  background: radial-gradient(
-    circle at center,
-    transparent 0%,
-    transparent var(--hole-size, 0%),
-    #000 calc(var(--hole-size, 0%) + 0.5px),
-    #000 100%
-  );
-
+  background:
+    /* top band */
+    linear-gradient(#000, #000) top / 100% calc(50% - var(--hole-size, 0%)) no-repeat,
+    /* bottom band */ linear-gradient(#000, #000) bottom / 100% calc(50% - var(--hole-size, 0%))
+      no-repeat,
+    /* left band */ linear-gradient(#000, #000) left / calc(50% - var(--hole-size, 0%)) 100%
+      no-repeat,
+    /* right band */ linear-gradient(#000, #000) right / calc(50% - var(--hole-size, 0%)) 100%
+      no-repeat;
   pointer-events: none;
   z-index: 0;
 }
@@ -212,49 +246,228 @@ textarea {
   justify-content: center;
 }
 
-/* === LOGO === */
-/* NO opacity + NO animation here (React controls everything) */
+/* === LOGO WRAPPER (React controls scale/opacity) === */
 .preloader-logo {
   transform-origin: center center;
-  /* shrink and opacity handled in TS */
 }
 
-.preloader-logo img {
-  width: min(20vw, 140px);
-  height: auto;
+/* === SINGLE-LINE "CAES" + ARCHITECTURE === */
+.preloader-logo-letters {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  color: #fff;
 }
 
-/* === SCROLL HINT TEXT === */
-.preloader-scroll-hint {
-  position: fixed;
-  bottom: clamp(1.5rem, 4vh, 3rem);
-  left: clamp(1.5rem, 4vw, 3rem);
+/* horizontal CAES line */
+.preloader-logo-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.18em; /* spacing between letters */
+}
 
-  font-size: 0.75rem;
-  letter-spacing: 0.3em;
+/* each main letter (C, A, E, S) */
+.preloader-letter {
+  display: block;
+  font-family: 'BigPixel', system-ui, sans-serif; /* your logo font */
+  font-size: clamp(64px, 8vw, 120px);
+  line-height: 1;
+  opacity: 0;
+  transform: scale(0.7) translateY(10px);
+  /* 🔁 slower animation */
+  animation: preloader-letter-in 1.15s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+/* wrapper for E + bar above it */
+.preloader-letter-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* the bar above E */
+.preloader-letter-bar {
+  position: absolute;
+  top: -11px; /* vertical offset above E */
+  left: 50%;
+  transform: translateX(-50%) scaleX(0.4);
+  transform-origin: center;
+  width: 3.2rem;
+  height: 8px;
+  background-color: #fff;
+  opacity: 0;
+  animation: preloader-bar-in 0.9s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+/* ARCHITECTURE container – bottom-right of CAES */
+.preloader-word-archi {
+  position: absolute;
+  right: 0;
+  bottom: -1.6rem; /* adjust vertical offset if needed */
+  display: flex;
+  gap: 0.18em;
+  font-family: 'Bukra', system-ui, sans-serif;
   text-transform: uppercase;
-
-  opacity: 0.7;
-  pointer-events: none;
 }
 
-/* No fade-in keyframe (removed) */
+/* each ARCHITECTURE letter */
+.archi-letter {
+  font-size: clamp(9px, 1vw, 11px);
+  letter-spacing: 0.28em;
+  opacity: 0;
+  transform: scale(0.9) translateY(6px);
+  /* slightly faster than CAES but still smooth */
+  animation: preloader-archi-letter-in 0.85s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
 
-/* === SCROLL ICON (bottom-right) === */
+/* ── STAGGER: CAES ───────────────────────── */
+
+.preloader-letter--c {
+  animation-delay: 0s;
+}
+
+.preloader-letter--a {
+  animation-delay: 0.25s;
+}
+
+.preloader-letter-bar {
+  animation-delay: 0.42s;
+}
+
+.preloader-letter--e {
+  animation-delay: 0.52s;
+}
+
+.preloader-letter--s {
+  animation-delay: 0.78s;
+}
+
+/* ── STAGGER: ARCHITECTURE (starts after S) ── */
+.archi-letter--1 {
+  animation-delay: 1s;
+}
+.archi-letter--2 {
+  animation-delay: 1.08s;
+}
+.archi-letter--3 {
+  animation-delay: 1.16s;
+}
+.archi-letter--4 {
+  animation-delay: 1.24s;
+}
+.archi-letter--5 {
+  animation-delay: 1.32s;
+}
+.archi-letter--6 {
+  animation-delay: 1.4s;
+}
+.archi-letter--7 {
+  animation-delay: 1.48s;
+}
+.archi-letter--8 {
+  animation-delay: 1.56s;
+}
+.archi-letter--9 {
+  animation-delay: 1.64s;
+}
+.archi-letter--10 {
+  animation-delay: 1.72s;
+}
+.archi-letter--11 {
+  animation-delay: 1.8s;
+}
+.archi-letter--12 {
+  animation-delay: 1.88s;
+}
+
+/* keyframes for main letters */
+@keyframes preloader-letter-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) translateY(10px);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.04) translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* keyframes for bar */
+@keyframes preloader-bar-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scaleX(0.4);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scaleX(1);
+  }
+}
+
+/* keyframes for ARCHITECTURE letters */
+@keyframes preloader-archi-letter-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(6px);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.03) translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* === SCROLL ICON (bottom-right) + TEXT === */
 .preloader-scroll-icon {
   position: fixed;
   bottom: clamp(1.5rem, 4vh, 3rem);
   right: clamp(1.5rem, 4vw, 3rem);
 
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
 
   pointer-events: none;
   animation: preloader-scroll-bounce 1.2s ease-in-out infinite alternate;
 }
 
 .preloader-scroll-icon img {
+  display: block;
+}
+
+/* label container: words stacked vertically */
+.preloader-scroll-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'SF Pro Text',
+    sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.preloader-scroll-label span {
   display: block;
 }
 

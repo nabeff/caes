@@ -15,7 +15,7 @@ export const SavoirFaireBlock: React.FC<SavoirFaireBlockProps> = ({
   return (
     <section className="bg-black text-white py-12 md:py-20">
       <div className="container">
-        <div className="flex gap-16 w-full">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 w-full">
           <div className="w-[50%]">
             <div className="relative w-full aspect-[645/740] overflow-hidden">
               {main && <Media resource={main} fill className="object-cover" />}

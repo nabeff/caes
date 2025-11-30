@@ -112,7 +112,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
   const headerClasses = cn(
     'fixed top-0 left-0 right-0 z-30 border-b border-black transition-all duration-300',
     isVisible ? 'translate-y-0' : '-translate-y-full',
-    isAtTop ? 'bg-white/70 backdrop-blur-sm' : 'bg-white',
+    isAtTop ? 'bg-white/30 backdrop-blur-sm' : 'bg-white',
   )
 
   const ctaRaw = data?.cta as any
@@ -216,7 +216,11 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
                   style={{ transitionDelay: `${index * 90 + 80}ms` }}
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <CMSLink {...item.link} appearance="link" className="text-xl tracking-wide" />
+                  <CMSLink
+                    {...item.link}
+                    appearance="link"
+                    className="text-xl tracking-wide link-underline-swipe"
+                  />
                 </div>
               )
             })}

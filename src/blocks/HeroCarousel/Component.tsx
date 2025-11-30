@@ -100,7 +100,7 @@ export const HeroCarouselBlock: React.FC<HeroCarouselBlockProps> = (props) => {
 
             {/* Featured label + project title */}
             <div className="text-white">
-              {activeTitle && <p className="mt-1 text-sm md:text-base">{activeTitle}</p>}
+              {activeTitle && <p className="mt-1 text-sm md:text-xl">{activeTitle}</p>}
             </div>
           </div>
 
@@ -108,7 +108,7 @@ export const HeroCarouselBlock: React.FC<HeroCarouselBlockProps> = (props) => {
           {activeHref && ctaLabel && (
             <Link
               href={activeHref}
-              className="pointer-events-auto inline-flex items-center gap-2 text-sm text-white hover:underline"
+              className="pointer-events-auto inline-flex items-center gap-2 text-sm text-white link-underline-swipe"
             >
               <span>{ctaLabel}</span>
               <span className="relative h-3 w-3">
