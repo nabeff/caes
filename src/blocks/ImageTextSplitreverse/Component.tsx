@@ -19,7 +19,7 @@ export const ImageTextSplitReverseBlock: React.FC<ImageTextSplitProps> = ({
             as="h2"
             variant="title"
             text={title}
-            className="text-2xl md:text-3xl lg:text-6xl uppercase "
+            className="text-2xl md:text-3xl lg:text-6xl uppercase uppercase "
           />
 
           <p className="whitespace-pre-line text-sm leading-relaxed md:text-base w-[90%]">{text}</p>

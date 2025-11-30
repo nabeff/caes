@@ -91,7 +91,7 @@ export const TeamStatsBlock: React.FC<TeamStatsBlockProps> = ({ title, items }) 
               as="h2"
               variant="title"
               text={title}
-              className="text-2xl md:text-3xl lg:text-6xl uppercase"
+              className="text-2xl md:text-3xl lg:text-6xl uppercase uppercase"
             />
           </div>
 

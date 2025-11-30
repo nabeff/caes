@@ -143,7 +143,7 @@ export const FormBlock: React.FC<
                 as="h2"
                 variant="title"
                 text={formTitle}
-                className="mb-6 text-2xl md:text-3xl lg:text-6xl"
+                className="mb-6 text-2xl md:text-3xl lg:text-6xl uppercase"
               />
             )}
 
