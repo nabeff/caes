@@ -16,13 +16,7 @@ export const ProjectsGrid: Block = {
       required: true,
       localized: true,
     },
-    {
-      name: 'title2',
-      type: 'text',
-      label: 'Title',
-      required: true,
-      localized: true,
-    },
+
     {
       name: 'description',
       type: 'textarea',

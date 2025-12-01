@@ -202,19 +202,19 @@ export const ProjectsListingClient: React.FC<Props> = ({
       </motion.article>,
     )
 
-    if ((idx + 1) % 4 === 0 && quoteIndex < quotes.length) {
+    if ((idx + 1) % 8 === 0 && quoteIndex < quotes.length) {
       const quote = quotes[quoteIndex++]
 
       gridChildren.push(
-        <div key={`quote-${quote.id}`} className="my-28 flex items-center md:col-span-2">
-          <q
+        <div key={`quote-${quote.id}`} className="my-0 flex items-center md:col-span-2">
+          {/* <q
             className={cn(
               'mt-6 max-w-xl text-sm text-muted-foreground md:text-base',
               quote.align === 'right' ? 'ml-auto text-right' : 'text-left',
             )}
           >
             {quote.text}
-          </q>
+          </q> */}
         </div>,
       )
     }
@@ -223,24 +223,21 @@ export const ProjectsListingClient: React.FC<Props> = ({
   return (
     <div>
       {/* Header + filter */}
-      <div className="mb-10">
+      <div className="mb-20 flex flex-col justify-end items-end">
         <SplitRevealText
           as="h1"
           text={title}
           variant="title"
-          className="text-3xl md:text-4xl lg:text-5xl uppercase"
+          className="text-3xl md:text-4xl lg:text-8xl uppercase text-end mb-6"
         />
 
         {description && (
-          <SplitRevealText
-            as="p"
-            variant="text"
-            text={description}
-            className="mt-3 max-w-2xl text-sm text-muted-foreground md:text-base"
-          />
+          <p className="mt-3 text-sm text-muted-foreground max-w-lg text-justify leading-relaxed">
+            {description}
+          </p>
         )}
 
-        <div className="mt-8 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+        <div className="mt-10 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
           <span className="text-xs uppercase tracking-wide text-muted-foreground">Filter by :</span>
 
           <FilterDropdown value={activeCatId} onChange={setActiveCatId} categories={categories} />

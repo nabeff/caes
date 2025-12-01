@@ -33,7 +33,7 @@ function getLocalizedText(value: unknown, locale: string): string {
 }
 
 export const ProjectsGridBlock = async (props: ProjectsGridProps & { locale: TypedLocale }) => {
-  const { title, title2, description, seeMoreLabel, locale } = props
+  const { title, description, seeMoreLabel, locale } = props
 
   const payload = await getPayload({ config })
 
@@ -48,7 +48,6 @@ export const ProjectsGridBlock = async (props: ProjectsGridProps & { locale: Typ
   if (!projects.length) return null
 
   const headerTitle = getLocalizedText(title, locale)
-  const headerTitle2 = getLocalizedText(title2, locale)
   const headerDescription = getLocalizedText(description, locale)
   const seeMoreText = getLocalizedText(seeMoreLabel, locale)
 
@@ -69,12 +68,6 @@ export const ProjectsGridBlock = async (props: ProjectsGridProps & { locale: Typ
           as="h2"
           variant="title"
           text={headerTitle}
-          className="text-2xl md:text-3xl lg:text-6xl uppercase "
-        />
-        <SplitRevealText
-          as="h2"
-          variant="title"
-          text={headerTitle2}
           className="text-2xl md:text-3xl lg:text-6xl uppercase "
         />
       </div>

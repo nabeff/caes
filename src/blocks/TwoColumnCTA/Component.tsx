@@ -70,20 +70,12 @@ export const TwoColumnCTABlock: React.FC<TwoColumnCTAProps> = ({ title, button, 
 
   return (
     <section className="container mx-auto relative py-16 mt-10">
-      <div className="mb-16">
-        <SplitRevealText
-          as="h2"
-          variant="title"
-          text={title}
-          className="text-2xl md:text-4xl lg:text-6xl "
-        />
-      </div>
       <div className="flex flex-col items-stretch justify-center gap-10 h-full lg:flex-row">
         <div
           id="twoColumnCtaParagraph"
-          className="flex w-full flex-col items-start gap-4 lg:w-[58%]"
+          className="flex w-full flex-col items-start gap-4 lg:w-[50%]"
         >
-          <h3 className="ml-[3rem] !font-bukra text-base md:text-2xl !leading-[2.2rem] lg:!leading-[2.7rem]">
+          <h3 className="ml-[4rem] !font-bukra text-base md:text-2xl !leading-[2.2rem] lg:!leading-[2.3rem]">
             {paraText}
           </h3>
         </div>

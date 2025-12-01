@@ -54,7 +54,7 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
           <div>
             <Link href={`/${locale}`} className="inline-flex items-center">
               {logo ? (
-                <Media resource={logo} imgClassName="h-auto w-auto object-contain" />
+                <Media resource={logo} imgClassName="h-[126px] w-[243px] object-contain" />
               ) : (
                 <Logo />
               )}
@@ -62,7 +62,7 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
           </div>
 
           {/* Columns (title + CMSLink links) */}
-          <div className="flex flex-col md:flex-row items-center md:items-start  text-center md:text-start gap-8 md:gap-16">
+          <div className="flex flex-col md:flex-row items-center md:items-start  text-center md:text-start gap-8 md:gap-20">
             {columns.map((col, idx) => {
               const links = col.links ?? []
 
@@ -71,7 +71,7 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
                   key={col.id ?? idx}
                   className="flex flex-col  items-center md:items-start gap-3"
                 >
-                  <h2 className="text-lg uppercase">{col.title}</h2>
+                  <h2 className="text-xl uppercase">{col.title}</h2>
 
                   <div className="flex flex-col gap-2 text-sm">
                     {links.map((row, i) => {
@@ -81,7 +81,7 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
                         <CMSLink
                           key={row.id ?? i}
                           {...row.link}
-                          className="block w-fit text-sm text-black/70 transition hover:text-black link-underline-swipe"
+                          className="block w-fit text-base text-black/70 transition hover:text-black link-underline-swipe"
                         />
                       )
                     })}

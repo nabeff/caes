@@ -967,7 +967,6 @@ export interface DividerLineBlock {
  */
 export interface ProjectsGridBlock {
   title: string;
-  title2: string;
   description: string;
   /**
    * Button label at the bottom (e.g. “See more”, “Voir plus”).
@@ -1655,7 +1654,6 @@ export interface DividerLineBlockSelect<T extends boolean = true> {
  */
 export interface ProjectsGridBlockSelect<T extends boolean = true> {
   title?: T;
-  title2?: T;
   description?: T;
   seeMoreLabel?: T;
   id?: T;
