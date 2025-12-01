@@ -91,7 +91,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <SplitRevealText
               as="h1"
               variant="title"
-              className="text-3xl md:text-4xl lg:text-4xl"
+              className="text-3xl md:text-4xl lg:text-6xl"
               text={section2.title}
             />
           </div>
@@ -101,11 +101,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               <SplitRevealText
                 as="h2"
                 variant="text"
-                className="text-lg md:text-2xl uppercase tracking-wide"
+                className="text-lg md:text-3xl uppercase tracking-wide"
                 text={section2.subtitle}
               />
 
-              <div className="mt-2 border-t border-neutral-200 pt-6">
+              <div className="w-full h-[0.5px] bg-black/20 my-4"></div>
+              <div className="">
                 <p className="whitespace-pre-line text-sm leading-relaxed md:text-base w-[80%]">
                   {section2.text}
                 </p>
@@ -129,7 +130,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         {/* 3) 3-image gallery */}
         <section className="container py-12">
           <div className="flex items-center gap-6">
-            <div className="flex flex-col gap-6 md:w-1/2">
+            <div className="flex flex-col gap-4 md:w-1/2">
               <div className="relative w-full overflow-hidden aspect-[4/3]">
                 {imageLeftTop && imageLeftTopIndex !== null && (
                   <GalleryImage
@@ -167,22 +168,22 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         {/* 4) Subtitle + details left, image right */}
         <section className="container py-16">
           <div className="flex flex-col gap-10 lg:flex-row lg:items-center">
-            <div className="flex w-full flex-col gap-6 lg:w-1/2">
+            <div className="flex w-full flex-col gap-4 lg:w-1/2">
               {/* Subtitle */}
               <SplitRevealText
                 as="h2"
                 variant="text"
-                className="text-lg md:text-2xl uppercase tracking-wide"
+                className="text-lg md:text-3xl uppercase tracking-wide"
                 text={section4.subtitle}
               />
 
-              {/* 🔹 Project details: PROGRAMME, MAÎTRE D’OUVRAGE, SURFACE PLANCHER, État */}
-              <div className="mt-2 border-t border-neutral-200 pt-6">
+              <div className="w-full h-[0.5px] bg-black/20 my-4"></div>
+              <div className="">
                 <div className=" gap-6 text-xs uppercase flex flex-col  ">
                   {section4.programme && (
                     <div className="flex flex-col gap-1">
-                      <span className="text-[11px] text-neutral-500">PROGRAMME</span>
-                      <span className="text-sm normal-case tracking-normal text-neutral-900">
+                      <span className="text-base text-neutral-500">PROGRAMME</span>
+                      <span className="text-lg normal-case tracking-normal text-neutral-900">
                         {section4.programme}
                       </span>
                     </div>
@@ -190,8 +191,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
                   {section4.maitreDouvrage && (
                     <div className="flex flex-col gap-1">
-                      <span className="text-[11px] text-neutral-500">MAÎTRE D’OUVRAGE</span>
-                      <span className="text-sm normal-case tracking-normal text-neutral-900">
+                      <span className="text-base text-neutral-500">MAÎTRE D’OUVRAGE</span>
+                      <span className="text-lg normal-case tracking-normal text-neutral-900">
                         {section4.maitreDouvrage}
                       </span>
                     </div>
@@ -199,8 +200,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
                   {section4.surfacePlancher && (
                     <div className="flex flex-col gap-1">
-                      <span className="text-[11px] text-neutral-500">SURFACE PLANCHER</span>
-                      <span className="text-sm normal-case tracking-normal text-neutral-900">
+                      <span className="text-base text-neutral-500">SURFACE PLANCHER</span>
+                      <span className="text-lg normal-case tracking-normal text-neutral-900">
                         {section4.surfacePlancher}
                       </span>
                     </div>
@@ -208,8 +209,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
                   {section4.etat && (
                     <div className="flex flex-col gap-1">
-                      <span className="text-[11px] text-neutral-500">ÉTAT</span>
-                      <span className="text-sm normal-case tracking-normal text-neutral-900">
+                      <span className="text-base text-neutral-500">ÉTAT</span>
+                      <span className="text-lg normal-case tracking-normal text-neutral-900">
                         {section4.etat}
                       </span>
                     </div>

@@ -81,7 +81,7 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
                         <CMSLink
                           key={row.id ?? i}
                           {...row.link}
-                          className="block text-sm text-black/70 transition hover:text-black"
+                          className="block w-fit text-sm text-black/70 transition hover:text-black link-underline-swipe"
                         />
                       )
                     })}
@@ -135,7 +135,10 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
                   return (
                     <React.Fragment key={row.id ?? idx}>
                       {idx > 0 && <span>&amp;</span>}
-                      <CMSLink {...row.link} className="text-black transition hover:underline" />
+                      <CMSLink
+                        {...row.link}
+                        className="text-black transition link-underline-swipe"
+                      />
                     </React.Fragment>
                   )
                 })}
@@ -152,7 +155,7 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
                 <CMSLink
                   key={row.id ?? idx}
                   {...row.link}
-                  className="text-black/60 underline transition hover:text-black"
+                  className="text-black/60  transition hover:text-black link-underline-swipe"
                 />
               )
             })}
