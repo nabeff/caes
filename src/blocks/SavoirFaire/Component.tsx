@@ -18,7 +18,7 @@ export const SavoirFaireBlock: React.FC<SavoirFaireBlockProps> = ({
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 w-full">
           <div className="w-[50%]">
             <div className="relative w-full aspect-[645/740] overflow-hidden">
-              {main && <Media resource={main} fill className="object-cover" />}
+              {main && <Media resource={main} fill imgClassName="object-cover" />}
             </div>
           </div>
 
@@ -33,7 +33,7 @@ export const SavoirFaireBlock: React.FC<SavoirFaireBlockProps> = ({
             <div className="flex flex-col gap-6 ">
               <p className="whitespace-pre-line text-sm md:text-base leading-relaxed ">{text}</p>
               <div className="relative w-full aspect-[589/254] overflow-hidden">
-                <Media resource={team} fill className="object-cover" />
+                <Media resource={team} fill imgClassName="object-cover" />
               </div>
             </div>
           </div>

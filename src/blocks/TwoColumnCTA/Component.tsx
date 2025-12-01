@@ -81,9 +81,9 @@ export const TwoColumnCTABlock: React.FC<TwoColumnCTAProps> = ({ title, button, 
       <div className="flex flex-col items-stretch justify-center gap-10 h-full lg:flex-row">
         <div
           id="twoColumnCtaParagraph"
-          className="flex w-full flex-col items-start gap-4 lg:w-[65%]"
+          className="flex w-full flex-col items-start gap-4 lg:w-[58%]"
         >
-          <h3 className="!font-bukra text-base md:text-3xl !leading-[2.2rem] lg:!leading-[3rem]">
+          <h3 className="ml-[3rem] !font-bukra text-base md:text-2xl !leading-[2.2rem] lg:!leading-[2.7rem]">
             {paraText}
           </h3>
         </div>
