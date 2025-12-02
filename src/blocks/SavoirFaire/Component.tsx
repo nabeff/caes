@@ -16,13 +16,13 @@ export const SavoirFaireBlock: React.FC<SavoirFaireBlockProps> = ({
     <section className="bg-black text-white py-12 md:py-20">
       <div className="container">
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 w-full">
-          <div className="w-[55%]">
+          <div className="w-full lg:w-[55%]">
             <div className="relative w-full aspect-[897/908] overflow-hidden">
               {main && <Media resource={main} fill imgClassName="object-cover" />}
             </div>
           </div>
 
-          <div className="flex flex-col gap-6 w-[45%] justify-center">
+          <div className="flex flex-col gap-6 w-full lg:w-[45%] justify-center">
             <SplitRevealText
               as="h2"
               variant="title"
@@ -31,7 +31,7 @@ export const SavoirFaireBlock: React.FC<SavoirFaireBlockProps> = ({
             />
 
             <div className="flex flex-col gap-6 ">
-              <p className="text-sm md:text-base w-[90%] ">{text}</p>
+              <p className="text-sm md:text-base w-full md:w-[90%] ">{text}</p>
               {/* <div className="relative w-full aspect-[589/254] overflow-hidden">
                 <Media resource={team} fill imgClassName="object-cover" />
               </div> */}

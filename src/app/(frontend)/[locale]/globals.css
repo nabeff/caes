@@ -277,36 +277,35 @@ textarea {
   line-height: 1;
   opacity: 0;
   transform: scale(0.7) translateY(10px);
-  /* 🔁 slower animation */
   animation: preloader-letter-in 1.15s cubic-bezier(0.19, 1, 0.22, 1) forwards;
 }
 
-/* wrapper for E + bar above it */
 .preloader-letter-wrapper {
   position: relative;
-  display: inline-flex;
+  display: inline-block;
   align-items: center;
   justify-content: center;
 }
 
-/* the bar above E */
 .preloader-letter-bar {
   position: absolute;
-  top: -11px; /* vertical offset above E */
-  left: 50%;
-  transform: translateX(-50%) scaleX(0.4);
-  transform-origin: center;
-  width: 3.2rem;
-  height: 8px;
+  bottom: 100%;
+  margin-bottom: 0.1em;
+  width: 70%;
+  left: 10%;
+
+  height: clamp(0.3em, 1vw, 0.6em);
   background-color: #fff;
+
+  transform-origin: left center;
+  transform: scaleX(0);
   opacity: 0;
   animation: preloader-bar-in 0.9s cubic-bezier(0.19, 1, 0.22, 1) forwards;
 }
 
-/* ARCHITECTURE container – bottom-right of CAES */
 .preloader-word-archi {
   position: absolute;
-  right: 0;
+  right: -4rem;
   bottom: -1.6rem; /* adjust vertical offset if needed */
   display: flex;
   gap: 0.18em;
@@ -314,17 +313,13 @@ textarea {
   text-transform: uppercase;
 }
 
-/* each ARCHITECTURE letter */
 .archi-letter {
   font-size: clamp(9px, 1vw, 11px);
   letter-spacing: 0.28em;
   opacity: 0;
   transform: scale(0.9) translateY(6px);
-  /* slightly faster than CAES but still smooth */
   animation: preloader-archi-letter-in 0.85s cubic-bezier(0.19, 1, 0.22, 1) forwards;
 }
-
-/* ── STAGGER: CAES ───────────────────────── */
 
 .preloader-letter--c {
   animation-delay: 0s;
@@ -346,7 +341,6 @@ textarea {
   animation-delay: 0.78s;
 }
 
-/* ── STAGGER: ARCHITECTURE (starts after S) ── */
 .archi-letter--1 {
   animation-delay: 1s;
 }
@@ -400,15 +394,15 @@ textarea {
   }
 }
 
-/* keyframes for bar */
+/* keyframes for bar (over E) */
 @keyframes preloader-bar-in {
   0% {
     opacity: 0;
-    transform: translateX(-50%) scaleX(0.4);
+    transform: scaleX(0);
   }
   100% {
     opacity: 1;
-    transform: translateX(-50%) scaleX(1);
+    transform: scaleX(1);
   }
 }
 
@@ -448,7 +442,7 @@ textarea {
   display: block;
 }
 
-/* label container: words stacked vertically */
+/* label container */
 .preloader-scroll-label {
   display: flex;
   flex-direction: row;

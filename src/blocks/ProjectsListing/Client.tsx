@@ -179,7 +179,7 @@ export const ProjectsListingClient: React.FC<Props> = ({
           href={`/${locale}/projects/${slug}`}
           className="group flex flex-col border border-border"
         >
-          <div className="relative h-80 w-full overflow-hidden">
+          <div className="relative h-60 md:h-80 w-full overflow-hidden">
             {thumbnail && (
               <Media
                 resource={thumbnail}

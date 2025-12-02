@@ -91,19 +91,19 @@ export const TeamStatsBlock: React.FC<TeamStatsBlockProps> = ({ title, items }) 
               as="h2"
               variant="title"
               text={title}
-              className="text-2xl md:text-3xl lg:text-6xl uppercase uppercase"
+              className="text-2xl md:text-3xl lg:text-6xl uppercase "
             />
           </div>
 
           {/* Cards */}
           <div className="w-full">
-            <div className="flex justify-between items-stretch w-full gap-4">
+            <div className="flex flex-col lg:flex-row justify-between items-stretch w-full gap-4">
               {items?.map((item, i) => (
                 <div
                   key={i}
-                  className="flex flex-col items-end justify-end text-end bg-[#f7f7f7] px-4 h-[300px] py-4 w-[25%] gap-2"
+                  className="flex flex-col items-end justify-end text-end bg-[#f7f7f7] px-4 h-[300px] py-4 w-full lg:w-[25%] gap-2"
                 >
-                  <h4 className="text-3xl md:text-8xl">
+                  <h4 className="text-3xl md:text-5xl lg:text-7xl">
                     <CountUpNumber value={item.value as string} />
                   </h4>
                   <p className="mt-2 text-xs md:text-sm uppercase tracking-[0.18em]">

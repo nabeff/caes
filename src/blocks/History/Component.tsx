@@ -16,21 +16,21 @@ export const HistoryBlock: React.FC<HistoryBlockProps> = ({
   return (
     <section className=" py-12 md:py-16 mt-[60px]">
       <div className="container">
-        <div className="flex gap-12">
+        <div className="flex flex-col-reverse md:flex-row gap-12">
           {/* LEFT COLUMN: image + description */}
-          <div className="flex flex-col gap-10 w-[50%] items-center">
+          <div className="flex flex-col-reverse gap-10 w-full md:w-[50%] items-center">
             {building && (
               <div className="relative w-full overflow-hidden aspect-[477/495]">
                 <Media resource={building} fill className="object-cover" />
               </div>
             )}
 
-            <p className="text-sm md:text-base leading-relaxed whitespace-pre-line w-[80%] mx-auto text-left">
+            <p className="text-sm md:text-base leading-relaxed whitespace-pre-line w-full md:w-[80%] mx-auto text-left">
               {leftText}
             </p>
           </div>
 
-          <div className="flex flex-col gap-6 w-[50%] items-start mt-24">
+          <div className="flex flex-col gap-6 w-full md:w-[50%] items-start mt-8 md:mt-24">
             <SplitRevealText
               as="h2"
               variant="title"
@@ -38,12 +38,12 @@ export const HistoryBlock: React.FC<HistoryBlockProps> = ({
               className="text-2xl md:text-3xl lg:text-6xl uppercase "
             />
 
-            <p className="text-sm md:text-base leading-relaxed whitespace-pre-line w-[80%]  mb-6">
+            <p className="text-sm md:text-base leading-relaxed whitespace-pre-line w-full md:w-[80%] mb-6">
               {rightText}
             </p>
 
             {team && (
-              <div className="relative mt-20 w-full overflow-hidden aspect-[589/308]">
+              <div className="relative mt-0 md:mt-20 w-full overflow-hidden aspect-[589/308]">
                 <Media resource={team} fill className="object-cover" />
               </div>
             )}
