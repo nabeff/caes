@@ -1,7 +1,9 @@
+// SavoirFaireBlock.tsx
 import React from 'react'
 import type { SavoirFaireBlock as SavoirFaireBlockProps, Media as MediaType } from '@/payload-types'
 import { Media } from '@/components/Media'
 import { SplitRevealText } from '@/components/animations/SplitRevealText'
+import { RichText } from '@payloadcms/richtext-lexical/react' // ⬅️ add this
 
 export const SavoirFaireBlock: React.FC<SavoirFaireBlockProps> = ({
   title,
@@ -30,8 +32,9 @@ export const SavoirFaireBlock: React.FC<SavoirFaireBlockProps> = ({
               className="text-2xl md:text-3xl lg:text-6xl uppercase "
             />
 
-            <div className="flex flex-col gap-6 ">
-              <p className="text-sm md:text-base w-full md:w-[90%] ">{text}</p>
+            <div className="flex flex-col gap-6">
+              {text && <RichText data={text} className="text-sm md:text-base w-full md:w-[90%]" />}
+
               {/* <div className="relative w-full aspect-[589/254] overflow-hidden">
                 <Media resource={team} fill imgClassName="object-cover" />
               </div> */}

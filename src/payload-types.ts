@@ -1090,7 +1090,24 @@ export interface DualMapBlock {
  */
 export interface SavoirFaireBlock {
   title: string;
-  text: string;
+  /**
+   * Main text
+   */
+  text: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
   mainImage: string | Media;
   teamImage?: (string | null) | Media;
   id?: string | null;

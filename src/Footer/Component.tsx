@@ -69,11 +69,11 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
               return (
                 <div
                   key={col.id ?? idx}
-                  className="flex flex-col  items-center md:items-start gap-3"
+                  className="flex flex-col text-center md:text-start  items-center md:items-start gap-3"
                 >
                   <h2 className="text-xl uppercase">{col.title}</h2>
 
-                  <div className="flex flex-col gap-2 text-sm">
+                  <div className="flex flex-col gap-2 items-center md:items-start text-sm">
                     {links.map((row, i) => {
                       if (!row.link) return null
 

@@ -1,4 +1,10 @@
 import type { Block } from 'payload'
+import {
+  FixedToolbarFeature,
+  HeadingFeature,
+  InlineToolbarFeature,
+  lexicalEditor,
+} from '@payloadcms/richtext-lexical'
 
 export const SavoirFaire: Block = {
   slug: 'savoirFaire',
@@ -16,15 +22,24 @@ export const SavoirFaire: Block = {
       localized: true,
       defaultValue: 'Un savoir-faire diversifié',
     },
+
     {
       name: 'text',
-      type: 'textarea',
-      label: 'Text',
+      type: 'richText',
       required: true,
       localized: true,
+      label: 'text',
       admin: {
-        rows: 6,
+        description: 'Main text ',
       },
+      editor: lexicalEditor({
+        features: ({ rootFeatures }) => [
+          ...rootFeatures,
+          HeadingFeature({ enabledHeadingSizes: ['h2', 'h3'] }),
+          FixedToolbarFeature(),
+          InlineToolbarFeature(),
+        ],
+      }),
     },
     {
       name: 'mainImage',

@@ -302,7 +302,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               {/* Arrows: bottom-right, square, black (md+ only) */}
               <CarouselPrevious
                 className="
-                  hidden md:inline-flex
+                   inline-flex
                   left-auto top-auto translate-y-0
                   -bottom-[50px] right-14
                   rounded-none
@@ -312,7 +312,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               />
               <CarouselNext
                 className="
-                  hidden md:inline-flex
+                  inline-flex
                   left-auto top-auto translate-y-0
                   -bottom-[50px] right-4
                   rounded-none
