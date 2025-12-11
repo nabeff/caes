@@ -33,11 +33,14 @@ export const SavoirFaireBlock: React.FC<SavoirFaireBlockProps> = ({
             />
 
             <div className="flex flex-col gap-6">
-              {text && <RichText data={text} className="text-sm md:text-base w-full md:w-[90%]" />}
+              {text && (
+                <RichText
+                  data={text}
+                  className="text-sm md:text-base w-full md:w-[90%] flex flex-col gap-4"
+                />
+              )}
 
-              {/* <div className="relative w-full aspect-[589/254] overflow-hidden">
-                <Media resource={team} fill imgClassName="object-cover" />
-              </div> */}
+    
             </div>
           </div>
         </div>
