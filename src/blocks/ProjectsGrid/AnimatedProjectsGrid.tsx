@@ -64,14 +64,14 @@ export const AnimatedProjectsGrid: React.FC<Props> = ({ locale, projects }) => {
         >
           <Link
             href={`/${locale}/projects/${project.slug}`}
-            className="group flex flex-col border border-border p-0 overflow-hidden"
+            className="group flex flex-col  p-0 overflow-hidden"
           >
             <div className="relative h-60 md:h-80 w-full">
               {project.thumbnail && (
                 <Media
                   resource={project.thumbnail}
                   fill
-                  imgClassName="object-cover grayscale transition duration-500 group-hover:grayscale-0"
+                  imgClassName="object-cover  transition duration-500 group-hover:grayscale-0"
                 />
               )}
 

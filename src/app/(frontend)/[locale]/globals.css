@@ -74,7 +74,7 @@ html[data-theme='light'] {
 /* LINK UNDERLINE SWIPE */
 .link-underline-swipe {
   position: relative;
-  display: inline-block;
+  display: flex;
 }
 
 .link-underline-swipe::after {

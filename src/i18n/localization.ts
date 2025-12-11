@@ -1,5 +1,5 @@
 const localization = {
-  defaultLocale: 'en',
+  defaultLocale: 'fr',
   // fallback: true,
   locales: [
     {

@@ -3,6 +3,7 @@
 
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl' // ⬅️ add this
 
 function LogoLetters() {
   return (
@@ -41,9 +42,13 @@ function LogoLetters() {
 }
 
 export default function Preloader() {
-  const [progress, setProgress] = useState(0) // 0 → 1
+  const [progress, setProgress] = useState(0)
   const [isDone, setIsDone] = useState(false)
   const touchStartYRef = useRef<number | null>(null)
+
+  const t = useTranslations('Preloader') // ⬅️ use the Preloader namespace
+  const scrollText = t('scrollToExplore')
+  const words = scrollText.split(' ') // we’ll stack each word on its own line
 
   // 🔒 LOCK PAGE SCROLL + use wheel/touch to animate
   useEffect(() => {
@@ -87,7 +92,6 @@ export default function Preloader() {
     }
   }, [isDone])
 
-  // REMOVE PRELOADER
   useEffect(() => {
     if (progress >= 1 && !isDone) {
       const timeout = setTimeout(() => setIsDone(true), 250)
@@ -98,32 +102,27 @@ export default function Preloader() {
   if (isDone) return null
 
   const clamped = Math.min(Math.max(progress, 0), 1)
+  const holeSize = 50 * clamped
 
-  // 🔁 for rectangle: use 0 → 50% as "half-size" from center
-  const holeSize = 50 * clamped // 0% (no hole) → 50% (hole fills viewport)
-
-  // 🔥 LOGO SHRINK from 0–30%
   const shrinkEnd = 0.3
-  const shrinkProgress = Math.min(clamped / shrinkEnd, 1) // 0→1 over first 30%
-  const logoScale = 1 - 0.4 * shrinkProgress // 1 → 0.6
+  const shrinkProgress = Math.min(clamped / shrinkEnd, 1)
+  const logoScale = 1 - 0.4 * shrinkProgress
 
-  // 🔥 LOGO FADE from 30%–50%
   const fadeStart = 0.3
   const fadeEnd = 0.5
   let fadeProgress = 0
   if (clamped > fadeStart) {
     fadeProgress = Math.min((clamped - fadeStart) / (fadeEnd - fadeStart), 1)
   }
-  const logoOpacity = 1 - fadeProgress // 1 → 0
+  const logoOpacity = 1 - fadeProgress
 
-  // ⭐ ICON FADE: starts AFTER logo is gone
   const iconFadeStart = 0.5
   const iconFadeEnd = 0.8
   let iconFadeProgress = 0
   if (clamped > iconFadeStart) {
     iconFadeProgress = Math.min((clamped - iconFadeStart) / (iconFadeEnd - iconFadeStart), 1)
   }
-  const iconOpacity = 1 - iconFadeProgress // 1 → 0 after logo
+  const iconOpacity = 1 - iconFadeProgress
 
   const style = {
     '--hole-size': `${holeSize}%`,
@@ -150,10 +149,9 @@ export default function Preloader() {
         {/* bottom-right bouncing scroll icon (fades after logo) */}
         <div className="preloader-scroll-icon" style={iconStyle} aria-hidden="true">
           <span className="preloader-scroll-label">
-            <span>FAITES</span>
-            <span>DÉFILER</span>
-            <span>POUR</span>
-            <span>DÉCOUVRIR</span>
+            {words.map((word, idx) => (
+              <span key={idx}>{word}</span>
+            ))}
           </span>
         </div>
       </div>

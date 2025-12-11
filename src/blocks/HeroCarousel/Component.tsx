@@ -108,12 +108,10 @@ export const HeroCarouselBlock: React.FC<HeroCarouselBlockProps> = (props) => {
           {activeHref && ctaLabel && (
             <Link
               href={activeHref}
-              className="pointer-events-auto inline-flex items-center gap-2 text-sm text-white link-underline-swipe"
+              className="link-underline-swipe flex items-center gap-2 text-base text-white  "
             >
               <span>{ctaLabel}</span>
-              <span className="relative h-3 w-3">
-                <Image src={arrowRight} alt="Arrow right" fill className="object-contain" />
-              </span>
+              <Image src={arrowRight} alt="Arrow right" className="h-auto w-auto" />
             </Link>
           )}
         </div>

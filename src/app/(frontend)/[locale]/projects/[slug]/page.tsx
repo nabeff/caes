@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { getPayload, type TypedLocale } from 'payload'
 import config from '@/payload.config'
 import type { Project, Media as MediaType } from '@/payload-types'
-
+import { getTranslations } from 'next-intl/server'
 import { ProjectGalleryProvider, GalleryImage } from '@/components/gallery/ProjectGallery'
 import {
   Carousel,
@@ -27,8 +27,42 @@ type ProjectPageProps = {
   params: Promise<Params>
 }
 
+export async function generateStaticParams() {
+  const locales = ['en', 'fr'] as const
+  const payload = await getPayload({ config: config })
+
+  // Get pages for each locale
+  const allParams = await Promise.all(
+    locales.map(async (locale) => {
+      const pages = await payload.find({
+        collection: 'pages',
+        draft: false,
+        limit: 1000,
+        overrideAccess: false,
+        pagination: false,
+        select: {
+          slug: true,
+        },
+        locale,
+      })
+
+      return pages.docs
+        ?.filter((doc: { slug?: string | null }) => {
+          return doc.slug && doc.slug !== 'home'
+        })
+        .map(({ slug }) => ({
+          params: { locale, slug: slug! },
+        }))
+    }),
+  )
+
+  // Flatten the array of arrays
+  return allParams.flat()
+}
+
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { slug, locale } = await params
+  const t = await getTranslations({ locale, namespace: 'Project' })
 
   const payload = await getPayload({ config })
 
@@ -58,6 +92,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     galleryImages.push(image)
     return index
   }
+
+  console.log(locale, 'locale')
 
   const heroIndex = registerImage(heroImage)
   const section2Image = section2.image as MediaType | undefined
@@ -102,7 +138,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 as="h2"
                 variant="text"
                 className="text-lg md:text-3xl uppercase tracking-wide"
-                text={section2.subtitle}
+                text={t('location')}
               />
 
               <div className="w-full h-[0.5px] bg-black/20 my-4"></div>
@@ -174,7 +210,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 as="h2"
                 variant="text"
                 className="text-lg md:text-3xl uppercase tracking-wide"
-                text={section4.subtitle}
+                text={t('projectDetails')}
               />
 
               <div className="w-full h-[0.5px] bg-black/20 my-4"></div>
@@ -182,7 +218,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 <div className=" gap-6 text-xs uppercase flex flex-col  ">
                   {section4.programme && (
                     <div className="flex flex-col gap-1">
-                      <span className="text-base text-neutral-500">PROGRAMME</span>
+                      <span className="text-base text-neutral-500">{t('programme')}</span>
                       <span className="text-lg normal-case tracking-normal text-neutral-900">
                         {section4.programme}
                       </span>
@@ -191,7 +227,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
                   {section4.maitreDouvrage && (
                     <div className="flex flex-col gap-1">
-                      <span className="text-base text-neutral-500">MAÎTRE D’OUVRAGE</span>
+                      <span className="text-base text-neutral-500">{t('maitreDouvrage')}</span>
                       <span className="text-lg normal-case tracking-normal text-neutral-900">
                         {section4.maitreDouvrage}
                       </span>
@@ -200,7 +236,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
                   {section4.surfacePlancher && (
                     <div className="flex flex-col gap-1">
-                      <span className="text-base text-neutral-500">SURFACE PLANCHER</span>
+                      <span className="text-base text-neutral-500">{t('surfacePlancher')}</span>
                       <span className="text-lg normal-case tracking-normal text-neutral-900">
                         {section4.surfacePlancher}
                       </span>
@@ -209,7 +245,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
                   {section4.etat && (
                     <div className="flex flex-col gap-1">
-                      <span className="text-base text-neutral-500">ÉTAT</span>
+                      <span className="text-base text-neutral-500">{t('etat')}</span>
                       <span className="text-lg normal-case tracking-normal text-neutral-900">
                         {section4.etat}
                       </span>
@@ -243,7 +279,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 as="h2"
                 variant="title"
                 className="text-2xl md:text-3xl lg:text-4xl uppercase "
-                text={section5.title}
+                text={t('exploreOurProjects')}
               />
             </div>
 
@@ -266,14 +302,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     >
                       <Link
                         href={`/${locale}/projects/${relProj.slug}`}
-                        className="group flex h-full flex-col border border-border"
+                        className="group flex h-full flex-col "
                       >
                         <div className="relative h-[300px] w-full overflow-hidden">
                           {relThumb && (
                             <Media
                               resource={relThumb}
                               fill
-                              imgClassName="object-cover grayscale transition duration-500 group-hover:grayscale-0"
+                              imgClassName="object-cover  transition duration-500 group-hover:grayscale-0"
                             />
                           )}
 
@@ -285,10 +321,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                             <SplitRevealText
                               as="h3"
                               variant="text"
-                              className="text-sm text-white md:text-base"
+                              className="text-base text-white md:text-base"
                               text={relProj.title as any}
                             />
-                            <p className="mt-1 line-clamp-2 text-[11px] text-white/80">
+                            <p className="mt-1 line-clamp-2 text-sm text-white/80">
                               {relProj.tinyText as any}
                             </p>
                           </div>

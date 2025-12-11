@@ -862,28 +862,61 @@ export interface Project {
    */
   tinyText: string;
   heroImage: string | Media;
+  /**
+   * This section shows the main project title and descriptive text. The subtitle "Location" is added automatically.
+   */
   section2: {
     title: string;
-    subtitle: string;
+    /**
+     * Describe the project context, site, or overall concept.
+     */
     text: string;
     image: string | Media;
   };
+  /**
+   * Three images: two stacked on the left, one tall image on the right. This section is used as a visual gallery.
+   */
   section3: {
     imageLeftTop: string | Media;
     imageLeftBottom: string | Media;
     imageRight: string | Media;
   };
+  /**
+   * Left side: optional text and key project details. Right side: one main image. The heading "Project Details" is added automatically.
+   */
   section4: {
-    subtitle: string;
+    /**
+     * Optional paragraph introducing the project details.
+     */
     text?: string | null;
+    /**
+     * Program or type of project (e.g. Housing, Offices, Mixed-use).
+     */
     programme?: string | null;
+    /**
+     * Name of the client or contracting authority.
+     */
     maitreDouvrage?: string | null;
+    /**
+     * Total floor area (e.g. "12 500 m²").
+     */
     surfacePlancher?: string | null;
+    /**
+     * Project status (e.g. "In progress", "Completed", "Competition").
+     */
     etat?: string | null;
+    /**
+     * Main image displayed on the right side of the Project Details section.
+     */
     image: string | Media;
   };
+  /**
+   * Select at least 2 related projects to display in a bottom carousel. The heading "Explore Our Projects" is added automatically.
+   */
   section5: {
-    title: string;
+    /**
+     * Choose projects to display in the related projects carousel.
+     */
     relatedProjects: (string | Project)[];
   };
   /**
@@ -2027,7 +2060,6 @@ export interface ProjectsSelect<T extends boolean = true> {
     | T
     | {
         title?: T;
-        subtitle?: T;
         text?: T;
         image?: T;
       };
@@ -2041,7 +2073,6 @@ export interface ProjectsSelect<T extends boolean = true> {
   section4?:
     | T
     | {
-        subtitle?: T;
         text?: T;
         programme?: T;
         maitreDouvrage?: T;
@@ -2052,7 +2083,6 @@ export interface ProjectsSelect<T extends boolean = true> {
   section5?:
     | T
     | {
-        title?: T;
         relatedProjects?: T;
       };
   generateSlug?: T;

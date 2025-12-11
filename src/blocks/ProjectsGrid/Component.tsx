@@ -61,7 +61,7 @@ export const ProjectsGridBlock = async (props: ProjectsGridProps & { locale: Typ
   }))
 
   return (
-    <section className="container py-12 lg:py-16 mt-[40px]">
+    <section className="container py-12 lg:py-16 my-[4rem]">
       {/* Section header */}
       <div className="mb-12 flex flex-col gap-2">
         <SplitRevealText

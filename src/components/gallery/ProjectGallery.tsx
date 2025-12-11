@@ -11,6 +11,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel'
+import { useTranslations } from 'next-intl'
 
 type GalleryContextValue = {
   openImage: (index: number) => void
@@ -38,6 +39,9 @@ export const ProjectGalleryProvider: React.FC<ProjectGalleryProviderProps> = ({
   const [isOpen, setIsOpen] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
 
+  // 👇 namespace = "Gallery"
+  const t = useTranslations('Gallery')
+
   const openImage = (index: number) => {
     setActiveIndex(index)
     setIsOpen(true)
@@ -55,9 +59,9 @@ export const ProjectGalleryProvider: React.FC<ProjectGalleryProviderProps> = ({
           <button
             type="button"
             onClick={close}
-            className="absolute right-4 top-4 border border-white/50 bg-white px-3 py-1 text-[13px] uppercase  text-black hover:bg-white hover:text-black"
+            className="absolute right-4 top-4 border border-white/50 bg-white px-3 py-1 text-[13px] uppercase text-black hover:bg-white hover:text-black"
           >
-            Close
+            {t('close')}
           </button>
 
           {/* Carousel wrapper */}
@@ -114,6 +118,8 @@ type GalleryImageProps = {
 
 export const GalleryImage: React.FC<GalleryImageProps> = ({ index, media, wrapperClassName }) => {
   const { openImage } = useProjectGallery()
+  // 👇 same namespace
+  const t = useTranslations('Gallery')
 
   return (
     <button
@@ -121,17 +127,14 @@ export const GalleryImage: React.FC<GalleryImageProps> = ({ index, media, wrappe
       onClick={() => openImage(index)}
       className={`group relative block overflow-hidden ${wrapperClassName ?? ''}`}
     >
-      {/* Image in black & white by default */}
       <Media
         resource={media}
         fill
-        imgClassName="object-cover grayscale transition duration-500 group-hover:grayscale-0"
+        imgClassName="object-cover transition duration-500 group-hover:grayscale-0"
       />
 
-      {/* Gradient on bottom */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[65%] bg-gradient-to-t from-black/85 via-black/60 to-transparent opacity-0 transition duration-500 group-hover:opacity-100" />
 
-      {/* “View gallery” label */}
       <div className="absolute inset-x-0 bottom-5 z-10 flex justify-center opacity-0 transition-opacity duration-500 group-hover:opacity-100">
         <span
           className="
@@ -141,7 +144,7 @@ export const GalleryImage: React.FC<GalleryImageProps> = ({ index, media, wrappe
             hover:bg-black hover:text-white
           "
         >
-          View gallery
+          {t('viewGallery')}
         </span>
       </div>
     </button>

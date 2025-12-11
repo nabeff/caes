@@ -20,10 +20,9 @@ export const Projects: CollectionConfig = {
       type: 'text',
       label: 'Project Title',
       required: true,
-      localized: true,
+      localized: true, // ✅ already localized
     },
 
-    // 🔥 Categories for filters
     {
       name: 'categories',
       type: 'relationship',
@@ -48,14 +47,12 @@ export const Projects: CollectionConfig = {
       type: 'textarea',
       label: 'Tiny Text',
       required: true,
-      localized: true,
+      localized: true, // ✅ already localized
       admin: {
         rows: 2,
         description: 'Short line of text shown on the homepage cards.',
       },
     },
-
-    // --------- SECTION FIELDS FOR TEMPLATE PAGE ---------
 
     // 1) Main image of project
     {
@@ -66,30 +63,33 @@ export const Projects: CollectionConfig = {
       required: true,
     },
 
-    // 2) Title + left (subtitle + text) / right (image)
+    // 2) Location & Intro
     {
       name: 'section2',
       type: 'group',
-      label: 'Section 2 – Intro',
+      label: 'Section 2 – Location & Intro Text',
+      admin: {
+        description:
+          'This section shows the main project title and descriptive text. The subtitle "Location" is added automatically.',
+      },
       fields: [
         {
           name: 'title',
           type: 'text',
-          label: 'Title',
+          label: 'Intro Title',
           required: true,
-        },
-        {
-          name: 'subtitle',
-          type: 'text',
-          label: 'Subtitle',
-          required: true,
+          localized: true, // ✅ so you can change title per language
         },
         {
           name: 'text',
           type: 'textarea',
-          label: 'Text',
+          label: 'Intro Text',
           required: true,
-          admin: { rows: 4 },
+          localized: true, // ✅ main paragraph translated
+          admin: {
+            rows: 4,
+            description: 'Describe the project context, site, or overall concept.',
+          },
         },
         {
           name: 'image',
@@ -97,15 +97,20 @@ export const Projects: CollectionConfig = {
           relationTo: 'media',
           label: 'Right Image',
           required: true,
+          // image can stay shared between locales
         },
       ],
     },
 
-    // 3) 3-image gallery (2 left stacked, 1 right)
+    // 3) Gallery
     {
       name: 'section3',
       type: 'group',
       label: 'Section 3 – 3 Image Gallery',
+      admin: {
+        description:
+          'Three images: two stacked on the left, one tall image on the right. This section is used as a visual gallery.',
+      },
       fields: [
         {
           name: 'imageLeftTop',
@@ -131,51 +136,74 @@ export const Projects: CollectionConfig = {
       ],
     },
 
-    // 4) Subtitle + text left, image right
-    // 4) Subtitle + text + project details left, image right
+    // 4) Project Details
     {
       name: 'section4',
       type: 'group',
-      label: 'Section 4 – Détails du projet',
+      label: 'Section 4 – Project Details',
+      admin: {
+        description:
+          'Left side: optional text and key project details. Right side: one main image. The heading "Project Details" is added automatically.',
+      },
       fields: [
-        {
-          name: 'subtitle',
-          type: 'text',
-          label: 'Subtitle',
-          required: true,
-        },
         {
           name: 'text',
           type: 'textarea',
-          label: 'Text',
-          required: false, // you can set true if you want to force it
-          admin: { rows: 4 },
+          label: 'Details Intro Text',
+          required: false,
+          localized: true, // ✅ this text usually needs translation
+          admin: {
+            rows: 4,
+            description: 'Optional paragraph introducing the project details.',
+          },
         },
 
-        // 🔹 Project detail fields in Section 4
+        // These can be localized or not depending on your preference
         {
           name: 'programme',
           type: 'text',
-          label: 'PROGRAMME',
+          label: 'Program',
+          localized: true, // ✅ add this
+
           required: false,
+          // localized: true, // ← uncomment if you want different wording EN/FR
+          admin: {
+            description: 'Program or type of project (e.g. Housing, Offices, Mixed-use).',
+          },
         },
         {
           name: 'maitreDouvrage',
           type: 'text',
-          label: 'MAÎTRE D’OUVRAGE',
+          localized: true, // ✅ add this
+
+          label: 'Client / Maître d’ouvrage',
           required: false,
+          // localized: true, // usually name is same in all languages, so can stay shared
+          admin: {
+            description: 'Name of the client or contracting authority.',
+          },
         },
         {
           name: 'surfacePlancher',
           type: 'text',
-          label: 'SURFACE PLANCHER',
+          localized: true, // ✅ add this
+
+          label: 'Floor Area',
           required: false,
+          // localized: true, // generally numeric; probably shared
+          admin: {
+            description: 'Total floor area (e.g. "12 500 m²").',
+          },
         },
         {
           name: 'etat',
           type: 'text',
-          label: 'État',
+          label: 'Status',
           required: false,
+          localized: true, // ✅ this one is likely different ("En cours" vs "In progress")
+          admin: {
+            description: 'Project status (e.g. "In progress", "Completed", "Competition").',
+          },
         },
 
         {
@@ -184,28 +212,33 @@ export const Projects: CollectionConfig = {
           relationTo: 'media',
           label: 'Right Image',
           required: true,
+          admin: {
+            description: 'Main image displayed on the right side of the Project Details section.',
+          },
         },
       ],
     },
 
-    // 5) Title + carousel of chosen projects (min 2)
+    // 5) Related Projects
     {
       name: 'section5',
       type: 'group',
       label: 'Section 5 – Related Projects Carousel',
+      admin: {
+        description:
+          'Select at least 2 related projects to display in a bottom carousel. The heading "Explore Our Projects" is added automatically.',
+      },
       fields: [
-        {
-          name: 'title',
-          type: 'text',
-          label: 'Title',
-          required: true,
-        },
         {
           name: 'relatedProjects',
           type: 'relationship',
           relationTo: 'projects',
           hasMany: true,
           required: true,
+          label: 'Related Projects',
+          admin: {
+            description: 'Choose projects to display in the related projects carousel.',
+          },
           validate: (value) => {
             if (!value || !Array.isArray(value) || value.length < 2) {
               return 'Please select at least 2 related projects.'

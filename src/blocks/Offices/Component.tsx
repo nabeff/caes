@@ -38,7 +38,7 @@ export const OfficesBlock: React.FC<OfficesBlockProps> = ({ title, rightText, of
                     <p>
                       <a
                         href={`tel:${office.phone.replace(/\s+/g, '')}`}
-                        className="link-underline-swipe"
+                        className="link-underline-swipe w-fit"
                       >
                         {office.phone}
                       </a>
@@ -47,7 +47,7 @@ export const OfficesBlock: React.FC<OfficesBlockProps> = ({ title, rightText, of
 
                   {office.email && (
                     <p>
-                      <a href={`mailto:${office.email}`} className="link-underline-swipe">
+                      <a href={`mailto:${office.email}`} className="link-underline-swipe w-fit">
                         {office.email}
                       </a>
                     </p>
@@ -55,13 +55,13 @@ export const OfficesBlock: React.FC<OfficesBlockProps> = ({ title, rightText, of
                 </div>
 
                 {/* 3) Map link */}
-                <div className="md:w-1/4 text-xs md:text-sm text-right uppercase tracking-[0.16em]">
+                <div className="md:w-1/4 text-xs md:text-sm text-right uppercase tracking-[0.16em] flex justify-end">
                   {office.mapUrl ? (
                     <a
                       href={office.mapUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="link-underline-swipe"
+                      className="link-underline-swipe w-fit"
                     >
                       {office.mapLabel || 'Map'}
                     </a>

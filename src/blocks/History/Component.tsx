@@ -18,7 +18,7 @@ export const HistoryBlock: React.FC<HistoryBlockProps> = ({
       <div className="container">
         <div className="flex flex-col-reverse md:flex-row gap-12">
           {/* LEFT COLUMN: image + description */}
-          <div className="flex flex-col-reverse gap-10 w-full md:w-[50%] items-center">
+          <div className="flex flex-col gap-[4rem] w-full md:w-[50%] items-center">
             {building && (
               <div className="relative w-full overflow-hidden aspect-[477/495]">
                 <Media resource={building} fill className="object-cover" />
@@ -30,7 +30,7 @@ export const HistoryBlock: React.FC<HistoryBlockProps> = ({
             </p>
           </div>
 
-          <div className="flex flex-col gap-6 w-full md:w-[50%] items-start mt-8 md:mt-24">
+          <div className="flex flex-col gap-6 w-full md:w-[50%] items-center mt-8 md:mt-24">
             <SplitRevealText
               as="h2"
               variant="title"
@@ -43,7 +43,7 @@ export const HistoryBlock: React.FC<HistoryBlockProps> = ({
             </p>
 
             {team && (
-              <div className="relative mt-0 md:mt-20 w-full overflow-hidden aspect-[589/308]">
+              <div className="relative mt-0 md:mt-12 w-full overflow-hidden aspect-[589/308]">
                 <Media resource={team} fill className="object-cover" />
               </div>
             )}

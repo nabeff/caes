@@ -5,6 +5,7 @@ import React, { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { motion, Variants } from 'framer-motion'
 import type { TypedLocale } from 'payload'
+import { useTranslations } from 'next-intl'
 
 import type { Media as MediaType } from '@/payload-types'
 import { Media } from '@/components/Media'
@@ -73,16 +74,23 @@ type FilterDropdownProps = {
   value: string
   onChange: (value: string) => void
   categories: Category[]
+  placeholderLabel: string
+  allLabel: string
 }
 
-const FilterDropdown: React.FC<FilterDropdownProps> = ({ value, onChange, categories }) => {
+const FilterDropdown: React.FC<FilterDropdownProps> = ({
+  value,
+  onChange,
+  categories,
+  placeholderLabel,
+  allLabel,
+}) => {
   const [open, setOpen] = useState(false)
 
-  // Placeholder text in the trigger
   const selectedLabel =
     value === 'all'
-      ? 'Category' // placeholder when "all" is selected
-      : (categories.find((c) => c.id === value)?.label ?? 'Category')
+      ? placeholderLabel
+      : (categories.find((c) => c.id === value)?.label ?? placeholderLabel)
 
   const handleSelect = (id: string) => {
     onChange(id)
@@ -117,7 +125,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({ value, onChange, catego
                 'bg-white text-black hover:bg-black hover:text-white transition-colors',
               )}
             >
-              All
+              {allLabel}
             </button>
           </li>
 
@@ -151,10 +159,10 @@ export const ProjectsListingClient: React.FC<Props> = ({
   quotes,
 }) => {
   const [activeCatId, setActiveCatId] = useState<string>('all')
+  const t = useTranslations('ProjectsListing')
 
   const filtered = useMemo(() => {
     if (activeCatId === 'all') return projects
-
     return projects.filter((p) => p.categories?.some((c) => c.id === activeCatId))
   }, [projects, activeCatId])
 
@@ -175,16 +183,13 @@ export const ProjectsListingClient: React.FC<Props> = ({
         whileInView="show"
         viewport={{ once: true, amount: 0.4 }}
       >
-        <Link
-          href={`/${locale}/projects/${slug}`}
-          className="group flex flex-col border border-border"
-        >
+        <Link href={`/${locale}/projects/${slug}`} className="group flex flex-col r">
           <div className="relative h-60 md:h-80 w-full overflow-hidden">
             {thumbnail && (
               <Media
                 resource={thumbnail}
                 fill
-                imgClassName="object-cover grayscale transition duration-500 group-hover:grayscale-0"
+                imgClassName="object-cover  transition duration-500 group-hover:grayscale-0"
               />
             )}
 
@@ -207,14 +212,7 @@ export const ProjectsListingClient: React.FC<Props> = ({
 
       gridChildren.push(
         <div key={`quote-${quote.id}`} className="my-0 flex items-center md:col-span-2">
-          {/* <q
-            className={cn(
-              'mt-6 max-w-xl text-sm text-muted-foreground md:text-base',
-              quote.align === 'right' ? 'ml-auto text-right' : 'text-left',
-            )}
-          >
-            {quote.text}
-          </q> */}
+          {/* reserved for quote block */}
         </div>,
       )
     }
@@ -223,24 +221,32 @@ export const ProjectsListingClient: React.FC<Props> = ({
   return (
     <div>
       {/* Header + filter */}
-      <div className="mb-20 flex flex-col justify-end items-end">
+      <div className="mb-20 flex flex-col items-end justify-end">
         <SplitRevealText
           as="h1"
           text={title}
           variant="title"
-          className="text-3xl md:text-4xl lg:text-8xl uppercase text-end mb-6"
+          className="mb-6 text-end text-3xl uppercase md:text-4xl lg:text-8xl"
         />
 
         {description && (
-          <p className="mt-3 text-sm text-muted-foreground max-w-lg text-justify leading-relaxed">
+          <p className="mt-3 max-w-lg text-justify text-sm leading-relaxed text-muted-foreground">
             {description}
           </p>
         )}
 
         <div className="mt-10 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-          <span className="text-xs uppercase tracking-wide text-muted-foreground">Filter by :</span>
+          <span className="text-xs uppercase tracking-wide text-muted-foreground">
+            {t('filterBy')}
+          </span>
 
-          <FilterDropdown value={activeCatId} onChange={setActiveCatId} categories={categories} />
+          <FilterDropdown
+            value={activeCatId}
+            onChange={setActiveCatId}
+            categories={categories}
+            placeholderLabel={t('categoryPlaceholder')}
+            allLabel={t('all')}
+          />
         </div>
       </div>
 
