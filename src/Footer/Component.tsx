@@ -108,8 +108,14 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
               const rel = newTab ? 'noreferrer' : undefined
 
               return (
-                <Link key={item.id ?? idx} href={url} target={target} rel={rel}>
-                  <Media resource={iconMedia} imgClassName="object-contain" />
+                <Link
+                  key={item.id ?? idx}
+                  href={url}
+                  target={target}
+                  rel={rel}
+                  className="inline-flex transition-transform duration-200 ease-out hover:scale-[1.05] hover:-translate-y-[2px]"
+                >
+                  <Media resource={iconMedia} imgClassName="object-contain h-[24px] w-[24px]" />
                 </Link>
               )
             })}

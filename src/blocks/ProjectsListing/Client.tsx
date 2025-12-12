@@ -1,4 +1,3 @@
-// src/blocks/ProjectsListing/Client.tsx
 'use client'
 
 import React, { useMemo, useState } from 'react'
@@ -26,19 +25,12 @@ type ProjectItem = {
   categories: { id: string }[]
 }
 
-type Quote = {
-  id: string
-  text: string
-  align: 'left' | 'right'
-}
-
 type Props = {
   title: string
   description?: string
   locale: TypedLocale
   categories: Category[]
   projects: ProjectItem[]
-  quotes: Quote[]
 }
 
 // 3D tilt + mask + blur
@@ -99,7 +91,6 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
 
   return (
     <div className="relative inline-block min-w-[180px]">
-      {/* Trigger button */}
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
@@ -115,30 +106,22 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
           animate={{ opacity: 1, y: 0 }}
           className="absolute right-0 z-20 mt-2 w-full border border-black bg-white shadow-sm"
         >
-          {/* "All" option at the top */}
           <li>
             <button
               type="button"
               onClick={() => handleSelect('all')}
-              className={cn(
-                'block w-full px-3 py-2 text-left text-sm',
-                'bg-white text-black hover:bg-black hover:text-white transition-colors',
-              )}
+              className="block w-full px-3 py-2 text-left text-sm transition-colors hover:bg-black hover:text-white"
             >
               {allLabel}
             </button>
           </li>
 
-          {/* Actual categories */}
           {categories.map((cat) => (
             <li key={cat.id}>
               <button
                 type="button"
                 onClick={() => handleSelect(cat.id)}
-                className={cn(
-                  'block w-full px-3 py-2 text-left text-sm',
-                  'bg-white text-black hover:bg-black hover:text-white transition-colors',
-                )}
+                className="block w-full px-3 py-2 text-left text-sm transition-colors hover:bg-black hover:text-white"
               >
                 {cat.label}
               </button>
@@ -156,7 +139,6 @@ export const ProjectsListingClient: React.FC<Props> = ({
   locale,
   categories,
   projects,
-  quotes,
 }) => {
   const [activeCatId, setActiveCatId] = useState<string>('all')
   const t = useTranslations('ProjectsListing')
@@ -165,58 +147,6 @@ export const ProjectsListingClient: React.FC<Props> = ({
     if (activeCatId === 'all') return projects
     return projects.filter((p) => p.categories?.some((c) => c.id === activeCatId))
   }, [projects, activeCatId])
-
-  // Build grid content with quotes after every 4 projects
-  const gridChildren: React.ReactNode[] = []
-  let quoteIndex = 0
-
-  filtered.forEach((project, idx) => {
-    const { thumbnail, slug, title, tinyText } = project
-
-    gridChildren.push(
-      <motion.article
-        key={project.id}
-        className="will-change-transform"
-        variants={cardVariants}
-        custom={idx}
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.4 }}
-      >
-        <Link href={`/${locale}/projects/${slug}`} className="group flex flex-col r">
-          <div className="relative h-60 md:h-80 w-full overflow-hidden">
-            {thumbnail && (
-              <Media
-                resource={thumbnail}
-                fill
-                imgClassName="object-cover  transition duration-500 group-hover:grayscale-0"
-              />
-            )}
-
-            <div className="pointer-events-none absolute inset-0 bg-black/30 transition duration-500 group-hover:bg-black/0" />
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 transition duration-500 group-hover:opacity-100" />
-
-            <div className="pointer-events-none absolute inset-x-4 bottom-4 translate-y-3 opacity-0 transition duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-              <h3 className="text-base text-white md:text-lg">{title}</h3>
-              {tinyText && (
-                <p className="mt-1 line-clamp-3 text-xs text-white/80 md:text-sm">{tinyText}</p>
-              )}
-            </div>
-          </div>
-        </Link>
-      </motion.article>,
-    )
-
-    if ((idx + 1) % 8 === 0 && quoteIndex < quotes.length) {
-      const quote = quotes[quoteIndex++]
-
-      gridChildren.push(
-        <div key={`quote-${quote.id}`} className="my-0 flex items-center md:col-span-2">
-          {/* reserved for quote block */}
-        </div>,
-      )
-    }
-  })
 
   return (
     <div>
@@ -250,8 +180,48 @@ export const ProjectsListingClient: React.FC<Props> = ({
         </div>
       </div>
 
-      {/* Grid + interleaved quotes */}
-      <div className="grid gap-6 md:grid-cols-2">{gridChildren}</div>
+      {/* Projects grid */}
+      <div className="grid gap-6 md:grid-cols-2">
+        {filtered.map((project, idx) => {
+          const { thumbnail, slug, title, tinyText } = project
+
+          return (
+            <motion.article
+              key={project.id}
+              className="will-change-transform"
+              variants={cardVariants}
+              custom={idx}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.4 }}
+            >
+              <Link href={`/${locale}/projects/${slug}`} className="group flex flex-col">
+                <div className="relative h-60 w-full overflow-hidden md:h-80">
+                  {thumbnail && (
+                    <Media
+                      resource={thumbnail}
+                      fill
+                      imgClassName="object-cover transition duration-500"
+                    />
+                  )}
+
+                  <div className="pointer-events-none absolute inset-0 bg-black/10 transition duration-500 group-hover:bg-black/0" />
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 transition duration-500 group-hover:opacity-100" />
+
+                  <div className="pointer-events-none absolute inset-x-4 bottom-4 translate-y-3 opacity-0 transition duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                    <h3 className="text-base text-white md:text-lg">{title}</h3>
+                    {tinyText && (
+                      <p className="mt-1 line-clamp-3 text-xs text-white/80 md:text-sm">
+                        {tinyText}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </Link>
+            </motion.article>
+          )
+        })}
+      </div>
     </div>
   )
 }

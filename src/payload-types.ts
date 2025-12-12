@@ -1039,16 +1039,6 @@ export interface StoryBlock {
 export interface ProjectsListingBlock {
   title: string;
   description?: string | null;
-  /**
-   * These texts will be inserted after every 4 projects. Choose left or right alignment.
-   */
-  quotes?:
-    | {
-        text: string;
-        align: 'left' | 'right';
-        id?: string | null;
-      }[]
-    | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'projectsListing';
@@ -1737,13 +1727,6 @@ export interface StoryBlockSelect<T extends boolean = true> {
 export interface ProjectsListingBlockSelect<T extends boolean = true> {
   title?: T;
   description?: T;
-  quotes?:
-    | T
-    | {
-        text?: T;
-        align?: T;
-        id?: T;
-      };
   id?: T;
   blockName?: T;
 }

@@ -24,18 +24,18 @@ function LogoLetters() {
 
       {/* ARCHITECTURE – letter by letter */}
       <div className="preloader-word-archi">
-        <span className="archi-letter archi-letter--1">A</span>
-        <span className="archi-letter archi-letter--2">R</span>
-        <span className="archi-letter archi-letter--3">C</span>
-        <span className="archi-letter archi-letter--4">H</span>
-        <span className="archi-letter archi-letter--5">I</span>
-        <span className="archi-letter archi-letter--6">T</span>
-        <span className="archi-letter archi-letter--7">E</span>
-        <span className="archi-letter archi-letter--8">C</span>
-        <span className="archi-letter archi-letter--9">T</span>
-        <span className="archi-letter archi-letter--10">U</span>
-        <span className="archi-letter archi-letter--11">R</span>
-        <span className="archi-letter archi-letter--12">E</span>
+        <span className="archi-letter archi-letter--1">a</span>
+        <span className="archi-letter archi-letter--2">r</span>
+        <span className="archi-letter archi-letter--3">c</span>
+        <span className="archi-letter archi-letter--4">h</span>
+        <span className="archi-letter archi-letter--5">i</span>
+        <span className="archi-letter archi-letter--6">t</span>
+        <span className="archi-letter archi-letter--7">e</span>
+        <span className="archi-letter archi-letter--8">c</span>
+        <span className="archi-letter archi-letter--9">t</span>
+        <span className="archi-letter archi-letter--10">u</span>
+        <span className="archi-letter archi-letter--11">r</span>
+        <span className="archi-letter archi-letter--12">e</span>
       </div>
     </div>
   )

@@ -1,4 +1,3 @@
-// src/blocks/ProjectsListing/Component.tsx
 import React from 'react'
 import { getPayload } from 'payload'
 import type { TypedLocale } from 'payload'
@@ -11,19 +10,14 @@ import type {
 } from '@/payload-types'
 import { ProjectsListingClient } from './Client'
 
-// Helper → safely extract localized values (string or { fr, en, ... })
 function getLocalizedText(value: unknown, locale: string): string {
-  if (typeof value === 'string' || typeof value === 'number') {
-    return String(value)
-  }
+  if (typeof value === 'string' || typeof value === 'number') return String(value)
 
   if (value && typeof value === 'object') {
     const obj = value as Record<string, unknown>
 
     const byLocale = obj[locale]
-    if (typeof byLocale === 'string' || typeof byLocale === 'number') {
-      return String(byLocale)
-    }
+    if (typeof byLocale === 'string' || typeof byLocale === 'number') return String(byLocale)
 
     const first = Object.values(obj).find((v) => typeof v === 'string' || typeof v === 'number')
     if (first !== undefined) return String(first)
@@ -55,7 +49,6 @@ export const ProjectsListingBlock = async (
 
   // Build category list from project.categories
   type Category = { id: string; label: string }
-
   const categoriesMap = new Map<string, Category>()
 
   projects.forEach((p) => {
@@ -84,7 +77,6 @@ export const ProjectsListingBlock = async (
   // Normalize projects for the client
   const projectItems = projects.map((p) => {
     const thumb = p.thumbnail as MediaType | null
-
     const slug = getLocalizedText(p.slug as unknown, locale) || String(p.id)
 
     const projectCats = (((p as any).categories || []) as any[]).map((cat) => {
@@ -102,23 +94,8 @@ export const ProjectsListingBlock = async (
     }
   })
 
-  // ---- QUOTES FIX ----
-  // quotes can be undefined or null in Payload types → normalize to []
-  const rawQuotes = Array.isArray(props.quotes) ? props.quotes : []
-
-  const quoteItems = rawQuotes.map((q) => {
-    const text = getLocalizedText(q.text, locale)
-    const align: 'left' | 'right' = q.align === 'right' ? 'right' : 'left' // force union, not generic string
-
-    return {
-      id: q.id ?? Math.random().toString(36).slice(2),
-      text,
-      align,
-    }
-  })
-
   return (
-    <section className=" py-16 md:py-24 mt-[80px]">
+    <section className="py-16 md:py-24 mt-[80px]">
       <div className="container">
         <ProjectsListingClient
           title={headerTitle}
@@ -126,7 +103,6 @@ export const ProjectsListingBlock = async (
           locale={locale}
           categories={categories}
           projects={projectItems}
-          quotes={quoteItems}
         />
       </div>
     </section>

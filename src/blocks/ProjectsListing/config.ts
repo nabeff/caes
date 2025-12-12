@@ -21,40 +21,6 @@ export const ProjectsListing: Block = {
       label: 'Description',
       localized: true,
     },
-    {
-      name: 'quotes',
-      type: 'array',
-      label: 'Interleaved texts',
-      labels: {
-        singular: 'Quote',
-        plural: 'Quotes',
-      },
-      admin: {
-        description:
-          'These texts will be inserted after every 4 projects. Choose left or right alignment.',
-        initCollapsed: true,
-      },
-      fields: [
-        {
-          name: 'text',
-          type: 'textarea',
-          label: 'Text',
-          required: true,
-          localized: true,
-        },
-        {
-          name: 'align',
-          type: 'select',
-          label: 'Alignment',
-          required: true,
-          defaultValue: 'left',
-          options: [
-            { label: 'Left', value: 'left' },
-            { label: 'Right', value: 'right' },
-          ],
-        },
-      ],
-    },
   ],
 }
 
