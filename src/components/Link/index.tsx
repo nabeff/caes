@@ -24,14 +24,31 @@ type CMSLinkType = {
   url?: string | null
 }
 
-// Build href, then prefix locale for internal links
 function buildHref(props: CMSLinkType, locale: TypedLocale): string | null {
   const { type, reference, url } = props
+  const raw = typeof url === 'string' ? url.trim() : ''
 
-  // External URLs → leave as-is
-  if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
-    return url
+  // ---------- GLOBAL NORMALIZATION (mailto/tel + plain email/phone) ----------
+  const isHttp = (v: string) => v.startsWith('http://') || v.startsWith('https://')
+  const isMailto = (v: string) => v.toLowerCase().startsWith('mailto:')
+  const isTel = (v: string) => v.toLowerCase().startsWith('tel:')
+  const looksLikeEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
+
+  const normalizePhone = (v: string) => v.replace(/[()\s.-]/g, '')
+  const looksLikePhone = (v: string) => {
+    if (!v) return false
+    if (v.includes('@')) return false
+    const p = normalizePhone(v)
+    return /^[+]?[\d]{6,}$/.test(p)
   }
+
+  // IMPORTANT: return early for external/schemes so we DON'T add "/" or locale
+  if (raw) {
+    if (isHttp(raw) || isMailto(raw) || isTel(raw)) return raw
+    if (looksLikeEmail(raw)) return `mailto:${raw}`
+    if (looksLikePhone(raw)) return `tel:${normalizePhone(raw)}`
+  }
+  // -------------------------------------------------------------------------
 
   let href: string | null = null
 
@@ -46,21 +63,15 @@ function buildHref(props: CMSLinkType, locale: TypedLocale): string | null {
 
     if (!slug) return null
 
-    const base = reference.relationTo !== 'pages' ? `/${reference.relationTo}/${slug}` : `/${slug}`
-
-    href = base
-  } else if (type === 'custom' && typeof url === 'string') {
-    if (!url.trim()) return null
-    href = url.startsWith('/') ? url : `/${url}`
-  } else if (typeof url === 'string') {
-    // fallback if type is null but url exists
-    if (!url.trim()) return null
-    href = url.startsWith('/') ? url : `/${url}`
+    href = reference.relationTo !== 'pages' ? `/${reference.relationTo}/${slug}` : `/${slug}`
+  } else if (raw) {
+    // internal custom URL fallback
+    href = raw.startsWith('/') ? raw : `/${raw}`
   }
 
   if (!href) return null
 
-  // Prefix locale for relative paths (internal)
+  // Prefix locale ONLY for internal paths
   if (href.startsWith('/') && !href.startsWith(`/${locale}`)) {
     href = `/${locale}${href}`
   }
@@ -70,6 +81,7 @@ function buildHref(props: CMSLinkType, locale: TypedLocale): string | null {
 
 export const CMSLink: React.FC<CMSLinkType> = (props) => {
   const locale = useLocale() as TypedLocale
+
   const {
     appearance = 'inline',
     children,
@@ -104,7 +116,6 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
     </>
   )
 
-  // Inline link (used in rich text)
   if (appearance === 'inline') {
     return (
       <Link className={cn(className)} href={href} {...newTabProps}>
@@ -113,7 +124,6 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
     )
   }
 
-  // Button-style link
   return (
     <Button asChild className={className} size={size} variant={appearance}>
       <Link className={cn(className)} href={href} {...newTabProps}>

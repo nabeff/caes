@@ -152,20 +152,7 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
             )}
           </div>
 
-          {/* Right: bottom links (Privacy, Terms, etc.) */}
-          {/* <div className="flex flex-wrap gap-4">
-            {bottomLinks.map((row, idx) => {
-              if (!row.link) return null
-
-              return (
-                <CMSLink
-                  key={row.id ?? idx}
-                  {...row.link}
-                  className="text-black/60  transition hover:text-black link-underline-swipe"
-                />
-              )
-            })}
-          </div> */}
+   
         </div>
       </div>
     </footer>
