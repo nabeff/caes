@@ -126,7 +126,7 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
         <div className="h-px w-full bg-black/20" />
 
         {/* Bottom bar */}
-        <div className="flex flex-col md:flex-row justify-between gap-6 text-xs text-black/60 items-center md:justify-between md:text-sm">
+        <div className="flex flex-col md:flex-row justify-between gap-6 text-xs text-black/60 items-center md:justify-between md:text-xs">
           {/* Left: bottom text + powered by */}
           <div className="flex flex-col md:flex-row items-center gap-2">
             {renderBottomText()}
@@ -153,7 +153,7 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
           </div>
 
           {/* Right: bottom links (Privacy, Terms, etc.) */}
-          <div className="flex flex-wrap gap-4">
+          {/* <div className="flex flex-wrap gap-4">
             {bottomLinks.map((row, idx) => {
               if (!row.link) return null
 
@@ -165,7 +165,7 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
                 />
               )
             })}
-          </div>
+          </div> */}
         </div>
       </div>
     </footer>
