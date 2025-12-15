@@ -1,35 +1,52 @@
 import { withPayload } from '@payloadcms/next/withPayload'
 import createNextIntlPlugin from 'next-intl/plugin'
+import redirects from './redirects.js'
 
 const withNextIntl = createNextIntlPlugin()
 
-import redirects from './redirects.js'
-
-const NEXT_PUBLIC_SERVER_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
-  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  : undefined || process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true,
+
   images: {
     remotePatterns: [
-      ...[NEXT_PUBLIC_SERVER_URL /* 'https://example.com' */].map((item) => {
-        const url = new URL(item)
+      // Primary domain
+      {
+        protocol: 'https',
+        hostname: 'caesarchitecture.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.caesarchitecture.com',
+      },
 
-        return {
-          hostname: url.hostname,
-          protocol: url.protocol.replace(':', ''),
-        }
-      }),
+      // Vercel production URL (safe fallback)
+      ...(process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? [
+            {
+              protocol: 'https',
+              hostname: process.env.VERCEL_PROJECT_PRODUCTION_URL,
+            },
+          ]
+        : []),
+
+      // Payload Vercel Blob storage (VERY IMPORTANT)
+      {
+        protocol: 'https',
+        hostname: '*.public.blob.vercel-storage.com',
+      },
     ],
   },
-  reactStrictMode: true,
-  redirects,
-  webpack: (config) => {
-    config.resolve.alias.canvas = false
 
+  redirects,
+
+  webpack: (config) => {
+    // Payload + Next fix
+    config.resolve.alias.canvas = false
     return config
   },
 }
 
-export default withNextIntl(withPayload(nextConfig), { devBundleServerPackages: false })
+export default withNextIntl(withPayload(nextConfig), {
+  devBundleServerPackages: false,
+})

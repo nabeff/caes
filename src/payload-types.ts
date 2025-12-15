@@ -911,6 +911,15 @@ export interface Project {
     image: string | Media;
   };
   /**
+   * Optional section below Section 4. Row 1: 2 images. Row 2: 1 full-width image.
+   */
+  section6?: {
+    enabled?: boolean | null;
+    imageLeft?: (string | null) | Media;
+    imageRight?: (string | null) | Media;
+    imageFull?: (string | null) | Media;
+  };
+  /**
    * Select at least 2 related projects to display in a bottom carousel. The heading "Explore Our Projects" is added automatically.
    */
   section5: {
@@ -2062,6 +2071,14 @@ export interface ProjectsSelect<T extends boolean = true> {
         surfacePlancher?: T;
         etat?: T;
         image?: T;
+      };
+  section6?:
+    | T
+    | {
+        enabled?: T;
+        imageLeft?: T;
+        imageRight?: T;
+        imageFull?: T;
       };
   section5?:
     | T

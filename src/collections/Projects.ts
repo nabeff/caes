@@ -219,6 +219,67 @@ export const Projects: CollectionConfig = {
       ],
     },
 
+    {
+      name: 'section6',
+      type: 'group',
+      label: 'Section 6 – Optional 3 Images',
+      admin: {
+        description:
+          'Optional section below Section 4. Row 1: 2 images. Row 2: 1 full-width image.',
+      },
+      fields: [
+        {
+          name: 'enabled',
+          type: 'checkbox',
+          label: 'Enable Section 6',
+          defaultValue: false,
+        },
+
+        // Row 1
+        {
+          name: 'imageLeft',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Row 1 – Left Image',
+          required: false,
+          admin: { condition: (_, siblingData) => Boolean(siblingData?.enabled) },
+          validate: (value: unknown, { siblingData }: { siblingData?: { enabled?: boolean } }) => {
+            if (siblingData?.enabled && !value)
+              return 'Row 1 Left Image is required when Section 6 is enabled.'
+            return true
+          },
+        },
+        {
+          name: 'imageRight',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Row 1 – Right Image',
+          required: false,
+          admin: { condition: (_, siblingData) => Boolean(siblingData?.enabled) },
+          validate: (value: unknown, { siblingData }: { siblingData?: { enabled?: boolean } }) => {
+            if (siblingData?.enabled && !value)
+              return 'Row 1 Right Image is required when Section 6 is enabled.'
+            return true
+          },
+        },
+
+        // Row 2 (full width)
+        {
+          name: 'imageFull',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Row 2 – Full Width Image',
+          required: false,
+          admin: { condition: (_, siblingData) => Boolean(siblingData?.enabled) },
+          validate: (value: unknown, { siblingData }: { siblingData?: { enabled?: boolean } }) => {
+            if (siblingData?.enabled && !value)
+              return 'Full Width Image is required when Section 6 is enabled.'
+            return true
+          },
+        },
+      ],
+    },
+
     // 5) Related Projects
     {
       name: 'section5',

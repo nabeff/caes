@@ -82,6 +82,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const section3 = project.section3 as NonNullable<Project['section3']>
   const section4 = project.section4 as NonNullable<Project['section4']>
   const section5 = project.section5 as NonNullable<Project['section5']>
+  const section6 = project.section6 as Project['section6'] | undefined
+
   const related = (section5.relatedProjects || []) as Project[]
 
   // --- Build gallery images + remember indices for each spot ---
@@ -106,6 +108,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const imageRightIndex = registerImage(imageRight)
   const section4Image = section4.image as MediaType | undefined
   const section4Index = registerImage(section4Image)
+  const section6Left = section6?.imageLeft as MediaType | undefined
+  const section6LeftIndex = registerImage(section6Left)
+
+  const section6Right = section6?.imageRight as MediaType | undefined
+  const section6RightIndex = registerImage(section6Right)
+
+  const section6Full = section6?.imageFull as MediaType | undefined
+  const section6FullIndex = registerImage(section6Full)
 
   return (
     <main className="pb-20">
@@ -150,7 +160,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             </div>
 
             <div className="w-full lg:w-1/2">
-              <div className="relative w-full overflow-hidden aspect-[4/3]">
+              <div className="relative w-full overflow-hidden aspect-[609/676]">
                 {section2Image && section2Index !== null && (
                   <GalleryImage
                     index={section2Index}
@@ -269,6 +279,47 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             </div>
           </div>
         </section>
+
+        {/* 6) Optional 3 images section (below section 4) */}
+        {section6?.enabled && (section6Left || section6Right || section6Full) && (
+          <section className="container py-12">
+            {/* Row 1: two images */}
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <div className="relative w-full overflow-hidden aspect-[4/3]">
+                {section6Left && section6LeftIndex !== null && (
+                  <GalleryImage
+                    index={section6LeftIndex}
+                    media={section6Left}
+                    wrapperClassName="relative w-full h-full"
+                  />
+                )}
+              </div>
+
+              <div className="relative w-full overflow-hidden aspect-[4/3]">
+                {section6Right && section6RightIndex !== null && (
+                  <GalleryImage
+                    index={section6RightIndex}
+                    media={section6Right}
+                    wrapperClassName="relative w-full h-full"
+                  />
+                )}
+              </div>
+            </div>
+
+            {/* Row 2: full width */}
+            <div className="mt-6">
+              <div className="relative w-full overflow-hidden aspect-[16/7]">
+                {section6Full && section6FullIndex !== null && (
+                  <GalleryImage
+                    index={section6FullIndex}
+                    media={section6Full}
+                    wrapperClassName="relative w-full h-full"
+                  />
+                )}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* 5) Related projects “carousel” (unchanged structurally) */}
         {related.length > 0 && (
