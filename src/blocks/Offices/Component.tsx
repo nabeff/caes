@@ -12,12 +12,10 @@ export const OfficesBlock: React.FC<OfficesBlockProps> = ({ title, rightText, of
             as="h2"
             variant="title"
             text={title}
-            className="text-2xl md:text-3xl lg:text-6xl uppercase  uppercase"
+            className="text-2xl md:text-3xl lg:text-6xl uppercase  "
           />
 
-          {rightText && (
-            <p className="text-sm md:text-base tracking-[0.12em] uppercase">{rightText}</p>
-          )}
+          {rightText && <p className="text-sm md:text-base tracking-[0.12em] ">{rightText}</p>}
         </div>
 
         {/* Offices list */}
