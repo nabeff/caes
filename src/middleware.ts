@@ -1,9 +1,12 @@
+// middleware.ts
 import createMiddleware from 'next-intl/middleware'
 import { routing } from './i18n/routing'
 
-export default createMiddleware(routing)
+export default createMiddleware({
+  ...routing,
+  localeDetection: false, // ✅ always use defaultLocale for "/"
+})
 
-// see https://next-intl-docs.vercel.app/docs/routing/middleware
 export const config = {
-  matcher: ['/', '/(en|fr)/:path*'], // Adjust to your supported locales
+  matcher: ['/', '/(en|fr)/:path*'],
 }

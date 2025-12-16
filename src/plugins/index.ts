@@ -14,7 +14,7 @@ import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
-  return doc?.title ? `${doc.title} | Caes Architecture` : 'Caes Architecture'
+  return doc?.title ? `${doc.title} | CAES Architecture` : 'CAES Architecture'
 }
 
 const generateURL: GenerateURL<Post | Page> = ({ doc }) => {

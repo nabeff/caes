@@ -26,7 +26,7 @@ export const generateMeta = async (args: {
 
   const ogImage = getImageURL(doc?.meta?.image)
 
-  const title = doc?.meta?.title ? doc?.meta?.title + ' | Caes Architecture' : 'Caes Architecture'
+  const title = doc?.meta?.title ? doc?.meta?.title + ' | CAES Architecture' : 'CAES Architecture'
 
   return {
     description: doc?.meta?.description,

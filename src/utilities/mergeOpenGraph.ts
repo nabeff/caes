@@ -9,8 +9,8 @@ const defaultOpenGraph: Metadata['openGraph'] = {
       url: `${getServerSideURL()}/caes.webp`,
     },
   ],
-  siteName: 'Caes Architecture',
-  title: 'Caes Architecture',
+  siteName: 'CAES Architecture',
+  title: 'CAES Architecture',
 }
 
 export const mergeOpenGraph = (og?: Metadata['openGraph']): Metadata['openGraph'] => {

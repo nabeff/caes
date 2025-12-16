@@ -11,10 +11,10 @@ test.describe('Frontend', () => {
   test('can go on homepage', async ({ page }) => {
     await page.goto('http://localhost:3000')
 
-    await expect(page).toHaveTitle(/Caes Architecture/)
+    await expect(page).toHaveTitle(/CAES Architecture/)
 
     const heading = page.locator('h1').first()
 
-    await expect(heading).toHaveText('Caes Architecture')
+    await expect(heading).toHaveText('CAES Architecture')
   })
 })
