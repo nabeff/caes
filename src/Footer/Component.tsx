@@ -10,6 +10,67 @@ import { Media } from '@/components/Media'
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 
+function isEmailLabel(label?: string | null) {
+  if (!label) return false
+  const s = label.trim()
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s)
+}
+
+function isPhoneLabel(label?: string | null) {
+  if (!label) return false
+  const s = label.trim()
+
+  // Accept +, spaces, (), dashes; require at least 7 digits
+  const digits = s.replace(/\D/g, '')
+  if (digits.length < 7) return false
+
+  return /^[+]?[\d\s().-]+$/.test(s)
+}
+
+function normalizePhoneForTel(label: string) {
+  const trimmed = label.trim()
+  const hasPlus = trimmed.startsWith('+')
+  const digits = trimmed.replace(/\D/g, '')
+  return hasPlus ? `+${digits}` : digits
+}
+
+/**
+ * We do NOT want these to go through CMSLink normalization (which might treat them like normal links).
+ * But we DO want them clickable as mailto/tel.
+ */
+function renderEmailOrPhone(label: string, className: string, key: React.Key) {
+  const safeLabel = label.trim()
+
+  if (isEmailLabel(safeLabel)) {
+    return (
+      <a key={key} href={`mailto:${safeLabel}`} className={className}>
+        {label}
+      </a>
+    )
+  }
+
+  if (isPhoneLabel(safeLabel)) {
+    const tel = normalizePhoneForTel(safeLabel)
+    return (
+      <a key={key} href={`tel:${tel}`} className={className}>
+        {label}
+      </a>
+    )
+  }
+
+  // fallback (shouldn't happen if caller checks)
+  return (
+    <span key={key} className={className}>
+      {label}
+    </span>
+  )
+}
+
+function shouldOverrideCMSLink(link: any) {
+  const label = typeof link?.label === 'string' ? link.label : null
+  return isEmailLabel(label) || isPhoneLabel(label)
+}
+
 export async function Footer({ locale }: { locale: TypedLocale }) {
   const payload = await getPayload({ config })
   const footerData = (await payload.findGlobal({
@@ -17,6 +78,7 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
     depth: 1,
     locale,
   })) as FooterGlobal
+
   const logo = footerData?.logo as MediaType | null
   const columns = footerData?.columns ?? []
   const socialLinks = footerData?.socialLinks ?? []
@@ -61,15 +123,15 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
             </Link>
           </div>
 
-          {/* Columns (title + CMSLink links) */}
-          <div className="flex flex-col md:flex-row items-center md:items-start  text-center md:text-start gap-8 md:gap-20">
+          {/* Columns (title + links) */}
+          <div className="flex flex-col md:flex-row items-center md:items-start text-center md:text-start gap-8 md:gap-20">
             {columns.map((col, idx) => {
               const links = col.links ?? []
 
               return (
                 <div
                   key={col.id ?? idx}
-                  className="flex flex-col text-center md:text-start  items-center md:items-start gap-3"
+                  className="flex flex-col text-center md:text-start items-center md:items-start gap-3"
                 >
                   <h2 className="text-xl uppercase">{col.title}</h2>
 
@@ -77,13 +139,16 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
                     {links.map((row, i) => {
                       if (!row.link) return null
 
-                      return (
-                        <CMSLink
-                          key={row.id ?? i}
-                          {...row.link}
-                          className="block w-fit text-base text-black/70 transition hover:text-black link-underline-swipe"
-                        />
-                      )
+                      const className =
+                        'block w-fit text-base text-black/70 transition hover:text-black link-underline-swipe'
+
+                      // ✅ If label is email or phone => clickable mailto/tel (not CMSLink / Next Link)
+                      if (shouldOverrideCMSLink(row.link)) {
+                        const label = (row.link as any).label as string
+                        return renderEmailOrPhone(label, className, row.id ?? i)
+                      }
+
+                      return <CMSLink key={row.id ?? i} {...row.link} className={className} />
                     })}
                   </div>
                 </div>
@@ -141,10 +206,20 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
                   return (
                     <React.Fragment key={row.id ?? idx}>
                       {idx > 0 && <span>&amp;</span>}
-                      <CMSLink
-                        {...row.link}
-                        className="text-black transition link-underline-swipe"
-                      />
+
+                      {/* ✅ If label is email/phone => mailto/tel */}
+                      {shouldOverrideCMSLink(row.link) ? (
+                        renderEmailOrPhone(
+                          (row.link as any).label as string,
+                          'text-black transition link-underline-swipe',
+                          row.id ?? idx,
+                        )
+                      ) : (
+                        <CMSLink
+                          {...row.link}
+                          className="text-black transition link-underline-swipe"
+                        />
+                      )}
                     </React.Fragment>
                   )
                 })}
@@ -152,7 +227,9 @@ export async function Footer({ locale }: { locale: TypedLocale }) {
             )}
           </div>
 
-   
+          {/* NOTE: bottomLinks exists in your data but wasn't rendered in your snippet.
+              Keeping your original structure unchanged as requested. */}
+          {bottomLinks.length > 0 ? null : null}
         </div>
       </div>
     </footer>
