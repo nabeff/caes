@@ -39,7 +39,7 @@ export const ProjectsGridBlock = async (props: ProjectsGridProps & { locale: Typ
 
   const { docs } = await payload.find({
     collection: 'projects',
-    limit: 6,
+    limit: 8,
     sort: '-createdAt',
     locale,
   })

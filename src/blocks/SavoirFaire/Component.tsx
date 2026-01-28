@@ -12,7 +12,6 @@ export const SavoirFaireBlock: React.FC<SavoirFaireBlockProps> = ({
   teamImage,
 }) => {
   const main = mainImage as MediaType | null
-  const team = teamImage as MediaType | null
 
   return (
     <section className="bg-black text-white py-12 md:py-20">
