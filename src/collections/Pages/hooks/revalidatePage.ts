@@ -4,6 +4,22 @@ import { revalidatePath, revalidateTag } from 'next/cache'
 
 import type { Page } from '../../../payload-types'
 
+const locales = ['en', 'fr'] as const
+
+function revalidateAllLocales(slug: string, logger: { info: (msg: string) => void }) {
+  if (slug === 'home') {
+    for (const locale of locales) {
+      logger.info(`Revalidating page at path: /${locale}`)
+      revalidatePath(`/${locale}`)
+    }
+  } else {
+    for (const locale of locales) {
+      logger.info(`Revalidating page at path: /${locale}/${slug}`)
+      revalidatePath(`/${locale}/${slug}`)
+    }
+  }
+}
+
 export const revalidatePage: CollectionAfterChangeHook<Page> = ({
   doc,
   previousDoc,
@@ -11,21 +27,13 @@ export const revalidatePage: CollectionAfterChangeHook<Page> = ({
 }) => {
   if (!context.disableRevalidate) {
     if (doc._status === 'published') {
-      const path = doc.slug === 'home' ? '/' : `/${doc.slug}`
-
-      payload.logger.info(`Revalidating page at path: ${path}`)
-
-      revalidatePath(path)
+      revalidateAllLocales(doc.slug, payload.logger)
       revalidateTag('pages-sitemap')
     }
 
     // If the page was previously published, we need to revalidate the old path
     if (previousDoc?._status === 'published' && doc._status !== 'published') {
-      const oldPath = previousDoc.slug === 'home' ? '/' : `/${previousDoc.slug}`
-
-      payload.logger.info(`Revalidating old page at path: ${oldPath}`)
-
-      revalidatePath(oldPath)
+      revalidateAllLocales(previousDoc.slug, payload.logger)
       revalidateTag('pages-sitemap')
     }
   }
@@ -34,8 +42,12 @@ export const revalidatePage: CollectionAfterChangeHook<Page> = ({
 
 export const revalidateDelete: CollectionAfterDeleteHook<Page> = ({ doc, req: { context } }) => {
   if (!context.disableRevalidate) {
-    const path = doc?.slug === 'home' ? '/' : `/${doc?.slug}`
-    revalidatePath(path)
+    if (doc?.slug) {
+      for (const locale of locales) {
+        const path = doc.slug === 'home' ? `/${locale}` : `/${locale}/${doc.slug}`
+        revalidatePath(path)
+      }
+    }
     revalidateTag('pages-sitemap')
   }
 
