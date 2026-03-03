@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { slugField } from 'payload'
+import { revalidateProject, revalidateProjectDelete } from './hooks/revalidateProject'
 
 export const Projects: CollectionConfig = {
   slug: 'projects',
@@ -7,6 +8,10 @@ export const Projects: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'tinyText', 'updatedAt'],
+  },
+  hooks: {
+    afterChange: [revalidateProject],
+    afterDelete: [revalidateProjectDelete],
   },
   access: {
     read: () => true,
