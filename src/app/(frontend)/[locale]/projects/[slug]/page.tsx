@@ -175,8 +175,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
         {/* 3) 3-image gallery */}
         <section className="container py-12">
-          <div className="flex items-center gap-6">
-            <div className="flex flex-col gap-4 md:w-1/2">
+          <div className="flex flex-col gap-6 md:flex-row md:items-center">
+            <div className="flex flex-col gap-4 w-full md:w-1/2">
               <div className="relative w-full overflow-hidden aspect-[4/3]">
                 {imageLeftTop && imageLeftTopIndex !== null && (
                   <GalleryImage
