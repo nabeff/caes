@@ -7,7 +7,7 @@ export const Projects: CollectionConfig = {
   labels: { singular: 'Project', plural: 'Projects' },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'slug', 'tinyText', 'updatedAt'],
+    defaultColumns: ['title', 'sortOrder', 'slug', 'tinyText', 'updatedAt'],
   },
   hooks: {
     afterChange: [revalidateProject],
@@ -26,6 +26,14 @@ export const Projects: CollectionConfig = {
       label: 'Project Title',
       required: true,
       localized: true, // ✅ already localized
+    },
+    {
+      name: 'sortOrder',
+      type: 'number',
+      label: 'Sort Order',
+      admin: {
+        description: 'Lower numbers appear first. Projects without a sort order appear last.',
+      },
     },
 
     {

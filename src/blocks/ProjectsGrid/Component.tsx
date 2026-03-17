@@ -37,14 +37,28 @@ export const ProjectsGridBlock = async (props: ProjectsGridProps & { locale: Typ
 
   const payload = await getPayload({ config })
 
+  // Fetch all projects so we can position them correctly, then slice to 8
   const { docs } = await payload.find({
     collection: 'projects',
-    limit: 8,
+    limit: 100,
     sort: '-createdAt',
     locale,
   })
 
-  const projects = docs as Project[]
+  // Sort: projects with sortOrder are inserted at their position (1-based),
+  // unordered projects fill remaining slots in their original order.
+  // Duplicate sortOrder values are placed next to each other.
+  const allDocs = docs as Project[]
+  const withOrder = allDocs.filter((p) => p.sortOrder != null).sort((a, b) => a.sortOrder! - b.sortOrder!)
+  const withoutOrder = allDocs.filter((p) => p.sortOrder == null)
+  // Start with unordered projects, then insert ordered ones at their positions
+  const sorted: Project[] = [...withoutOrder]
+  for (const p of withOrder) {
+    const idx = Math.min(p.sortOrder! - 1, sorted.length)
+    sorted.splice(idx, 0, p)
+  }
+  // Take the first 8 for the homepage grid
+  const projects = sorted.slice(0, 8)
   if (!projects.length) return null
 
   const headerTitle = getLocalizedText(title, locale)

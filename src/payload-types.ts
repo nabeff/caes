@@ -853,6 +853,10 @@ export interface Project {
   id: string;
   title: string;
   /**
+   * Lower numbers appear first. Projects without a sort order appear last.
+   */
+  sortOrder?: number | null;
+  /**
    * Used for filters in the projects listing.
    */
   categories?: (string | ProjectCategory)[] | null;
@@ -2044,6 +2048,7 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface ProjectsSelect<T extends boolean = true> {
   title?: T;
+  sortOrder?: T;
   categories?: T;
   thumbnail?: T;
   tinyText?: T;

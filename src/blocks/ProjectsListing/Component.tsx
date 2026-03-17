@@ -41,7 +41,18 @@ export const ProjectsListingBlock = async (
     locale,
   })
 
-  const projects = docs as Project[]
+  // Sort: projects with sortOrder are inserted at their position (1-based),
+  // unordered projects fill remaining slots in their original order.
+  // Duplicate sortOrder values are placed next to each other.
+  const allDocs = docs as Project[]
+  const withOrder = allDocs.filter((p) => p.sortOrder != null).sort((a, b) => a.sortOrder! - b.sortOrder!)
+  const withoutOrder = allDocs.filter((p) => p.sortOrder == null)
+  // Start with unordered projects, then insert ordered ones at their positions
+  const projects: Project[] = [...withoutOrder]
+  for (const p of withOrder) {
+    const idx = Math.min(p.sortOrder! - 1, projects.length)
+    projects.splice(idx, 0, p)
+  }
   if (!projects.length) return null
 
   const headerTitle = getLocalizedText(title, locale)
