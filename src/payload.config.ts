@@ -73,7 +73,6 @@ export default buildConfig({
     vercelBlobStorage({
       access: 'public',
       enabled: true,
-      clientUploads: true,
       addRandomSuffix: true,
       collections: {
         media: true,
