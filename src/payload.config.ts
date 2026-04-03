@@ -74,6 +74,7 @@ export default buildConfig({
       access: 'public',
       enabled: true,
       clientUploads: true,
+      addRandomSuffix: true,
       collections: {
         media: true,
       },
