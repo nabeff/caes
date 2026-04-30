@@ -36,6 +36,7 @@ import ImageTextSplitReverse from '@/blocks/ImageTextSplitreverse/config'
 import History from '@/blocks/History/config'
 import TeamStats from '@/blocks/TeamStats/config'
 import Offices from '@/blocks/Offices/config'
+import ImageGallery from '@/blocks/ImageGallery/config'
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
@@ -110,6 +111,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 History,
                 TeamStats,
                 Offices,
+                ImageGallery,
               ],
               required: true,
               admin: {

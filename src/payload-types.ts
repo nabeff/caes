@@ -225,6 +225,7 @@ export interface Page {
     | HistoryBlock
     | TeamStatsBlock
     | OfficesBlock
+    | ImageGalleryBlock
   )[];
   meta?: {
     title?: string | null;
@@ -1215,6 +1216,23 @@ export interface OfficesBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageGalleryBlock".
+ */
+export interface ImageGalleryBlock {
+  title?: string | null;
+  columns: '3' | '4';
+  items: {
+    image: string | Media;
+    title?: string | null;
+    location?: string | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'imageGallery';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1545,6 +1563,7 @@ export interface PagesSelect<T extends boolean = true> {
         history?: T | HistoryBlockSelect<T>;
         teamStats?: T | TeamStatsBlockSelect<T>;
         offices?: T | OfficesBlockSelect<T>;
+        imageGallery?: T | ImageGalleryBlockSelect<T>;
       };
   meta?:
     | T
@@ -1869,6 +1888,24 @@ export interface OfficesBlockSelect<T extends boolean = true> {
         email?: T;
         mapLabel?: T;
         mapUrl?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImageGalleryBlock_select".
+ */
+export interface ImageGalleryBlockSelect<T extends boolean = true> {
+  title?: T;
+  columns?: T;
+  items?:
+    | T
+    | {
+        image?: T;
+        title?: T;
+        location?: T;
         id?: T;
       };
   id?: T;

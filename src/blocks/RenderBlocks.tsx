@@ -24,6 +24,7 @@ import ImageTextSplitReverseBlock from './ImageTextSplitreverse/Component'
 import HistoryBlock from './History/Component'
 import TeamStatsBlock from './TeamStats/Component'
 import OfficesBlock from './Offices/Component'
+import ImageGalleryBlock from './ImageGallery/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -47,6 +48,7 @@ const blockComponents = {
   history: HistoryBlock,
   teamStats: TeamStatsBlock,
   offices: OfficesBlock,
+  imageGallery: ImageGalleryBlock,
 }
 
 export const RenderBlocks: React.FC<{
