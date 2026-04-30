@@ -42,11 +42,11 @@ const cardVariants: Variants = {
 export const AnimatedImageGallery: React.FC<Props> = ({ columns, items }) => {
   const gridCols =
     columns === '4'
-      ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
-      : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+      ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
+      : 'grid-cols-2 lg:grid-cols-3'
 
   return (
-    <div className={`grid gap-8 ${gridCols}`}>
+    <div className={`grid gap-2 md:gap-8 ${gridCols}`}>
       {items.map((item, index) => {
         const image = item.image as MediaType | null
         return (

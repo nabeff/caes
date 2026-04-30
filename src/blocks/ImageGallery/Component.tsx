@@ -10,9 +10,9 @@ export const ImageGalleryBlock: React.FC<ImageGalleryProps & { locale: TypedLoca
   if (!items?.length) return null
 
   return (
-    <section className="container py-12 lg:py-16 my-[4rem]">
+    <section className="container pt-0 pb-2 lg:pb-3 mb-12 lg:mb-16">
       {title && (
-        <div className="mb-12 flex flex-col gap-2">
+        <div className="mb-6 flex flex-col gap-2">
           <SplitRevealText
             as="h2"
             variant="title"
