@@ -1225,6 +1225,7 @@ export interface ImageGalleryBlock {
     image: string | Media;
     title?: string | null;
     location?: string | null;
+    category?: (string | null) | ProjectCategory;
     id?: string | null;
   }[];
   id?: string | null;
@@ -1906,6 +1907,7 @@ export interface ImageGalleryBlockSelect<T extends boolean = true> {
         image?: T;
         title?: T;
         location?: T;
+        category?: T;
         id?: T;
       };
   id?: T;

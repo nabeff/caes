@@ -51,6 +51,12 @@ export const ImageGallery: Block = {
           label: 'Location',
           localized: true,
         },
+        {
+          name: 'category',
+          type: 'relationship',
+          relationTo: 'projectCategories',
+          label: 'Category',
+        },
       ],
     },
   ],
